@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -12,3 +14,4 @@
 */
 
 Route::get('/', 'Index@index');
+Route::get('/test', 'Index@test');
