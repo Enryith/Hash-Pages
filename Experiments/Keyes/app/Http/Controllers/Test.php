@@ -2,18 +2,36 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Routing\Controller as BaseController;
+use Doctrine\ORM\EntityManagerInterface;
+use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
+use Illuminate\Validation\Factory;
+use App\Entities;
 
-class Test extends BaseController
+
+
+class Test extends Controller
 {
-	public function test()
-	{
-		/** @var String[] $person */
-		$person = [
-			'name' => 'keyes',
-			'age' => '19',
-		];
+	protected $em;
 
-		return view('test', compact('person'));
+	public function __construct(EntityManagerInterface $em)
+	{
+		$this->em = $em;
+	}
+
+	public function test(Request $request)
+	{
+
+		$data = $request->all();
+		var_dump($data);
+
+		$test = new Entities\Test();
+		$test->setVar1($data['name']);
+		$test->setVar2($data['age']);
+
+		$this->em->persist($test);
+		$this->em->flush();
+
+		return view('test/test');
 	}
 }

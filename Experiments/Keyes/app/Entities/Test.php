@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * @ORM\Table
  */
-class TestEnt
+class Test
 {
 	/**
 	 * @ORM\Id
@@ -24,14 +24,10 @@ class TestEnt
 	protected $var1;
 	/**
 	 * @var int $var2
-	 * @ORM\Column(type="int")
+	 * @ORM\Column(type="integer")
 	 */
 	protected $var2;
-	/**
-	 * @var boolean $var3
-	 * @ORM\Column(type="boolean")
-	 */
-	protected $var3;
+
 
 	/**
 	 * @return mixed
@@ -79,21 +75,5 @@ class TestEnt
 	public function setVar2($var2)
 	{
 		$this->var2 = $var2;
-	}
-
-	/**
-	 * @return boolean
-	 */
-	public function getVar3()
-	{
-		return $this->var3;
-	}
-
-	/**
-	 * @param boolean $var3
-	 */
-	public function setVar3($var3)
-	{
-		$this->var3 = $var3;
 	}
 }

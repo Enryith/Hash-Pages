@@ -14,4 +14,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', 'Index@index');
-Route::get('/test', 'Index@test');
+Route::get('/test/test', function(){
+	return view('test.test');
+});
+
+Route::post('/test/test', 'Test@test');
