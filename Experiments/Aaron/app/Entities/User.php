@@ -2,27 +2,43 @@
 namespace App\Entities;
 
 use Doctrine\ORM\Mapping AS ORM;
+use Illuminate\Contracts\Auth\Authenticatable;
+use App\Entities\Traits;
 
 /**
  * @ORM\Entity
  * @ORM\Table
  */
-class User
+class User implements Authenticatable
 {
-	/**
-	 * @ORM\Id
-	 * @ORM\GeneratedValue
-	 * @ORM\Column(type="integer")
-	 */
-	protected $id;
+	use \LaravelDoctrine\ORM\Auth\Authenticatable;
+	use Traits\Id;
 
 	/**
 	 * @ORM\Column(type="string")
+	 * @var string
 	 */
-	protected $name;
+	protected $username;
 
-	public function getName()
-	{
-		return $this->name;
+	/**
+	 * @ORM\Column(type="string")
+	 * @var string
+	 */
+	protected $nameFirst;
+
+	/**
+	 * @ORM\Column(type="string")
+	 * @var string
+	 */
+	protected $nameLast;
+
+	/**
+	 * @ORM\Column(type="string")
+	 * @var string
+	 */
+	protected $email;
+
+	public function getFormValue($key) {
+		return $this->$key;
 	}
 }

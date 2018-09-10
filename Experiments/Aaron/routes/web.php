@@ -11,4 +11,8 @@
 |
 */
 
+use Illuminate\Support\Facades\Route;
+
 Route::get('/', 'Index@index');
+Route::get('/user/register', 'User@register');
+Route::post('/user/register', 'User@store');

@@ -17,9 +17,6 @@ class Index extends BaseController
 
 	public function index()
 	{
-		/** @var User $user */
-		$user = $this->em->find("App\Entities\User", 1);
-		var_dump($user->getName());
-		return view('welcome', ['user' => $user]);
+		return view('welcome');
 	}
 }
