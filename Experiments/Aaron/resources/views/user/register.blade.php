@@ -1,4 +1,5 @@
 @php /** @var $form Collective\Html\FormBuilder */ @endphp
+@php /** @var $errors \Illuminate\Support\ViewErrorBag */ @endphp
 @inject('form', 'Collective\Html\FormBuilder')
 @extends('theme.base')
 @section('title', 'Test')
@@ -6,7 +7,7 @@
     {{ $form->open()}}
         <div>
             {{ $form->label("username", "Username:") }}
-            {{ $form->text('username', "") }}
+            {{ $form->text('username', null, $errors->has('username') ? ['class' => 'has-error'] : []) }}
         </div>
         <div>
             {{ $form->label("password", "Password:") }}

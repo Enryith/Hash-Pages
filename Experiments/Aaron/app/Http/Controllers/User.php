@@ -30,10 +30,20 @@ class User extends Controller
 	 */
 	public function store(Request $request)
 	{
-		$this->validator->validate($request->all(), [
-			'username' => 'required|unique:App\Entities\User,username',
-			'password' => 'required|same:password_again',
+		$valid = $this->validator->make($request->all(), [
+			'username' => 'required|unique:App\Entities\User,username|min:2',
+			'password' => 'required|same:password_again|min:8',
 			'password_again' => 'required',
+		], [
+			"min" => ':Attribute must be more than :min characters.',
+			"required" => ':Attribute field is required.',
+			"same" => ':Attribute must match :other',
 		]);
+
+		$valid->setAttributeNames([
+			'password_again' => "the second password"
+		]);
+
+		$valid->validate();
 	}
 }
