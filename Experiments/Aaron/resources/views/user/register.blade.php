@@ -27,7 +27,6 @@
     </div>
     <div>
         {{ $form->submit('Register') }}
-        {{ e("hello") }}
     </div>
 {{ $form->close() }}
 @endsection

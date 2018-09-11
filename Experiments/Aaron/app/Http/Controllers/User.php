@@ -27,6 +27,7 @@ class User extends Controller
 
 	/**
 	 * @param Request $request
+	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 * @throws \Illuminate\Validation\ValidationException
 	 */
 	public function store(Request $request)
@@ -34,13 +35,13 @@ class User extends Controller
 		$valid = $this->validator->make($request->all(), [
 			'username' => 'required|unique:App\Entities\User,username|min:2|alpha_num',
 			'name' => 'required',
-			'email' => 'required|email',
+			'email' => 'required|email|unique:App\Entities\User,email',
 			'password' => 'required|same:password_again|min:8',
 			'password_again' => 'required',
 		], [
 			"min" => ':Attribute must be more than :min characters.',
 			"required" => ':Attribute field is required.',
-			"same" => ':Attribute must match :other',
+			"same" => ':Attribute must match :other.',
 			"alpha_num" => ':Attribute can only be letters and numbers.',
 			"email" => 'The :attribute field does not look like an email.',
 			"unique" => 'That :attribute is already used.',
