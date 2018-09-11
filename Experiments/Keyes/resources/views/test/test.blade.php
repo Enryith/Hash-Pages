@@ -16,4 +16,5 @@
         {{ $form->submit('Submit') }}
     </div>
     {{ $form->close() }}
+
 @endsection
