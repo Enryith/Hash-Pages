@@ -5,7 +5,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Dheepak's Webpage</title>
+        <title>Laravel</title>
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet" type="text/css">
@@ -14,7 +14,7 @@
         <style>
             html, body {
                 background-color: #fff;
-                color: #00ffff;
+                color: #636b6f;
                 font-family: 'Nunito', sans-serif;
                 font-weight: 200;
                 height: 100vh;
@@ -22,7 +22,7 @@
             }
 
             .full-height {
-                height: 80vh;
+                height: 100vh;
             }
 
             .flex-center {
@@ -46,13 +46,13 @@
             }
 
             .title {
-                font-size: 100px;
+                font-size: 84px;
             }
 
             .links > a {
-                color: #ff00ff;
+                color: #636b6f;
                 padding: 0 25px;
-                font-size: 19px;
+                font-size: 12px;
                 font-weight: 600;
                 letter-spacing: .1rem;
                 text-decoration: none;
@@ -79,17 +79,16 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    Dheepak's Webpage
+                    Laravel
                 </div>
 
                 <div class="links">
-                    <a href="https://www.youtube.com">Youtube</a>
-                    <a href="https://www.google.com">Google</a>
-                    <a href="https://www.netflix.com/browse">Netflix</a>
-                    <a href="https://canvas.iastate.edu">Canvas</a>
-                    <a href="https://trello.com">Trello</a>
-                    <a href="https://git.linux.iastate.edu">Git</a>
-                    <a href="https://tehurn.com/frankerz">Why not?</a>
+                    <a href="https://laravel.com/docs">Documentation</a>
+                    <a href="https://laracasts.com">Laracasts</a>
+                    <a href="https://laravel-news.com">News</a>
+                    <a href="https://nova.laravel.com">Nova</a>
+                    <a href="https://forge.laravel.com">Forge</a>
+                    <a href="https://github.com/laravel/laravel">GitHub</a>
                 </div>
             </div>
         </div>
