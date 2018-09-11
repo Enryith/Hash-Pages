@@ -12,7 +12,7 @@
         <link href="https://fonts.googleapis.com/css?family=Monoton" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css?family=Rock+Salt" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css?family=Fredericka+the+Great" rel="stylesheet">
-
+        <link href "animate.css" rel = "stylesheet">
 
         <!-- Styles -->
         <style>
@@ -92,6 +92,8 @@
                 <div class="title m-b-md">
                       #<span class="hash"> HASH <span>
                 </div>
+
+
 
                 <div class="links">
                     <a href="https://laravel.com/docs">Documentation</a>
