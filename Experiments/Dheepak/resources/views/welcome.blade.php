@@ -89,7 +89,7 @@
                     <a href="https://canvas.iastate.edu">Canvas</a>
                     <a href="https://trello.com">Trello</a>
                     <a href="https://git.linux.iastate.edu">Git</a>
-                    <a href="https://tehurn.com/frankerz">Why not?</a>
+                    <a href="http://tehurn.com/frankerz">Why not?</a>
                 </div>
             </div>
         </div>
