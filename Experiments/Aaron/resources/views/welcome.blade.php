@@ -9,29 +9,26 @@
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet" type="text/css">
-        <link href="https://fonts.googleapis.com/css?family=Monoton" rel="stylesheet">
-        <link href="https://fonts.googleapis.com/css?family=Rock+Salt" rel="stylesheet">
-        <link href="https://fonts.googleapis.com/css?family=Fredericka+the+Great" rel="stylesheet">
-        <link href "animate.css" rel = "stylesheet">
 
         <!-- Styles -->
         <style>
             html, body {
-                background-color: #93a0ed;
-                color: ##000000;
+                background-color: #fff;
+                color: #636b6f;
                 font-family: 'Nunito', sans-serif;
                 font-weight: 200;
                 height: 100vh;
+                margin: 0;
             }
 
             .full-height {
-                height: 12vh;
+                height: 100vh;
             }
 
             .flex-center {
                 align-items: center;
                 display: flex;
-                justify-content: left;
+                justify-content: center;
             }
 
             .position-ref {
@@ -45,24 +42,15 @@
             }
 
             .content {
-
-                font-family: 'Fredericka the Great', cursive;
-
+                text-align: center;
             }
 
             .title {
-                font-family: 'Rock Salt', cursive;
-                font-size: 90px;
-            }
-
-            .hash {
-              font-family: 'Fredericka the Great', cursive;
-              font-size: 72px;
+                font-size: 84px;
             }
 
             .links > a {
-                font-family: 'Fredericka the Great', cursive;
-                color: #000;
+                color: #636b6f;
                 padding: 0 25px;
                 font-size: 12px;
                 font-weight: 600;
@@ -72,13 +60,13 @@
             }
 
             .m-b-md {
-                margin-bottom: 10px;
+                margin-bottom: 30px;
             }
         </style>
     </head>
     <body>
         <div class="flex-center position-ref full-height">
-              @if (Route::has('login'))
+            @if (Route::has('login'))
                 <div class="top-right links">
                     @auth
                         <a href="{{ url('/home') }}">Home</a>
@@ -88,12 +76,11 @@
                     @endauth
                 </div>
             @endif
+
             <div class="content">
                 <div class="title m-b-md">
-                      #<span class="hash"> HASH <span>
+                    Laravel
                 </div>
-
-
 
                 <div class="links">
                     <a href="https://laravel.com/docs">Documentation</a>

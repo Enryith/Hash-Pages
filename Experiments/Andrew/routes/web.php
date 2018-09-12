@@ -12,3 +12,7 @@
 */
 
 Route::get('/', 'Index@index');
+
+Route::get('/home', function () {
+  return view('pages/home');
+});
