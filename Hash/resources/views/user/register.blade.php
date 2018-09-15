@@ -1,32 +1,46 @@
 @php /** @var $form Collective\Html\FormBuilder */ @endphp
-@php /** @var $errors \Illuminate\Support\ViewErrorBag */ @endphp
 @inject('form', 'Collective\Html\FormBuilder')
 @extends('theme.base')
 @section('title', 'Register')
 @section('content')
+
 {{ $form->open()}}
-	<div>
-		{{ $form->label("username", "Username:") }}
-		{{ $form->text('username') }}
-	</div>
-	<div>
-		{{ $form->label("email", "Email Address:") }}
-		{{ $form->text('email') }}
-	</div>
-	<div>
-		{{ $form->label("name", "Full Name:") }}
-		{{ $form->text('name') }}
-	</div>
-	<div>
-		{{ $form->label("password", "Password:") }}
-		{{ $form->password('password') }}
-	</div>
-	<div>
-		{{ $form->label("password_confirmation", "Password, Again:") }}
-		{{ $form->password('password_confirmation') }}
-	</div>
-	<div>
-		{{ $form->submit('Register') }}
-	</div>
+
+@component("form.text")
+	@slot('form', $form)
+	@slot('id', 'username')
+	@slot('label', 'Username:')
+@endcomponent
+
+@component("form.text")
+	@slot('form', $form)
+	@slot('id', 'email')
+	@slot('label', 'Email Address:')
+@endcomponent
+
+@component("form.text")
+	@slot('form', $form)
+	@slot('id', 'name')
+	@slot('label', 'Full Name:')
+@endcomponent
+
+@component("form.password")
+	@slot('form', $form)
+	@slot('id', 'password')
+	@slot('label', 'Password:')
+@endcomponent
+
+@component("form.password")
+	@slot('form', $form)
+	@slot('id', 'password_confirmation')
+	@slot('label', 'Password, Again:')
+@endcomponent
+
+@component("form.submit")
+	@slot('form', $form)
+	@slot('label', "Register")
+@endcomponent
+
 {{ $form->close() }}
+
 @endsection

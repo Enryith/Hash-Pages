@@ -1,35 +1,34 @@
 @php /** @var $form Collective\Html\FormBuilder */ @endphp
-@php /** @var $errors \Illuminate\Support\ViewErrorBag */ @endphp
 @inject('form', 'Collective\Html\FormBuilder')
 @extends('theme.base')
 @section('title', 'Login')
 @section('content')
+
 {{ $form->open()}}
 
-	@php($name = "login")
-	@php($err = $errors->has($name))
-	<div class="form-group @if($err) has-error @endif">
-		{{ $form->label($name, "Username or Email:", ["class" => "control-label"]) }}
-		{{ $form->text($name, null, ["class" => "form-control"]) }}
-		@if($err) <div class="help-block">{{ $errors->first($name) }}</div> @endif
-	</div>
+@component("form.text")
+	@slot('form', $form)
+	@slot('id', 'login')
+	@slot('label', 'Username or Email:')
+@endcomponent
 
-	@php($name = "password")
-	@php($err = $errors->has($name))
-	<div class="form-group @if($err) has-error @endif">
-		{{ $form->label($name, "Username or Email:", ["class" => "control-label"]) }}
-		{{ $form->password($name, ["class" => "form-control"]) }}
-		@if($err) <div class="help-block">{{ $errors->first($name) }}</div> @endif
-	</div>
+@component("form.password")
+	@slot('form', $form)
+	@slot('id', 'password')
+	@slot('label', 'Password:')
+@endcomponent
 
-	<div class="checkbox">
-		<label>
-			{{ $form->checkbox('remember', 'true') }} Remember Me
-		</label>
-	</div>
+@component("form.checkbox")
+	@slot('form', $form)
+	@slot('id', 'remember')
+	@slot('label', 'Remember me')
+@endcomponent
 
-	<div class="form-group">
-		{{ $form->submit("Let's Go", ["class" => "btn btn-primary"]) }}
-	</div>
+@component("form.submit")
+	@slot('form', $form)
+	@slot('label', "Let's go!")
+@endcomponent
+
 {{ $form->close() }}
+
 @endsection

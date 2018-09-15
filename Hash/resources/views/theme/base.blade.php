@@ -5,40 +5,58 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link href="/css/global.css" rel="stylesheet">
-	<link href="https://stackpath.bootstrapcdn.com/bootswatch/3.3.7/lumen/bootstrap.min.css"
-	      integrity="sha384-gv0oNvwnqzF6ULI9TVsSmnULNb3zasNysvWwfT/s4l8k5I+g6oFz9dye0wg3rQ2Q"
+	<link href="https://stackpath.bootstrapcdn.com/bootswatch/4.1.3/lumen/bootstrap.min.css"
+	      integrity="sha384-DfbCiBdRiiNWvRTbHe5X9IfkezKzm0pCrZSKc7EM9mmSl/OyckwbYk3GrajL8Ngy"
 	      rel="stylesheet"
 	      crossorigin="anonymous">
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js"
+	        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+	        crossorigin="anonymous">
+	</script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+	        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+	        crossorigin="anonymous">
+	</script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+	        integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+	        crossorigin="anonymous">
+	</script>
 	<title>HashPages - @yield('title')</title>
 </head>
 <body>
 
-<div class="navbar navbar-default navbar-fixed-top">
+<nav class="navbar navbar-expand-md navbar-dark bg-primary fixed-top">
 	<div class="container">
-		<div class="navbar-header">
-			<a href="/" class="navbar-brand">Hash Pages</a>
-			<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>
-			</button>
-		</div>
-		<div class="navbar-collapse collapse" id="navbar-main">
-			<ul class="nav navbar-nav">
-				<li><a href="#">Link</a></li>
-			</ul>
+		<a class="navbar-brand" href="#">Hash Pages</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-nav">
+			<span class="navbar-toggler-icon"></span>
+		</button>
 
-			<ul class="nav navbar-nav navbar-right">
-				@auth
-					<li><a href="{{url("/auth/logout")}}">Logout</a></li>
-				@else
-					<li><a href="{{url("/auth/login")}}">Login</a></li>
-					<li><a href="{{url("/register")}}">Register</a></li>
-				@endauth
+		<div class="collapse navbar-collapse" id="main-nav">
+			<ul class="navbar-nav mr-auto">
+				<li class="nav-item">
+					<a class="nav-link" href="#">Link</a>
+				</li>
 			</ul>
+			<form class="form-inline">
+				<ul class="navbar-nav mr-auto">
+					@auth
+						<li class="nav-item">
+							<a class="nav-link" href="{{url("/auth/logout")}}">Logout</a>
+						</li>
+					@else
+						<li class="nav-item">
+							<a class="nav-link" href="{{url("/auth/login")}}">Login</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="{{url("/register")}}">Register</a>
+						</li>
+					@endauth
+				</ul>
+			</form>
 		</div>
 	</div>
-</div>
+</nav>
 
 <div class="container main">
 	<div class="flash-message">
@@ -52,15 +70,6 @@
 	</div>
 
 	@yield('content')
-
-	<script src="https://code.jquery.com/jquery-3.3.1.min.js"
-	        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-	        crossorigin="anonymous">
-	</script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
-	        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
-	        crossorigin="anonymous">
-	</script>
 </div>
 </body>
 </html>
