@@ -18,7 +18,6 @@ class Auth extends Controller
 	//Services
 	protected $em;
 	protected $validator;
-	protected $flash;
 	protected $auth;
 	protected $hash;
 
