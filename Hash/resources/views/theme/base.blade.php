@@ -27,7 +27,7 @@
 
 <nav class="navbar navbar-expand-md navbar-dark bg-primary fixed-top">
 	<div class="container">
-		<a class="navbar-brand" href="#">Hash Pages</a>
+		<a class="navbar-brand" href="/">Hash Pages</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-nav">
 			<span class="navbar-toggler-icon"></span>
 		</button>
