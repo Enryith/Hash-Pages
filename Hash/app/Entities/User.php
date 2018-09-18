@@ -4,7 +4,7 @@ namespace App\Entities;
 use Doctrine\ORM\Mapping AS ORM;
 use Illuminate\Contracts\Auth\Authenticatable;
 use App\Entities\Traits;
-use \LaravelDoctrine\ORM\Auth;
+use LaravelDoctrine\ORM\Auth;
 
 /**
  * @ORM\Entity
@@ -36,6 +36,12 @@ class User implements Authenticatable
 	 * @var string
 	 */
 	protected $name;
+
+	/**
+	 * @var Settings
+	 * @ORM\OneToOne(targetEntity="Settings", mappedBy="user")
+	 */
+	protected $settings;
 
 	/**
 	 * @return string
@@ -82,12 +88,30 @@ class User implements Authenticatable
 	}
 
 	/**
-	 * @param string $email
-	 * @return User
+	 * @param $email
+	 * @return $this
 	 */
 	public function setEmail($email)
 	{
 		$this->email = $email;
 		return $this;
 	}
+
+	/**
+	 * @return Settings
+	 */
+	public function getSettings()
+	{
+		return $this->settings;
+	}
+
+	/**
+	 * @param Settings $settings
+	 */
+	public function setSettings($settings)
+	{
+		$this->settings = $settings;
+	}
+
+
 }
