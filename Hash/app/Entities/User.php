@@ -1,14 +1,13 @@
 <?php
 namespace App\Entities;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping AS ORM;
 use Illuminate\Contracts\Auth\Authenticatable;
-use App\Entities\Traits;
-use \LaravelDoctrine\ORM\Auth;
+use LaravelDoctrine\ORM\Auth;
 
 /**
  * @ORM\Entity
- * @ORM\Table
  */
 class User implements Authenticatable
 {
@@ -16,51 +15,38 @@ class User implements Authenticatable
 	use Traits\Id;
 
     /**
-     * @ORM\Column(type="comment")
-     * @ORM\OneToMany(targetEntity="App\Entities\Comment", mappedBy="author")
-     * @var comment
+     * @ORM\OneToMany(targetEntity="Comment", mappedBy="author")
+     * @var ArrayCollection|Comment[]
      */
     private $comments;
 
     /**
-     * @ORM\Column(type="post")
-     * @ORM\OneToMany(targetEntity="App\Entities\Post", mappedBy="author")
-     * @var post
+     * @ORM\OneToMany(targetEntity="Post", mappedBy="author")
+     * @var ArrayCollection|Post[]
      */
     private $posts;
 
     /**
-     * @ORM\Column(type="user")
-     * @ORM\ManyToMany(targetEntity="App\Entities\User", mappedBy="following")
-     * @var user
+     * @ORM\ManyToMany(targetEntity="User", mappedBy="following")
+     * @var ArrayCollection|User[]
      */
     private $followers;
 
     /**
-     * @ORM\Column(type="user")
-     * @ORM\ManyToMany(targetEntity="App\Entities\User", inversedBy="followers")
-     * @var user
+     * @ORM\ManyToMany(targetEntity="User", inversedBy="followers")
+     * @var ArrayCollection|User[]
      */
     private $following;
 
     /**
-     * @ORM\Column(type="tag")
-     * @ORM\ManyToMany(targetEntity="App\Entities\Tag", mappedBy="subscriber")
-     * @var tag
+     * @ORM\ManyToMany(targetEntity="Tag", mappedBy="subscribers")
+     * @var ArrayCollection|Tag[]
      */
     private $subscriptions;
 
     /**
-     * @ORM\Column(type="tag")
-     * @ORM\ManyToMany(targetEntity="App\Entities\Tag", mappedBy="User")
-     * @var tag
-     */
-    private $curate;
-
-    /**
-     * @ORM\Column(type="discussion")
-     * @ORM\OneToMany(targetEntity="App\Entities\Discussion", mappedBy="lead")
-     * @var discussion
+     * @ORM\OneToMany(targetEntity="Discussion", mappedBy="author")
+     * @var ArrayCollection|Discussion[]
      */
     private $leading;
 

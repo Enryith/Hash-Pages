@@ -2,34 +2,31 @@
 
 namespace App\Entities;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping AS ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table
  */
 class Post
 {
     use Traits\Id;
 
     /**
-     * @ORM\Column(type="score")
-     * @ORM\OneToOne(targetEntity="App/Entities/Score", mappedBy="post")
-     * @var Score
+     * @ORM\OneToMany(targetEntity="Score", mappedBy="post")
+     * @var ArrayCollection|Score[]
      */
-    private $score;
+    private $scores;
 
     /**
-     * @ORM\Column(type="User")
-     * @ORM\ManyToOne(targetEntity="App/Entities/User", inversedBy="posts")
-     * @var score
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="posts")
+     * @var User
      */
     private $author;
 
     /**
-     * @ORM\Column(type="discussion")
-     * @ORM\OneToMany(targetEntity="App\Entities\Discussion", mappedBy="post")
-     * @var Discussion
+     * @ORM\OneToMany(targetEntity="Discussion", mappedBy="post")
+     * @var ArrayCollection|Discussion[]
      */
     private $discussion;
 
@@ -37,27 +34,31 @@ class Post
      * @ORM\Column(type="string")
      * @var string
      */
-    private $Body;
+    private $body;
+
     /**
      * @ORM\Column(type="string")
      * @var string
      */
-    private $Title;
+    private $title;
+
     /**
      * @ORM\Column(type="string")
      * @var string
      */
-    private $Link;
+    private $link;
+
     /**
      * @ORM\Column(type="integer")
      * @var integer
      */
-    private $Agree;
+    private $agree;
+
     /**
      * @ORM\Column(type="integer")
      * @var integer
      */
-    private $Disagree;
+    private $disagree;
 
 
 }

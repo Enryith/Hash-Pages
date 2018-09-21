@@ -12,32 +12,28 @@ use Doctrine\ORM\Mapping AS ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table
  */
 class Score
 {
     use Traits\Id;
 
     /**
-     * @ORM\Column(type="Tag")
-     * @ORM\OneToMany(targetEntity="App/Entities/Tag", mappedBy="score")
-     * @var tag
+     * @ORM\ManyToOne(targetEntity="Tag", inversedBy="scores")
+     * @var Tag
      */
     private $tag;
 
     /**
-     * @ORM\Column(type="discussion")
-     * @ORM\OneToMany(targetEntity="App\Entities\Discussion", mappedBy="score")
-     * @var discussion
-     */
-    private $discussion;
-
-    /**
-     * @ORM\Column(type="Post")
-     * @ORM\OneToOne(targetEntity="App/Entities/Post", inversedBy="score")
-     * @var post
+     * @ORM\ManyToOne(targetEntity="Post", inversedBy="scores")
+     * @var Post
      */
     private $post;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Discussion", inversedBy="scores")
+     * @var Discussion
+     */
+    private $discussion;
 
     /**
      * @ORM\Column(type="integer")

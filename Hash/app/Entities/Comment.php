@@ -1,44 +1,38 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: dknallur
- * Date: 9/20/2018
- * Time: 6:56 PM
- */
 
 namespace App\Entities;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping AS ORM;
 
+/**
+ * @ORM\Entity
+ */
 class Comment
 {
     use Traits\Id;
 
     /**
-     * @ORM\Column(type="discussion")
-     * @ORM\ManyToOne(targetEntity="App/Entities/Discussion", inversedBy="comment")
-     * @var discussion
+     * @ORM\ManyToOne(targetEntity="Discussion", inversedBy="comment")
+     * @var Discussion
      */
     private $discussion;
 
     /**
-     * @ORM\Column(type="comment")
-     * @ORM\ManyToOne(targetEntity="App/Entities/Comment", inversedBy="child")
-     * @var comment
+     * @ORM\ManyToOne(targetEntity="Comment", inversedBy="child")
+     * @var Comment
      */
     private $parent;
 
     /**
-     * @ORM\Column(type="comment")
-     * @ORM\OneToMany(targetEntity="App/Entities/Comment", mappedBy ="parent")
-     * @var comment
+     * @ORM\OneToMany(targetEntity="Comment", mappedBy ="parent")
+     * @var ArrayCollection|Comment[]
      */
     private $child;
 
     /**
-     * @ORM\Column(type="user")
-     * @ORM\ManyToOne(targetEntity="App/Entities/User", inversedBy="comment")
-     * @var user
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="comment")
+     * @var ArrayCollection|User[]
      */
     private $author;
 
@@ -60,5 +54,5 @@ class Comment
      */
     private $disagree;
 
-    
+
 }

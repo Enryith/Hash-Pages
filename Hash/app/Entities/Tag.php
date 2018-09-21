@@ -2,42 +2,33 @@
 
 namespace App\Entities;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping AS ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table
  */
 class Tag
 {
     use Traits\Id;
 
     /**
-     * @ORM\Column(type="score")
-     * @ORM\ManyToOne(targetEntity="App\Entities\Score", inversedBy="tag")
-     * @var Score
+     * @ORM\OneToMany(targetEntity="Score", mappedBy="tag")
+     * @var ArrayCollection|Score[]
      */
-    private $score;
+    private $scores;
 
     /**
-     * @ORM\Column(type="user")
-     * @ORM\ManyToMany(targetEntity="App\Entities\User", inversedBy="curate")
-     * @var user
+     * @ORM\ManyToMany(targetEntity="User", inversedBy="subscriptions")
+     * @var ArrayCollection|User[]
      */
-    private $curators;
-
-    /**
-     * @ORM\Column(type="user")
-     * @ORM\ManyToMany(targetEntity="App\Entities\User", inversedBy="subscriptions")
-     * @var user
-     */
-    private $subscriber;
+    private $subscribers;
 
     /**
      * @ORM\Column(type="string")
      * @var string
      */
-    private $Tag;
+    private $tag;
 
 
 }

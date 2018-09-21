@@ -10,28 +10,28 @@ namespace App\Entities;
 
 use Doctrine\ORM\Mapping AS ORM;
 
+/**
+ * @ORM\Entity
+ */
 class Discussion
 {
     use Traits\Id;
 
     /**
-     * @ORM\Column(type="post")
-     * @ORM\ManyToOne(targetEntity="App\Entities\Post", inversedBy="discussion")
-     * @var post
+     * @ORM\ManyToOne(targetEntity="Post", inversedBy="discussion")
+     * @var Post
      */
     private $post;
 
     /**
-     * @ORM\Column(type="score")
-     * @ORM\ManyToOne(targetEntity="App\Entities\Score", inversedBy="discussion")
-     * @var score
+     * @ORM\ManyToOne(targetEntity="Score", inversedBy="discussion")
+     * @var Score
      */
     private $score;
 
     /**
-     * @ORM\Column(type="user")
-     * @ORM\ManyToOne(targetEntity="App\Entities\User", inversedBy="leading")
-     * @var user
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="leading")
+     * @var User
      */
     private $lead;
 
