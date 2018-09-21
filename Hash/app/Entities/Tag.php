@@ -21,6 +21,22 @@ class Tag
     private $score;
 
     /**
+     * @ORM\curators
+     * @ORM\Column(type="user")
+     * @ORM\ManyToMany(user="App\Entities\User", inversedBy="Tag")
+     * @var user
+     */
+    private $curators;
+
+    /**
+     * @ORM\subscriber
+     * @ORM\Column(type="user")
+     * @ORM\ManyToMany(user="App\Entities\User", inversedBy="Tag")
+     * @var user
+     */
+    private $subscriber;
+
+    /**
      * @ORM\Tag
      * @ORM\Column(type="string")
      * @var string
@@ -65,6 +81,38 @@ class Tag
     {
         $this->Tag = $Tag;
         return $this;
+    }
+
+    /**
+     * @return user
+     */
+    public function getCurators(): user
+    {
+        return $this->curators;
+    }
+
+    /**
+     * @param user $curators
+     */
+    public function setCurators(user $curators): void
+    {
+        $this->curators = $curators;
+    }
+
+    /**
+     * @return user
+     */
+    public function getSubscriber(): user
+    {
+        return $this->subscriber;
+    }
+
+    /**
+     * @param user $subscriber
+     */
+    public function setSubscriber(user $subscriber): void
+    {
+        $this->subscriber = $subscriber;
     }
 
 
