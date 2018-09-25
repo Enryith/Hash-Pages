@@ -19,5 +19,5 @@
 				a following of your own.
 			</p>
 		</div>
-	@endif
+	@endauth
 @endsection

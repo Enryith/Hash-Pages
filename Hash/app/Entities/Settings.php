@@ -18,7 +18,7 @@ class Settings
 
 	/**
 	 * @var User
-	 * @ORM\OneToOne(targetEntity="User", mappedBy="settings")
+	 * @ORM\OneToOne(targetEntity="User", inversedBy="settings")
 	 */
 	protected $user;
 

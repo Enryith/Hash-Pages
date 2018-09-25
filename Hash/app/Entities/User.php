@@ -88,7 +88,7 @@ class User implements Authenticatable
 	}
 
 	/**
-	 * @param $email
+	 * @param string $email
 	 * @return $this
 	 */
 	public function setEmail($email)
