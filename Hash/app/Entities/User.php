@@ -78,4 +78,57 @@ class User implements Authenticatable
 	 */
 	protected $name;
 
+    /**
+	 * @return string
+	 */
+	public function getUsername()
+	{
+		return $this->username;
+	}
+
+	/**
+	 * @param string $username
+	 * @return User
+	 */
+	public function setUsername($username)
+	{
+		$this->username = $username;
+		return $this;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getName()
+	{
+		return $this->name;
+	}
+
+	/**
+	 * @param string $name
+	 * @return User
+	 */
+	public function setName($name)
+	{
+		$this->name = $name;
+		return $this;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getEmail()
+	{
+		return $this->email;
+	}
+
+	/**
+	 * @param string $email
+	 * @return User
+	 */
+	public function setEmail($email)
+	{
+		$this->email = $email;
+		return $this;
+	}
 }
