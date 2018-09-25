@@ -27,7 +27,7 @@ class Auth extends Controller
 
 	//Constraints for password
 	protected $constraintsPassword = "min:8|max:32";
-	protected $constraintsUsername = "min:3|alpha_num";
+	protected $constraintsUsername = "min:3";
 
 	public function __construct(EntityManagerInterface $em, Validation $validator, Guard $auth, Hasher $hash)
 	{
@@ -114,7 +114,7 @@ class Auth extends Controller
 	public function store(Request $request)
 	{
 		$valid = $this->validator->make($request->all(), [
-			'username' => "required|unique:App\Entities\User,username|{$this->constraintsUsername}",
+			'username' => "required|unique:App\Entities\User,username|alpha_num|{$this->constraintsUsername}",
 			'email' => 'required|email|unique:App\Entities\User,email',
 			'name' => 'required|min:2',
 			'password' => "required|same:password_confirmation|{$this->constraintsPassword}",
