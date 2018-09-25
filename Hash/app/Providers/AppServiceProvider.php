@@ -2,15 +2,14 @@
 
 namespace App\Providers;
 
-use App\Repositories\User;
+use App\Entities\User;
+use App\Repositories\User as UserRepository;
 use Illuminate\Support\ServiceProvider;
-use LaravelDoctrine\ORM\Facades\EntityManager;
 
 class AppServiceProvider extends ServiceProvider
 {
 	/**
 	 * Bootstrap any application services.
-	 *
 	 * @return void
 	 */
 	public function boot()
@@ -20,12 +19,16 @@ class AppServiceProvider extends ServiceProvider
 
 	/**
 	 * Register any application services.
-	 *
 	 * @return void
 	 */
 	public function register()
 	{
-		$users = EntityManager::getRepository(User::class);
-		$this->app->instance(User::class, $users);
+		$this->app->bind(UserRepository::class, function($app) {
+			// This is what Doctrine's EntityRepository needs in its constructor.
+			return new UserRepository(
+				$app['em'],
+				$app['em']->getClassMetaData(User::class)
+			);
+		});
 	}
 }

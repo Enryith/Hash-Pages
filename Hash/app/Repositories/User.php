@@ -2,17 +2,22 @@
 
 namespace App\Repositories;
 
-use Doctrine\Common\Persistence\ObjectRepository;
+use App\Entities;
+use Doctrine\ORM\EntityRepository;
+use LaravelDoctrine\ORM\Pagination\PaginatesFromRequest;
+use Illuminate\Pagination\LengthAwarePaginator;
 
-class User
+class User extends EntityRepository
 {
-	/**
-	 * @var ObjectRepository
-	 */
-	private $users;
+	use PaginatesFromRequest;
 
-	public function __construct(ObjectRepository $users)
+	/**
+	 * @return LengthAwarePaginator|Entities\User[]
+	 */
+	public function paginateUsers()
 	{
-		$this->users = $users;
+		$query = $this->createQueryBuilder('o');
+
+		return $this->paginate($query->getQuery(), 1, 'page');
 	}
 }

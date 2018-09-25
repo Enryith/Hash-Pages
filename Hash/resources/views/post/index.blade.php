@@ -1,13 +1,13 @@
 @extends('theme.base')
 @section('title', 'Landing')
 @section('content')
-@php /** @var \Illuminate\Database\Query\Builder $users */@endphp
-@php /** @var \Illuminate\Contracts\Pagination\LengthAwarePaginator $pag */@endphp
+@php /** @var Illuminate\Pagination\LengthAwarePaginator|App\Entities\User[] $pag */@endphp
 
 	<div class="container">
-		@php dd($users, $pag) @endphp
+
+		@foreach($pag as $user)
+			{{$user->username}}
+		@endforeach
 	</div>
-
-	{{ $users->links() }}
-
+{{$pag->links()}}
 @endsection
