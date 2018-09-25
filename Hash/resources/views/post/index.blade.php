@@ -1,11 +1,11 @@
 @extends('theme.base')
 @section('title', 'Landing')
 @section('content')
+@php /** @var \Illuminate\Database\Query\Builder $users */@endphp
+@php /** @var \Illuminate\Contracts\Pagination\LengthAwarePaginator $pag */@endphp
 
 	<div class="container">
-		@foreach ($users as $user)
-			<?php var_dump($user->); ?>
-		@endforeach
+		@php dd($users, $pag) @endphp
 	</div>
 
 	{{ $users->links() }}

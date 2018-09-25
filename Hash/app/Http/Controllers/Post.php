@@ -1,16 +1,17 @@
 <?php
 namespace App\Http\Controllers;
 
-
-use Illuminate\Support\Facades\DB;
 use Illuminate\Routing\Controller;
+use Illuminate\Database\Connection;
 
 class Post extends Controller
 {
-	public function index()
+	public function index(Connection $db)
 	{
-		$users = DB::table('users')->paginate();
+		$users = $db->table('users');
 
-		return view('post.index')->with(['users' => $users]);
+		$pag = $users->paginate();
+
+		return view('post.index')->with(compact('users', 'pag'));
 	}
 }
