@@ -16,10 +16,8 @@ class Auth extends Controller
 	use ThrottlesLogins;
 
 	//Services
-	protected $em;
 	protected $validator;
 	protected $auth;
-	protected $hash;
 
 	//Defined from ThrottlesLogin
 	protected $maxAttempts = 5;
@@ -29,13 +27,11 @@ class Auth extends Controller
 	protected $constraintsPassword = "min:8|max:32";
 	protected $constraintsUsername = "min:3";
 
-	public function __construct(EntityManagerInterface $em, Validation $validator, Guard $auth, Hasher $hash)
+	public function __construct(Validation $validator, Guard $auth)
 	{
 		/** @var StatefulGuard $auth */
-		$this->em = $em;
 		$this->validator = $validator;
 		$this->auth = $auth;
-		$this->hash = $hash;
 	}
 
 	/**
@@ -108,10 +104,12 @@ class Auth extends Controller
 
 	/**
 	 * @param Request $request
+	 * @param EntityManagerInterface $em
+	 * @param Hasher $hash
 	 * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
 	 * @throws \Illuminate\Validation\ValidationException
 	 */
-	public function store(Request $request)
+	public function store(Request $request, EntityManagerInterface $em, Hasher $hash)
 	{
 		$valid = $this->validator->make($request->all(), [
 			'username' => "required|unique:App\Entities\User,username|alpha_num|{$this->constraintsUsername}",
@@ -124,15 +122,15 @@ class Auth extends Controller
 		$valid->validate();
 		$data = $valid->getData();
 
-		$hashWord = $this->hash->make($data["password"], ['rounds' => 12]);
+		$hashWord = $hash->make($data["password"], ['rounds' => 12]);
 		$user = new Entities\User();
 		$user->setUsername($data["username"])
 			->setName($data["name"])
 			->setEmail($data["email"])
 			->setPassword($hashWord);
 
-		$this->em->persist($user);
-		$this->em->flush();
+		$em->persist($user);
+		$em->flush();
 		$request->session()->flash("alert-success", trans('auth.created', ["name" => $user->getName()]));
 
 		return redirect('/auth/login');
