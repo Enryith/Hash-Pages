@@ -10,25 +10,23 @@ use Doctrine\ORM\Mapping AS ORM;
  */
 class Tag
 {
-    use Traits\Id;
+	use Traits\Id;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Score", mappedBy="tag")
-     * @var ArrayCollection|Score[]
-     */
-    private $scores;
+	/**
+	 * @ORM\OneToMany(targetEntity="Score", mappedBy="tag")
+	 * @var ArrayCollection|Score[]
+	 */
+	private $scores;
 
-    /**
-     * @ORM\ManyToMany(targetEntity="User", inversedBy="subscriptions")
-     * @var ArrayCollection|User[]
-     */
-    private $subscribers;
+	/**
+	 * @ORM\ManyToMany(targetEntity="User", inversedBy="subscriptions")
+	 * @var ArrayCollection|User[]
+	 */
+	private $subscribers;
 
-    /**
-     * @ORM\Column(type="string")
-     * @var string
-     */
-    private $tag;
-
-
+	/**
+	 * @ORM\Column(type="string")
+	 * @var string
+	 */
+	private $tag;
 }

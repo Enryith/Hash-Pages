@@ -4,6 +4,7 @@ namespace App\Entities;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping AS ORM;
 use Illuminate\Contracts\Auth\Authenticatable;
+use App\Entities\Traits;
 use LaravelDoctrine\ORM\Auth;
 
 /**
@@ -14,41 +15,41 @@ class User implements Authenticatable
 	use Auth\Authenticatable;
 	use Traits\Id;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Comment", mappedBy="author")
-     * @var ArrayCollection|Comment[]
-     */
-    private $comments;
+	/**
+	 * @ORM\OneToMany(targetEntity="Comment", mappedBy="author")
+	 * @var ArrayCollection|Comment[]
+	 */
+	private $comments;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Post", mappedBy="author")
-     * @var ArrayCollection|Post[]
-     */
-    private $posts;
+	/**
+	 * @ORM\OneToMany(targetEntity="Post", mappedBy="author")
+	 * @var ArrayCollection|Post[]
+	 */
+	private $posts;
 
-    /**
-     * @ORM\ManyToMany(targetEntity="User", mappedBy="following")
-     * @var ArrayCollection|User[]
-     */
-    private $followers;
+	/**
+	 * @ORM\ManyToMany(targetEntity="User", mappedBy="following")
+	 * @var ArrayCollection|User[]
+	 */
+	private $followers;
 
-    /**
-     * @ORM\ManyToMany(targetEntity="User", inversedBy="followers")
-     * @var ArrayCollection|User[]
-     */
-    private $following;
+	/**
+	 * @ORM\ManyToMany(targetEntity="User", inversedBy="followers")
+	 * @var ArrayCollection|User[]
+	 */
+	private $following;
 
-    /**
-     * @ORM\ManyToMany(targetEntity="Tag", mappedBy="subscribers")
-     * @var ArrayCollection|Tag[]
-     */
-    private $subscriptions;
+	/**
+	 * @ORM\ManyToMany(targetEntity="Tag", mappedBy="subscribers")
+	 * @var ArrayCollection|Tag[]
+	 */
+	private $subscriptions;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Discussion", mappedBy="author")
-     * @var ArrayCollection|Discussion[]
-     */
-    private $leading;
+	/**
+	 * @ORM\OneToMany(targetEntity="Discussion", mappedBy="author")
+	 * @var ArrayCollection|Discussion[]
+	 */
+	private $leading;
 
 	/**
 	 * Warning: only use getters to get this
@@ -58,11 +59,11 @@ class User implements Authenticatable
 	 */
 	public $username;
 
-    /**
-     * @ORM\Column(type="string")
-     * @var string
-     */
-    protected $password;
+	/**
+	 * @ORM\Column(type="string")
+	 * @var string
+	 */
+	protected $password;
 
 	/**
 	 * Warning: only use getters to get this
@@ -78,7 +79,13 @@ class User implements Authenticatable
 	 */
 	protected $name;
 
-    /**
+	/**
+	 * @var Settings
+	 * @ORM\OneToOne(targetEntity="Settings", mappedBy="user")
+	 */
+	protected $settings;
+
+	/**
 	 * @return string
 	 */
 	public function getUsername()
@@ -124,11 +131,29 @@ class User implements Authenticatable
 
 	/**
 	 * @param string $email
-	 * @return User
+	 * @return $this
 	 */
 	public function setEmail($email)
 	{
 		$this->email = $email;
 		return $this;
 	}
+
+	/**
+	 * @return Settings
+	 */
+	public function getSettings()
+	{
+		return $this->settings;
+	}
+
+	/**
+	 * @param Settings $settings
+	 */
+	public function setSettings($settings)
+	{
+		$this->settings = $settings;
+	}
+
+
 }

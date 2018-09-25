@@ -19,3 +19,4 @@ Route::post('/register', 'Auth@store')->middleware("guest");
 Route::get('/auth/login', 'Auth@login')->middleware("guest");
 Route::post('/auth/login', 'Auth@auth')->middleware("guest");
 Route::get('/auth/logout', 'Auth@logout')->middleware("auth");
+Route::get('/settings', 'Settings@index')->middleware("auth");

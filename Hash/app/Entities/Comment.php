@@ -10,49 +10,47 @@ use Doctrine\ORM\Mapping AS ORM;
  */
 class Comment
 {
-    use Traits\Id;
+	use Traits\Id;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Discussion", inversedBy="comment")
-     * @var Discussion
-     */
-    private $discussion;
+	/**
+	 * @ORM\ManyToOne(targetEntity="Discussion", inversedBy="comment")
+	 * @var Discussion
+	 */
+	private $discussion;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Comment", inversedBy="child")
-     * @var Comment
-     */
-    private $parent;
+	/**
+	 * @ORM\ManyToOne(targetEntity="Comment", inversedBy="child")
+	 * @var Comment
+	 */
+	private $parent;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Comment", mappedBy ="parent")
-     * @var ArrayCollection|Comment[]
-     */
-    private $child;
+	/**
+	 * @ORM\OneToMany(targetEntity="Comment", mappedBy ="parent")
+	 * @var ArrayCollection|Comment[]
+	 */
+	private $child;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="comment")
-     * @var ArrayCollection|User[]
-     */
-    private $author;
+	/**
+	 * @ORM\ManyToOne(targetEntity="User", inversedBy="comment")
+	 * @var ArrayCollection|User[]
+	 */
+	private $author;
 
-    /**
-     * @ORM\Column(type="string")
-     * @var string
-     */
-    private $comment;
+	/**
+	 * @ORM\Column(type="string")
+	 * @var string
+	 */
+	private $comment;
 
-    /**
-     * @ORM\Column(type="integer")
-     * @var integer
-     */
-    private $agree;
+	/**
+	 * @ORM\Column(type="integer")
+	 * @var integer
+	 */
+	private $agree;
 
-    /**
-     * @ORM\Column(type="integer")
-     * @var integer
-     */
-    private $disagree;
-
-
+	/**
+	 * @ORM\Column(type="integer")
+	 * @var integer
+	 */
+	private $disagree;
 }
