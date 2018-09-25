@@ -14,41 +14,41 @@ class User implements Authenticatable
 	use Auth\Authenticatable;
 	use Traits\Id;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Comment", mappedBy="author")
-     * @var ArrayCollection|Comment[]
-     */
-    private $comments;
+	/**
+	 * @ORM\OneToMany(targetEntity="Comment", mappedBy="author")
+	 * @var ArrayCollection|Comment[]
+	 */
+	private $comments;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Post", mappedBy="author")
-     * @var ArrayCollection|Post[]
-     */
-    private $posts;
+	/**
+	 * @ORM\OneToMany(targetEntity="Post", mappedBy="author")
+	 * @var ArrayCollection|Post[]
+	 */
+	private $posts;
 
-    /**
-     * @ORM\ManyToMany(targetEntity="User", mappedBy="following")
-     * @var ArrayCollection|User[]
-     */
-    private $followers;
+	/**
+	 * @ORM\ManyToMany(targetEntity="User", mappedBy="following")
+	 * @var ArrayCollection|User[]
+	 */
+	private $followers;
 
-    /**
-     * @ORM\ManyToMany(targetEntity="User", inversedBy="followers")
-     * @var ArrayCollection|User[]
-     */
-    private $following;
+	/**
+	 * @ORM\ManyToMany(targetEntity="User", inversedBy="followers")
+	 * @var ArrayCollection|User[]
+	 */
+	private $following;
 
-    /**
-     * @ORM\ManyToMany(targetEntity="Tag", mappedBy="subscribers")
-     * @var ArrayCollection|Tag[]
-     */
-    private $subscriptions;
+	/**
+	 * @ORM\ManyToMany(targetEntity="Tag", mappedBy="subscribers")
+	 * @var ArrayCollection|Tag[]
+	 */
+	private $subscriptions;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Discussion", mappedBy="author")
-     * @var ArrayCollection|Discussion[]
-     */
-    private $leading;
+	/**
+	 * @ORM\OneToMany(targetEntity="Discussion", mappedBy="author")
+	 * @var ArrayCollection|Discussion[]
+	 */
+	private $leading;
 
 	/**
 	 * Warning: only use getters to get this
@@ -58,11 +58,11 @@ class User implements Authenticatable
 	 */
 	public $username;
 
-    /**
-     * @ORM\Column(type="string")
-     * @var string
-     */
-    protected $password;
+	/**
+	 * @ORM\Column(type="string")
+	 * @var string
+	 */
+	protected $password;
 
 	/**
 	 * Warning: only use getters to get this
@@ -78,7 +78,7 @@ class User implements Authenticatable
 	 */
 	protected $name;
 
-    /**
+	/**
 	 * @return string
 	 */
 	public function getUsername()
