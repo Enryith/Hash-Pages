@@ -7,7 +7,7 @@ use Doctrine\ORM\EntityRepository;
 use LaravelDoctrine\ORM\Pagination\PaginatesFromRequest;
 use Illuminate\Pagination\LengthAwarePaginator;
 
-class User extends EntityRepository
+class Users extends EntityRepository
 {
 	use PaginatesFromRequest;
 
@@ -16,8 +16,7 @@ class User extends EntityRepository
 	 */
 	public function paginateUsers()
 	{
-		$query = $this->createQueryBuilder('o');
-
+		$query = $this->createQueryBuilder('u');
 		return $this->paginate($query->getQuery(), 1, 'page');
 	}
 }
