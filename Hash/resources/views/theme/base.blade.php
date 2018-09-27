@@ -47,9 +47,9 @@
 					@auth
 						<li class="nav-item dropdown">
 							<a class="nav-link dropdown-toggle" role="button" data-toggle="dropdown">
-								{{ $user->getUsername() }}
+								{{ $user->getEmail() }}
 							</a>
-							<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+							<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
 								<a class="dropdown-item" href="{{url("/post")}}">Post</a>
 								<a class="dropdown-item" href="#">My Profile</a>
 								<a class="dropdown-item" href="{{url("/settings")}}">Settings</a>
