@@ -154,8 +154,5 @@ class Auth extends Controller
 	{
 		return "login";
 	}
-	public function profile()
-	{
-		return view("account.profile");
-	}
+
 }
