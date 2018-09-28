@@ -52,6 +52,12 @@ class User implements Authenticatable
 	private $leading;
 
 	/**
+	 * @ORM\ManyToMany(targetEntity="Conversation", mappedBy="users")
+	 * @var ArrayCollection|Conversation[]
+	 */
+	private $conversations;
+
+	/**
 	 * Warning: only use getters to get this
 	 * field or bad things will happen!
 	 * @ORM\Column(type="string")
