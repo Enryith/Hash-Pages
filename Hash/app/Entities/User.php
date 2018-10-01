@@ -60,12 +60,6 @@ class User implements Authenticatable
 	public $username;
 
 	/**
-	 * @ORM\Column(type="string")
-	 * @var string
-	 */
-	protected $password;
-
-	/**
 	 * Warning: only use getters to get this
 	 * field or bad things will happen!
 	 * @ORM\Column(type="string")
@@ -155,5 +149,18 @@ class User implements Authenticatable
 		$this->settings = $settings;
 	}
 
+	/**
+	 * @param Post $post
+	 * @return $this
+	 */
+	public function addPost(Post $post)
+	{
+		if (!$this->posts->contains($post))
+		{
+			$this->posts->add($post);
+			$post->setAuthor($this);
+		}
 
+		return $this;
+	}
 }

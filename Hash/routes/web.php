@@ -14,6 +14,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', 'Auth@welcome');
+Route::get('/all', "Post@index");
+Route::get('/post', "Post@form")->middleware("auth");
+Route::post('/post', "Post@store")->middleware("auth");
 Route::get('/register', "Auth@register")->middleware("guest");
 Route::post('/register', 'Auth@store')->middleware("guest");
 Route::get('/auth/login', 'Auth@login')->middleware("guest");
