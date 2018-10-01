@@ -41,8 +41,18 @@
 			<form class="form-inline">
 				<ul class="navbar-nav mr-auto">
 					@auth
-						<li class="nav-item">
-							<a class="nav-link" href="{{url("/auth/logout")}}">Logout</a>
+						<li class="nav-item dropdown">
+							<a class="nav-link dropdown-toggle" role="button" data-toggle="dropdown">
+								@php echo(\Illuminate\Support\Facades\Auth::user()->getUserName()) @endphp
+							</a>
+							<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+								<a class="dropdown-item" href="{{url("/")}}">Home</a>
+								<a class="dropdown-item" href="#">My Profile</a>
+
+								<a class="dropdown-item" href="{{url("/settings")}}">Settings</a>
+								<div class="dropdown-divider"></div>
+								<a class="dropdown-item" href="{{url("/auth/logout")}}">Logout</a>
+							</div>
 						</li>
 					@else
 						<li class="nav-item">

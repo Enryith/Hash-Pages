@@ -16,3 +16,11 @@ Route::get('/', 'Index@index');
 Route::get('/home', function () {
   return view('pages/home');
 });
+
+Route::get('/profile', function () {
+  return view('pages/profile');
+});
+
+Route::get('/editprofile', function () {
+  return view('pages/editprofile');
+});
