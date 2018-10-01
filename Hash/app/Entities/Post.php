@@ -71,6 +71,41 @@ class Post
 	}
 
 	/**
+	 * @return Score[]|ArrayCollection
+	 */
+	public function getScores()
+	{
+		return $this->scores;
+	}
+
+	/**
+	 * @param Score[]|ArrayCollection $scores
+	 * @return Post
+	 */
+	public function setScores($scores)
+	{
+		$scores->addPostScore($this);
+		$this->scores = $scores;
+		return $this;
+	}
+
+	/**
+	 * @return Discussion[]|ArrayCollection
+	 */
+	public function getDiscussion()
+	{
+		return $this->discussion;
+	}
+
+	/**
+	 * @param Discussion[]|ArrayCollection $discussion
+	 */
+	public function setDiscussion($discussion): void
+	{
+		$this->discussion = $discussion;
+	}
+
+	/**
 	 * @return User
 	 */
 	public function getAuthor()

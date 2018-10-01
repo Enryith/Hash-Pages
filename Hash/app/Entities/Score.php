@@ -40,4 +40,15 @@ class Score
 	 * @var integer
 	 */
 	private $spam;
+
+	public function addPostScore(Post $post)
+	{
+		if (!$this->posts->contains($post))
+		{
+			$this->posts->add($post);
+			$post->setScores($this);
+		}
+
+		return $this;
+	}
 }
