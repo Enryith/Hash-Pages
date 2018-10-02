@@ -8,6 +8,7 @@ return [
     "alpha_num" => ':Attribute can only be letters and numbers.',
     "email" => 'The :attribute field does not look like an email.',
     "unique" => 'That :attribute is already used.',
+	"image" => ':Attribute must be an image.',
     "attributes" => [
         'password_confirmation' => "the second password",
         'login' => "username or email"
