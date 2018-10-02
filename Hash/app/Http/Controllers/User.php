@@ -9,6 +9,7 @@ use Illuminate\Filesystem\FilesystemServiceProvider;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Routing\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Factory as Validation;
 use Illuminate\Contracts\Auth\Guard;
@@ -54,7 +55,7 @@ class User extends Controller
 
 		if ($user->getPicture())
 		{
-			Storage::delete($user->getPicture());
+			File::delete($user->getPicture());
 		}
 
 		//store the file
