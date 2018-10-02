@@ -166,26 +166,24 @@ class User implements Authenticatable
 			$this->posts->add($post);
 			$post->setAuthor($this);
 		}
-
 		return $this;
 	}
 
 	/**
 	 * @return string
 	 */
-	public function getPicture(): string
+	public function getPicture()
 	{
 		return $this->picture;
 	}
 
 	/**
 	 * @param string $picture
+	 * @return $this
 	 */
-	public function setPicture(string $picture): void
+	public function setPicture($picture)
 	{
 		$this->picture = $picture;
+		return $this;
 	}
-
-
-
 }

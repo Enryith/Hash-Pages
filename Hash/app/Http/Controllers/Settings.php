@@ -58,5 +58,4 @@ class Settings extends Controller
 
 		return redirect('/settings');
 	}
-
 }
