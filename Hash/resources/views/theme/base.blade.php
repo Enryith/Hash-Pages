@@ -1,4 +1,8 @@
+@php /** @var $user App\Entities\User */ @endphp
+@php /** @var $auth Illuminate\Contracts\Auth\Guard */ @endphp
 @php /** @var $errors Illuminate\Support\ViewErrorBag */ @endphp
+@inject('auth', 'Illuminate\Contracts\Auth\Guard')
+@php($user = $auth->user())
 <!doctype html>
 <html lang="{{ app()->getLocale() }}">
 <head>
@@ -35,7 +39,7 @@
 		<div class="collapse navbar-collapse" id="main-nav">
 			<ul class="navbar-nav mr-auto">
 				<li class="nav-item">
-					<a class="nav-link" href="#">Link</a>
+					<a class="nav-link" href="{{url("/all")}}">All</a>
 				</li>
 			</ul>
 			<form class="form-inline">
@@ -43,12 +47,11 @@
 					@auth
 						<li class="nav-item dropdown">
 							<a class="nav-link dropdown-toggle" role="button" data-toggle="dropdown">
-								@php echo(\Illuminate\Support\Facades\Auth::user()->getUserName()) @endphp
+								{{ $user->getEmail() }}
 							</a>
-							<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-								<a class="dropdown-item" href="{{url("/")}}">Home</a>
+							<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+								<a class="dropdown-item" href="{{url("/post")}}">Post</a>
 								<a class="dropdown-item" href="#">My Profile</a>
-
 								<a class="dropdown-item" href="{{url("/settings")}}">Settings</a>
 								<div class="dropdown-divider"></div>
 								<a class="dropdown-item" href="{{url("/auth/logout")}}">Logout</a>

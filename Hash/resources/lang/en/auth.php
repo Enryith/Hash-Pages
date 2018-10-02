@@ -6,5 +6,6 @@ return [
 	"created" => ":Name, your account has been created.",
 	"failed" => "Username or password incorrect.",
 	"logout" => "See you later!",
-	"throttle" => "Sorry, please wait :seconds seconds before trying again."
+	"throttle" => "Sorry, please wait :seconds seconds before trying again.",
+	"required" => "Please login first before accessing that!"
 ];
