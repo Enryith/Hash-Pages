@@ -9,7 +9,8 @@
 	@component("form.file")
 		@slot('form', $form)
 		@slot('id', 'picture')
-		@slot('label', 'Upload Picture')
+		@slot('label', 'Upload Avatar:')
+		@slot('hint', 'Choose a Picture')
 		@slot('accept', "image/*")
 	@endcomponent
 
