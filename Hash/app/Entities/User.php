@@ -15,6 +15,10 @@ class User implements Authenticatable
 	use Auth\Authenticatable;
 	use Traits\Id;
 
+	const LUMEN = "Lumen";
+	const DARKLY = "Darkly";
+	const SOLAR = "Solar";
+
 	/**
 	 * @ORM\OneToMany(targetEntity="Comment", mappedBy="author")
 	 * @var ArrayCollection|Comment[]
@@ -74,12 +78,6 @@ class User implements Authenticatable
 	protected $name;
 
 	/**
-	 * @var Settings
-	 * @ORM\OneToOne(targetEntity="Settings", mappedBy="user")
-	 */
-	protected $settings;
-
-	/**
 	 * @ORM\Column(type="string")
 	 * @var string
 	 */
@@ -137,22 +135,6 @@ class User implements Authenticatable
 	{
 		$this->email = $email;
 		return $this;
-	}
-
-	/**
-	 * @return Settings
-	 */
-	public function getSettings()
-	{
-		return $this->settings;
-	}
-
-	/**
-	 * @param Settings $settings
-	 */
-	public function setSettings($settings)
-	{
-		$this->settings = $settings;
 	}
 
 	/**
