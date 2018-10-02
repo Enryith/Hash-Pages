@@ -2,15 +2,11 @@
 
 namespace App\Http\Controllers;
 
-
 use App\Entities;
 use Doctrine\ORM\EntityManagerInterface;
-use Illuminate\Filesystem\FilesystemServiceProvider;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Routing\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Factory as Validation;
 use Illuminate\Contracts\Auth\Guard;
 
@@ -35,17 +31,18 @@ class User extends Controller
 	}
 
 	/**
+	 * @param Guard $auth
 	 * @param Request $request
 	 * @param Validation $validator
 	 * @param EntityManagerInterface $em
+	 * @param Filesystem $file
 	 * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
 	 * @throws \Illuminate\Validation\ValidationException
-	 * @throws \Exception
 	 */
-	public function update(Request $request, Validation $validator, EntityManagerInterface $em)
+	public function update(Guard $auth, Request $request, Validation $validator, EntityManagerInterface $em, Filesystem $file)
 	{
 		/** @var Entities\User $user */
-		$user = Auth::user();
+		$user = $auth->user();
 
 		$valid = $validator->make($request->all(), [
 			'avatar' => "required|image|dimensions:max_width=800,max_height=800",
@@ -55,17 +52,10 @@ class User extends Controller
 
 		if ($user->getPicture())
 		{
-			File::delete($user->getPicture());
+			$file->delete($user->getPicture());
 		}
 
-		//store the file
-		$id = $request->file('avatar')->storePublicly("public/avatars");
-
-		//dd($id);
-
-		//store filename in database
-		$user->setPicture($id);
-
+		$user->setPicture($request->file('avatar')->storePublicly("public/avatars"));
 		$em->flush();
 
 		return redirect('/user');

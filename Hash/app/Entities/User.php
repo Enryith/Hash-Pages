@@ -143,8 +143,7 @@ class User implements Authenticatable
 	 */
 	public function addPost(Post $post)
 	{
-		if (!$this->posts->contains($post))
-		{
+		if (!$this->posts->contains($post)) {
 			$this->posts->add($post);
 			$post->setAuthor($this);
 		}
@@ -157,6 +156,11 @@ class User implements Authenticatable
 	public function getPicture()
 	{
 		return $this->picture;
+	}
+
+	public function getPicturePublic()
+	{
+		return str_replace("public","", $this->picture);
 	}
 
 	/**
