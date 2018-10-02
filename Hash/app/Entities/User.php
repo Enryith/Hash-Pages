@@ -83,6 +83,11 @@ class User implements Authenticatable
 	 */
 	protected $picture;
 
+	public function __construct()
+	{
+		$this->picture = "";
+	}
+
 	/**
 	 * @return string
 	 */
