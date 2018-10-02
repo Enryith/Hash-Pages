@@ -51,7 +51,7 @@
 							</a>
 							<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
 								<a class="dropdown-item" href="{{url("/post")}}">Post</a>
-								<a class="dropdown-item" href="#">My Profile</a>
+								<a class="dropdown-item" href="{{url("/user")}}">My Profile</a>
 								<a class="dropdown-item" href="{{url("/settings")}}">Settings</a>
 								<div class="dropdown-divider"></div>
 								<a class="dropdown-item" href="{{url("/auth/logout")}}">Logout</a>

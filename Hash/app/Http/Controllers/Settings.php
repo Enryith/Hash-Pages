@@ -56,7 +56,7 @@ class Settings extends Controller
 
 		$em->flush();
 
-		return redirect('/');
+		return redirect('/settings');
 	}
 
 }

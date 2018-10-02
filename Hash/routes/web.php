@@ -24,3 +24,4 @@ Route::post('/auth/login', 'Auth@auth')->middleware("guest");
 Route::get('/auth/logout', 'Auth@logout')->middleware("auth");
 Route::get('/settings', 'Settings@form')->middleware("auth");
 Route::post('/settings', 'Settings@update')->middleware("auth");
+Route::get('/user/{user?}', 'User@view');
