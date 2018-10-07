@@ -86,6 +86,12 @@ class User implements Authenticatable
 	protected $settings;
 
 	/**
+	 * @ORM\Column(type="string")
+	 * @var string
+	 */
+	protected $picture;
+
+	/**
 	 * @return string
 	 */
 	public function getUsername()
@@ -166,7 +172,24 @@ class User implements Authenticatable
 			$this->posts->add($post);
 			$post->setAuthor($this);
 		}
+		return $this;
+	}
 
+	/**
+	 * @return string
+	 */
+	public function getPicture()
+	{
+		return $this->picture;
+	}
+
+	/**
+	 * @param string $picture
+	 * @return $this
+	 */
+	public function setPicture($picture)
+	{
+		$this->picture = $picture;
 		return $this;
 	}
 }
