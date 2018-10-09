@@ -15,6 +15,10 @@ class User implements Authenticatable
 	use Auth\Authenticatable;
 	use Traits\Id;
 
+	const LUMEN = "Lumen";
+	const DARKLY = "Darkly";
+	const SOLAR = "Solar";
+
 	/**
 	 * @ORM\OneToMany(targetEntity="Comment", mappedBy="author")
 	 * @var ArrayCollection|Comment[]
@@ -74,16 +78,15 @@ class User implements Authenticatable
 	protected $name;
 
 	/**
-	 * @var Settings
-	 * @ORM\OneToOne(targetEntity="Settings", mappedBy="user")
-	 */
-	protected $settings;
-
-	/**
 	 * @ORM\Column(type="string")
 	 * @var string
 	 */
 	protected $picture;
+
+	public function __construct()
+	{
+		$this->picture = "";
+	}
 
 	/**
 	 * @return string
@@ -140,29 +143,12 @@ class User implements Authenticatable
 	}
 
 	/**
-	 * @return Settings
-	 */
-	public function getSettings()
-	{
-		return $this->settings;
-	}
-
-	/**
-	 * @param Settings $settings
-	 */
-	public function setSettings($settings)
-	{
-		$this->settings = $settings;
-	}
-
-	/**
 	 * @param Post $post
 	 * @return $this
 	 */
 	public function addPost(Post $post)
 	{
-		if (!$this->posts->contains($post))
-		{
+		if (!$this->posts->contains($post)) {
 			$this->posts->add($post);
 			$post->setAuthor($this);
 		}
@@ -175,6 +161,11 @@ class User implements Authenticatable
 	public function getPicture()
 	{
 		return $this->picture;
+	}
+
+	public function getPicturePublic()
+	{
+		return str_replace("public","", $this->picture);
 	}
 
 	/**
