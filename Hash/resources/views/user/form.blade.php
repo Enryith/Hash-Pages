@@ -4,7 +4,7 @@
 @section('title', 'Update Settings')
 @section('content')
 
-	{{ $form->open(['files'=>true])}}
+	{{ $form->model($user,['files'=>true])}}
 
 	@component("form.file")
 		@slot('form', $form)
@@ -12,6 +12,12 @@
 		@slot('label', 'Upload Avatar:')
 		@slot('hint', 'Choose a Picture')
 		@slot('accept', "image/*")
+	@endcomponent
+
+	@component("form.textarea")
+		@slot('form', $form)
+		@slot('id', 'bio')
+		@slot('label', 'Bio:')
 	@endcomponent
 
 	@component("form.submit")

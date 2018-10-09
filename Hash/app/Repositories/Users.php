@@ -19,4 +19,13 @@ class Users extends EntityRepository
 		$query = $this->createQueryBuilder('u');
 		return $this->paginate($query->getQuery(), 1, 'page');
 	}
+
+	/**
+	 * @param $username
+	 * @return Entities\User|null|object
+	 */
+	public function findOneByUsername($username)
+	{
+		return $this->findOneBy(['username' => $username]);
+	}
 }

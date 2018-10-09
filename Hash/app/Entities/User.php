@@ -1,6 +1,7 @@
 <?php
 namespace App\Entities;
 
+use Collective\Html\Eloquent\FormAccessible;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping AS ORM;
 use Illuminate\Contracts\Auth\Authenticatable;
@@ -83,9 +84,16 @@ class User implements Authenticatable
 	 */
 	protected $picture;
 
+	/**
+	 * @ORM\Column(type="string", length=300)
+	 * @var string
+	 */
+	protected $bio;
+
 	public function __construct()
 	{
 		$this->picture = "";
+		$this->bio = "";
 	}
 
 	/**
@@ -165,7 +173,7 @@ class User implements Authenticatable
 
 	public function getPicturePublic()
 	{
-		return str_replace("public","", $this->picture);
+		return str_replace("public","/storage", $this->picture);
 	}
 
 	/**
@@ -177,4 +185,29 @@ class User implements Authenticatable
 		$this->picture = $picture;
 		return $this;
 	}
+
+	/**
+	 * @return string
+	 */
+	public function getBio()
+	{
+		return $this->bio;
+	}
+
+	/**
+	 * @param string $bio
+	 * @return User
+	 */
+	public function setBio($bio)
+	{
+		$this->bio = $bio ?? "";
+		return $this;
+	}
+
+	public function getFormValue($key)
+	{
+		return $this->$key;
+	}
+
+
 }

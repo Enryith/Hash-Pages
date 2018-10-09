@@ -2,6 +2,12 @@
 	margin-top: 70px;
 }
 
+img.profile {
+	object-fit: cover;
+	height: 200px;
+	width: 200px;
+}
+
 .custom-file-label::after  {
 	height: auto !important;
 }
