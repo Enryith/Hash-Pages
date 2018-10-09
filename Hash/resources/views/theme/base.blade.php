@@ -25,6 +25,7 @@
 	        integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
 	        crossorigin="anonymous">
 	</script>
+	<script src="/js/hash.js"></script>
 	<title>HashPages - @yield('title')</title>
 </head>
 <body>
@@ -42,31 +43,29 @@
 					<a class="nav-link" href="{{url("/all")}}">All</a>
 				</li>
 			</ul>
-			<form class="form-inline">
-				<ul class="navbar-nav mr-auto">
-					@auth
-						<li class="nav-item dropdown">
-							<a class="nav-link dropdown-toggle" role="button" data-toggle="dropdown">
-								{{ $user->getEmail() }}
-							</a>
-							<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-								<a class="dropdown-item" href="{{url("/post")}}">Post</a>
-								<a class="dropdown-item" href="{{url("/user")}}">My Profile</a>
-								<a class="dropdown-item" href="{{url("/settings")}}">Settings</a>
-								<div class="dropdown-divider"></div>
-								<a class="dropdown-item" href="{{url("/auth/logout")}}">Logout</a>
-							</div>
-						</li>
-					@else
-						<li class="nav-item">
-							<a class="nav-link" href="{{url("/auth/login")}}">Login</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link" href="{{url("/register")}}">Register</a>
-						</li>
-					@endauth
-				</ul>
-			</form>
+			<ul class="navbar-nav">
+				@auth
+					<li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle" role="button" data-toggle="dropdown">
+							{{ $user->getEmail() }}
+						</a>
+						<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+							<a class="dropdown-item" href="{{url("/post")}}">New Post</a>
+							<a class="dropdown-item" href="{{url("/user")}}">My Profile</a>
+							<a class="dropdown-item" href="{{url("/settings")}}">Settings</a>
+							<div class="dropdown-divider"></div>
+							<a class="dropdown-item" href="{{url("/auth/logout")}}">Logout</a>
+						</div>
+					</li>
+				@else
+					<li class="nav-item">
+						<a class="nav-link" href="{{url("/auth/login")}}">Login</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{{url("/register")}}">Register</a>
+					</li>
+				@endauth
+			</ul>
 		</div>
 	</div>
 </nav>
