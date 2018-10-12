@@ -48,4 +48,18 @@ class Post extends Controller
 		$em->flush();
 		return redirect('/all');
 	}
+
+	public function view(Posts $posts, $id = null)
+	{
+		$post = $posts->findOneById($id);
+
+		if($post instanceof Entities\Post)
+		{
+			return view('post.view')->with(compact('post'));
+		}
+		else
+		{
+			abort(404);
+		}
+	}
 }

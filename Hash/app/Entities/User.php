@@ -1,6 +1,7 @@
 <?php
 namespace App\Entities;
 
+use Collective\Html\Eloquent\FormAccessible;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping AS ORM;
 use Illuminate\Contracts\Auth\Authenticatable;
@@ -14,6 +15,10 @@ class User implements Authenticatable
 {
 	use Auth\Authenticatable;
 	use Traits\Id;
+
+	const LUMEN = "Lumen";
+	const DARKLY = "Darkly";
+	const SOLAR = "Solar";
 
 	/**
 	 * @ORM\OneToMany(targetEntity="Comment", mappedBy="author")
@@ -80,16 +85,22 @@ class User implements Authenticatable
 	protected $name;
 
 	/**
-	 * @var Settings
-	 * @ORM\OneToOne(targetEntity="Settings", mappedBy="user")
-	 */
-	protected $settings;
-
-	/**
 	 * @ORM\Column(type="string")
 	 * @var string
 	 */
 	protected $picture;
+
+	/**
+	 * @ORM\Column(type="string", length=300)
+	 * @var string
+	 */
+	protected $bio;
+
+	public function __construct()
+	{
+		$this->picture = "";
+		$this->bio = "";
+	}
 
 	/**
 	 * @return string
@@ -146,29 +157,12 @@ class User implements Authenticatable
 	}
 
 	/**
-	 * @return Settings
-	 */
-	public function getSettings()
-	{
-		return $this->settings;
-	}
-
-	/**
-	 * @param Settings $settings
-	 */
-	public function setSettings($settings)
-	{
-		$this->settings = $settings;
-	}
-
-	/**
 	 * @param Post $post
 	 * @return $this
 	 */
 	public function addPost(Post $post)
 	{
-		if (!$this->posts->contains($post))
-		{
+		if (!$this->posts->contains($post)) {
 			$this->posts->add($post);
 			$post->setAuthor($this);
 		}
@@ -183,6 +177,11 @@ class User implements Authenticatable
 		return $this->picture;
 	}
 
+	public function getPicturePublic()
+	{
+		return str_replace("public","/storage", $this->picture);
+	}
+
 	/**
 	 * @param string $picture
 	 * @return $this
@@ -192,4 +191,29 @@ class User implements Authenticatable
 		$this->picture = $picture;
 		return $this;
 	}
+
+	/**
+	 * @return string
+	 */
+	public function getBio()
+	{
+		return $this->bio;
+	}
+
+	/**
+	 * @param string $bio
+	 * @return User
+	 */
+	public function setBio($bio)
+	{
+		$this->bio = $bio ?? "";
+		return $this;
+	}
+
+	public function getFormValue($key)
+	{
+		return $this->$key;
+	}
+
+
 }

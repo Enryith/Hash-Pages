@@ -9,8 +9,9 @@ return [
     "email" => 'The :attribute field does not look like an email.',
     "unique" => 'That :attribute is already used.',
 	"image" => ':Attribute must be an image.',
-    "attributes" => [
+	'dimensions' => ':Attribute must be less than :max_height x :max_width px',
+	"attributes" => [
         'password_confirmation' => "the second password",
         'login' => "username or email"
-    ]
+    ],
 ];
