@@ -29,4 +29,10 @@ class Tag
 	 * @var string
 	 */
 	private $tag;
+
+	public function __construct($tag){
+		$this->tag = $tag;
+		$this->subscribers = new ArrayCollection();
+		$this->scores = new ArrayCollection();
+	}
 }

@@ -41,14 +41,10 @@ class Score
 	 */
 	private $spam;
 
-	public function addPostScore(Post $post)
+	public function setPost(Post $post)
 	{
-		if (!$this->posts->contains($post))
-		{
-			$this->posts->add($post);
-			$post->setScores($this);
-		}
-
+		$post->addScore($this);
+		$this->post = $post;
 		return $this;
 	}
 }

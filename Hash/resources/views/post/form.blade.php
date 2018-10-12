@@ -13,6 +13,10 @@
 @endcomponent
 
 @component("form.text")
+
+@endcomponent
+
+@component("form.text")
 	@slot('form', $form)
 	@slot('id', 'link')
 	@slot('label', 'Link:')

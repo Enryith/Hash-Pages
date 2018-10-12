@@ -68,6 +68,8 @@ class Post
 		$this->body = $body;
 		$this->agree = 0;
 		$this->disagree = 0;
+		$this->discussion = new ArrayCollection();
+		$this->scores = new ArrayCollection();
 	}
 
 	/**
@@ -78,14 +80,11 @@ class Post
 		return $this->scores;
 	}
 
-	/**
-	 * @param Score[]|ArrayCollection $scores
-	 * @return Post
-	 */
-	public function setScores($scores)
-	{
-		$scores->addPostScore($this);
-		$this->scores = $scores;
+	public function addScore(Score $score){
+		if(!$this->scores->contains($score)){
+			$score->setPost($this);
+			$this->scores->add($score);
+		}
 		return $this;
 	}
 
