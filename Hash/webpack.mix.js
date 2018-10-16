@@ -11,4 +11,9 @@ const mix = require('laravel-mix');
  |
  */
 
-mix.js('resources/js/app.js', 'public/js');
+mix.copyDirectory('resources/svg', 'public/svg');
+mix.copyDirectory('resources/img', 'public/img');
+mix.js('resources/js/socket.js', 'public/js')
+mix.js('resources/js/hash.js', 'public/js')
+mix.js('resources/js/app.js', 'public/js')
+	.extract(["jquery", "popper.js", "bootstrap", "socket.io-client", "laravel-echo"]);
