@@ -25,3 +25,5 @@ Route::get('/auth/logout', 'Auth@logout')->middleware("auth");
 Route::get('/settings', 'User@form')->middleware("auth");
 Route::post('/settings', 'User@update')->middleware("auth");
 Route::get('/user/{username?}', 'User@view');
+Route::get('/send/{message}', 'Socket@send');
+Route::get('/listen', 'Socket@listen');
