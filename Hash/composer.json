@@ -45,12 +45,12 @@
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover"
         ],
-        "create-server": [
+        "install-crap": [
             "npm install -g laravel-echo-server sqlite3"
         ]
     },
     "scripts-descriptions": {
-        "create-server": "Install laravel echo server. Finalize with 'laravel-echo-server init'."
+        "install-crap": "Install laravel echo server. Finalize with 'laravel-echo-server init'."
     },
     "config": {
         "preferred-install": "dist",
