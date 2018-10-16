@@ -35,7 +35,7 @@
     },
     "scripts": {
         "post-root-package-install": [
-            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+            "@php -r \"file_exists('.env') || copy('.env.default', '.env');\""
         ],
         "post-create-project-cmd": [
             "@php artisan key:generate"
@@ -43,7 +43,13 @@
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover"
+        ],
+        "create-server": [
+            "npm install -g laravel-echo-server sqlite3"
         ]
+    },
+    "scripts-descriptions": {
+        "create-server": "Install laravel echo server. Finalize with 'laravel-echo-server init'."
     },
     "config": {
         "preferred-install": "dist",
