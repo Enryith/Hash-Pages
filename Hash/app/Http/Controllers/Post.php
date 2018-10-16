@@ -34,8 +34,9 @@ class Post extends Controller
 	{
 		$valid = $validator->make($request->all(), [
 			'title' => "required|min:2",
-			'link' => 'required|min:13',
-			'body' => 'required|min:10',
+			'link' => "required|min:13",
+			'body' => "required|min:10",
+			'tags' => "required|exists:app\Entities\Tag,tag",
 		]);
 
 		$valid->validate();
