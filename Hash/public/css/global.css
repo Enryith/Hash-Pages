@@ -4,8 +4,8 @@
 
 img.profile {
 	object-fit: cover;
-	height: 200px;
-	width: 200px;
+	height: 170px;
+	width: 170px;
 }
 
 .custom-file-label::after  {
