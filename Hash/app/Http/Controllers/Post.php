@@ -44,13 +44,20 @@ class Post extends Controller
 
 		/** @var $user Entities\User */
 		$user = $auth->user();
-		$tag = DB::table('tags')->where('tag', $data["tags"])->first();
+		$tag = $em->createQueryBuilder("")
+			->select('t.tag')
+			->from("App\Entities\Tag", "t")
+			->where('t.tag = :tag')
+			->setParameter("tag", $data["tags"])
+			->getQuery()
+			->getOneOrNullResult();
+		dd($tag);
 		$post = new Entities\Post($user, $data["title"], $data["link"], $data["body"]);
 		$score = new Entities\Score($tag, $post);
-		$tag.setScore($score);
+		//$tag.setScore($score);
 		$em->persist($score);
 		$em->persist($post);
-		var_dump($tag->tag);
+		//var_dump($tag->tag);
 		$em->flush();
 		return redirect('/all');
 	}
