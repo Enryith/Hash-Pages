@@ -6,6 +6,12 @@
 
 	{{ $form->model($user,['files'=>true])}}
 
+	@component("form.text")
+		@slot('form', $form)
+		@slot('id', 'username')
+		@slot('label', 'Username:')
+	@endcomponent
+
 	@component("form.file")
 		@slot('form', $form)
 		@slot('id', 'avatar')

@@ -10,6 +10,7 @@ use Illuminate\Routing\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Factory as Validation;
 use Illuminate\Contracts\Auth\Guard;
+use Illuminate\Validation\Rule;
 
 class User extends Controller
 {
@@ -64,7 +65,8 @@ class User extends Controller
 
 		$valid = $validator->make($request->all(), [
 			'avatar' => "image|dimensions:max_width=800,max_height=800",
-			'bio' => "max:300"
+			'bio' => "max:300",
+			'username' => "required"
 		]);
 
 		$valid->validate();
@@ -79,6 +81,8 @@ class User extends Controller
 		}
 
 		$user->setBio($data['bio']);
+
+		$user->setUsername($data['username']);
 
 		$em->flush();
 
