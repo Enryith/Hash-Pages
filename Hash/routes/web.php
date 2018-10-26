@@ -27,4 +27,5 @@ Route::post('/auth/login', 'Auth@auth')->middleware("guest");
 Route::get('/auth/logout', 'Auth@logout')->middleware("auth");
 Route::get('/settings', 'User@form')->middleware("auth");
 Route::post('/settings', 'User@update')->middleware("auth");
+Route::get('/chat', 'Chat@form')->middleware("auth");
 Route::get('/user/{username?}', 'User@view');
