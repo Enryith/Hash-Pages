@@ -10,6 +10,7 @@ return [
     "unique" => 'That :attribute is already used.',
 	"image" => ':Attribute must be an image.',
 	'dimensions' => ':Attribute must be less than :max_height x :max_width px',
+	'exists' => ':Attribute does not exist.',
 	"attributes" => [
         'password_confirmation' => "the second password",
         'login' => "username or email"

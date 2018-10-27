@@ -7,67 +7,84 @@ use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvi
 
 class RouteServiceProvider extends ServiceProvider
 {
-    /**
-     * This namespace is applied to your controller routes.
-     *
-     * In addition, it is set as the URL generator's root namespace.
-     *
-     * @var string
-     */
-    protected $namespace = 'App\Http\Controllers';
+	/**
+	 * This namespace is applied to your controller routes.
+	 *
+	 * In addition, it is set as the URL generator's root namespace.
+	 *
+	 * @var string
+	 */
+	protected $namespace = 'App\Http\Controllers';
 
-    /**
-     * Define your route model bindings, pattern filters, etc.
-     *
-     * @return void
-     */
-    public function boot()
-    {
-        //
+	/**
+	 * Define your route model bindings, pattern filters, etc.
+	 *
+	 * @return void
+	 */
+	public function boot()
+	{
+		parent::boot();
+	}
 
-        parent::boot();
-    }
+	/**
+	 * Define the routes for the application.
+	 *
+	 * @return void
+	 */
+	public function map()
+	{
+		$this->mapApiRoutes();
+		$this->mapWebRoutes();
+		$this->mapAuthRoutes();
+		$this->mapGuestRoutes();
+	}
 
-    /**
-     * Define the routes for the application.
-     *
-     * @return void
-     */
-    public function map()
-    {
-        $this->mapApiRoutes();
+	/**
+	 * Define the "web" routes for the application.
+	 *
+	 * These routes all receive session state, CSRF protection, etc.
+	 *
+	 * @return void
+	 */
+	protected function mapWebRoutes()
+	{
+		Route::middleware('web')
+			 ->namespace($this->namespace)
+			 ->group(base_path('routes/web.php'));
+	}
 
-        $this->mapWebRoutes();
+	/**
+	 * Defines any routes that require authentication.
+	 */
+	protected function mapAuthRoutes()
+	{
+		Route::middleware(['web', "auth"])
+			->namespace($this->namespace)
+			->group(base_path('routes/auth.php'));
+	}
 
-        //
-    }
+	/**
+	 * Defines routes that explicitly do not require authentication.
+	 */
+	protected function mapGuestRoutes()
+	{
+		Route::middleware(['web', "guest"])
+			->namespace($this->namespace)
+			->group(base_path('routes/guest.php'));
+	}
 
-    /**
-     * Define the "web" routes for the application.
-     *
-     * These routes all receive session state, CSRF protection, etc.
-     *
-     * @return void
-     */
-    protected function mapWebRoutes()
-    {
-        Route::middleware('web')
-             ->namespace($this->namespace)
-             ->group(base_path('routes/web.php'));
-    }
-
-    /**
-     * Define the "api" routes for the application.
-     *
-     * These routes are typically stateless.
-     *
-     * @return void
-     */
-    protected function mapApiRoutes()
-    {
-        Route::prefix('api')
-             ->middleware('api')
-             ->namespace($this->namespace)
-             ->group(base_path('routes/api.php'));
-    }
+	/**
+	 * Define the "api" routes for the application.
+	 *
+	 * These routes are typically stateless.
+	 *
+	 * @return void
+	 */
+	protected function mapApiRoutes()
+	{
+		Route::prefix('api')
+			 ->middleware('api')
+			 ->namespace($this->namespace)
+			 ->group(base_path('routes/api.php'));
+	}
 }

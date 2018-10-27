@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -10,3 +12,6 @@
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
+Route::get('/test', "Api@test");
+Route::post('/tags', "Api@tags");

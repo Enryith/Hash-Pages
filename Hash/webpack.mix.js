@@ -12,7 +12,8 @@ const mix = require('laravel-mix');
  */
 mix.webpackConfig({ devtool: "source-map" });
 mix.styles([
-	'resources/css/global.css'
+	'resources/css/global.css',
+	'node_modules/jquery-typeahead/src/jquery.typeahead.css'
 ], 'public/css/all.css');
 mix.copyDirectory('resources/svg', 'public/svg');
 mix.copyDirectory('resources/img', 'public/img');
