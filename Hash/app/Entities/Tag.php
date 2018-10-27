@@ -29,4 +29,60 @@ class Tag
 	 * @var string
 	 */
 	private $tag;
+
+	public function __construct($tag){
+		$this->tag = $tag;
+		$this->subscribers = new ArrayCollection();
+		$this->scores = new ArrayCollection();
+	}
+
+	/**
+	 * @return Score[]|ArrayCollection
+	 */
+	public function getScores()
+	{
+		return $this->scores;
+	}
+
+	/**
+	 * @param Score[]|ArrayCollection $scores
+	 */
+	public function setScores($scores): void
+	{
+		$this->scores = $scores;
+	}
+
+	/**
+	 * @return User[]|ArrayCollection
+	 */
+	public function getSubscribers()
+	{
+		return $this->subscribers;
+	}
+
+	/**
+	 * @param User[]|ArrayCollection $subscribers
+	 */
+	public function setSubscribers($subscribers): void
+	{
+		$this->subscribers = $subscribers;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getTag(): string
+	{
+		return $this->tag;
+	}
+
+	/**
+	 * @param string $tag
+	 */
+	public function setTag(string $tag): void
+	{
+		$this->tag = $tag;
+	}
+
+
 }

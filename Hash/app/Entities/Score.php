@@ -2,6 +2,7 @@
 
 namespace App\Entities;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping AS ORM;
 
 /**
@@ -40,4 +41,19 @@ class Score
 	 * @var integer
 	 */
 	private $spam;
+
+	public function __construct($tag, $post){
+		$this->tag = $tag;
+		$this->post = $post;
+		$this->discussion = null;
+		$this->contributes = 0;
+		$this->spam = 0;
+	}
+
+	public function setPost(Post $post)
+	{
+		$post->addScore($this);
+		$this->post = $post;
+		return $this;
+	}
 }

@@ -14,6 +14,12 @@
 
 @component("form.text")
 	@slot('form', $form)
+	@slot('id', 'tags')
+	@slot('label', 'Tags:')
+@endcomponent
+
+@component("form.text")
+	@slot('form', $form)
 	@slot('id', 'link')
 	@slot('label', 'Link:')
 @endcomponent

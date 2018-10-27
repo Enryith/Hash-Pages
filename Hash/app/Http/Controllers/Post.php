@@ -34,8 +34,9 @@ class Post extends Controller
 	{
 		$valid = $validator->make($request->all(), [
 			'title' => "required|min:2",
-			'link' => 'required|min:13',
-			'body' => 'required|min:10',
+			'link' => "required|min:13",
+			'body' => "required|min:10",
+			'tags' => "required|exists:app\Entities\Tag,tag",
 		]);
 
 		$valid->validate();
@@ -43,8 +44,20 @@ class Post extends Controller
 
 		/** @var $user Entities\User */
 		$user = $auth->user();
+		$tag = $em->createQueryBuilder("")
+			->select('t.tag')
+			->from("App\Entities\Tag", "t")
+			->where('t.tag = :tag')
+			->setParameter("tag", $data["tags"])
+			->getQuery()
+			->getOneOrNullResult();
+		dd($tag);
 		$post = new Entities\Post($user, $data["title"], $data["link"], $data["body"]);
+		$score = new Entities\Score($tag, $post);
+		//$tag.setScore($score);
+		$em->persist($score);
 		$em->persist($post);
+		//var_dump($tag->tag);
 		$em->flush();
 		return redirect('/all');
 	}
