@@ -40,7 +40,7 @@ $(".complete").each(function(e) {
 		callback: {
 			onSubmit: function (node, form, items) {
 				$target.val(items.map(e => e.id).join(","));
-				return true;
+				return $this.val() === ""; //Submit this form only if it's empty
 			}
 		},
 	});
