@@ -13,9 +13,6 @@
 	      integrity="sha384-DfbCiBdRiiNWvRTbHe5X9IfkezKzm0pCrZSKc7EM9mmSl/OyckwbYk3GrajL8Ngy"
 	      rel="stylesheet"
 	      crossorigin="anonymous">
-	<script src="/js/manifest.js"></script>
-	<script src="/js/vendor.js"></script>
-	<script src="/js/app.js"></script>
 	<title>HashPages - @yield('title')</title>
 </head>
 <body>
@@ -72,6 +69,11 @@
 	</div>
 
 	@yield('content')
+
+	<script src="/js/manifest.js"></script>
+	<script src="/js/vendor.js"></script>
+	<script src="/js/app.js"></script>
+	<script src="/js/hash.js"></script>
 </div>
 </body>
 </html>

@@ -10,7 +10,7 @@ const mix = require('laravel-mix');
  | file for the application as well as bundling up all the JS files.
  |
  */
-
+mix.webpackConfig({ devtool: "source-map" });
 mix.styles([
 	'resources/css/global.css'
 ], 'public/css/all.css');
