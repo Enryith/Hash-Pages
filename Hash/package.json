@@ -14,10 +14,11 @@
         "cross-env": "^5.1"
     },
     "dependencies": {
-        "popper.js": "^1.12",
-        "jquery": "^3.2",
         "bootstrap": "^4.0.0",
+        "jquery": "^3.2",
+        "jquery-typeahead": "^2.10.6",
         "laravel-echo": "^1.4.0",
+        "popper.js": "^1.12",
         "socket.io-client": "^2.1.1"
     }
 }
