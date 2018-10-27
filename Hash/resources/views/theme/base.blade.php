@@ -37,7 +37,7 @@
 				@auth
 					<li class="nav-item dropdown">
 						<a class="nav-link dropdown-toggle" role="button" data-toggle="dropdown">
-							{{ $user->getEmail() }}
+							{{ $user->getUsername() }}
 						</a>
 						<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
 							<a class="dropdown-item" href="{{url("/post")}}">New Post</a>
