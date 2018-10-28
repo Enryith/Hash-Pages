@@ -55,6 +55,7 @@ class Post extends Controller
 		foreach ($ids as $id)
 		{
 			$tag = $tags->findOneBy(["id" => $id]);
+
 			if (!$tag)
 			{
 				throw ValidationException::withMessages([
@@ -62,16 +63,19 @@ class Post extends Controller
 				]);
 			}
 
-
 			//Get all of the tags as actual objects
 			array_push($found, $tag);
+			if($tag) {
+				$score = new Entities\Score($tag, $post);
+				$em->persist($score);
+
+			}
 		}
-
-		dd($tags);
-
+		var_dump($tags);
 
 		$em->persist($post);
 		$em->flush();
+
 		return redirect('/all');
 	}
 

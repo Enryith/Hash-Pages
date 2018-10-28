@@ -36,6 +36,14 @@ class Tag
 		$this->scores = new ArrayCollection();
 	}
 
+	public function addScore(Score $score){
+		if(!$this->scores->contains($score)){
+			$this->scores->add($score);
+			$score->setTag($this);
+		}
+		return $this;
+	}
+
 	/**
 	 * @return Score[]|ArrayCollection
 	 */

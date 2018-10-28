@@ -43,8 +43,8 @@ class Score
 	private $spam;
 
 	public function __construct($tag, $post){
-		$this->tag = $tag;
-		$this->post = $post;
+		$this->setTag($tag);
+		$this->setPost($post);
 		$this->discussion = null;
 		$this->contributes = 0;
 		$this->spam = 0;
@@ -54,6 +54,12 @@ class Score
 	{
 		$post->addScore($this);
 		$this->post = $post;
+		return $this;
+	}
+
+	public function setTag(Tag $tag){
+		$tag->addScore($this);
+		$this->tag = $tag;
 		return $this;
 	}
 }

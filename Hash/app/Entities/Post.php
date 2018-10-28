@@ -82,8 +82,8 @@ class Post
 
 	public function addScore(Score $score){
 		if(!$this->scores->contains($score)){
-			$score->setPost($this);
 			$this->scores->add($score);
+			$score->setPost($this);
 		}
 		return $this;
 	}
