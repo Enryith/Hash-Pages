@@ -13,12 +13,13 @@ $(".complete").each(function(e) {
 	let $this = $(this);
 	let uri = $this.data("uri");
 	let $target = $($this.data("target"));
+	let $warning = $($this.data("warn"));
 	$this.typeahead({
 		minLength: 1,
 		maxItem: 0, //The server limits results
 		emptyTemplate: "No result for {{query}}",
 		dynamic: true,
-		delay: 500,
+		delay: 300,
 		hint: true,
 		accent: true,
 		highlight :true,
@@ -38,9 +39,19 @@ $(".complete").each(function(e) {
 			}
 		},
 		callback: {
+			onResult: function () {
+				$this.data("asked", false);
+				$warning.hide();
+			},
 			onSubmit: function (node, form, items) {
 				$target.val(items.map(e => e.id).join(","));
-				return $this.val() === ""; //Submit this form only if it's empty
+				if ($this.val() === "" || $this.data("asked") === true) {
+					return true;
+				} else {
+					$warning.show();
+					$this.data("asked", true);
+					return false;
+				}
 			}
 		},
 	});
