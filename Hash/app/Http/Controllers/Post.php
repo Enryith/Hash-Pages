@@ -68,7 +68,7 @@ class Post extends Controller
 			if($tag) {
 				$score = new Entities\Score($tag, $post);
 				$em->persist($score);
-
+				$em->persist($tag);
 			}
 		}
 		var_dump($tags);
