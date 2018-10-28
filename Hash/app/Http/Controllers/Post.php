@@ -47,6 +47,11 @@ class Post extends Controller
 
 		$found = [];
 		$ids = array_unique(explode(",", $data["tags"]), SORT_STRING);
+
+		/** @var $user Entities\User */
+		$user = $auth->user();
+		$post = new Entities\Post($user, $data["title"], $data["link"], $data["body"]);
+
 		foreach ($ids as $id)
 		{
 			$tag = $tags->findOneBy(["id" => $id]);
@@ -57,15 +62,14 @@ class Post extends Controller
 				]);
 			}
 
+
 			//Get all of the tags as actual objects
 			array_push($found, $tag);
 		}
 
 		dd($tags);
 
-		/** @var $user Entities\User */
-		$user = $auth->user();
-		$post = new Entities\Post($user, $data["title"], $data["link"], $data["body"]);
+
 		$em->persist($post);
 		$em->flush();
 		return redirect('/all');
