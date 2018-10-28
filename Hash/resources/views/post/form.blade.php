@@ -1,10 +1,10 @@
 @php /** @var $form Collective\Html\FormBuilder */ @endphp
 @inject('form', 'Collective\Html\FormBuilder')
 @extends('theme.base')
-@section('title', 'Register')
+@section('title', 'New Post')
 @section('content')
 
-{{ $form->open()}}
+{{ $form->open(["autocomplete" => 'off'])}}
 
 @component("form.text")
 	@slot('form', $form)
@@ -22,6 +22,13 @@
 	@slot('form', $form)
 	@slot('id', 'body')
 	@slot('label', 'Body:')
+@endcomponent
+
+@component("form.complete")
+	@slot('form', $form)
+	@slot('id', 'tags')
+	@slot('uri', '/api/tags')
+	@slot('label', 'Tags:')
 @endcomponent
 
 @component("form.submit")

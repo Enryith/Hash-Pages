@@ -13,24 +13,14 @@ use Illuminate\Contracts\Auth\Guard;
 
 class User extends Controller
 {
-	public function view(Request $request, Guard $auth, Users $users, $username = null)
+	public function self( Guard $auth) {
+		$user = $auth->user();
+		return view('user.view')->with(compact("user"));
+	}
+
+	public function view(Users $users, $username)
 	{
-		$user = null;
-
-		if ($username)
-		{
-			$user = $users->findOneByUsername($username);
-		}
-		else if ($auth->check())
-		{
-			$user = $auth->user();
-		}
-		else
-		{
-			$request->session()->flash("alert-danger", trans('auth.required'));
-			return redirect("/auth/login");
-		}
-
+		$user = $users->findOneByUsername($username);
 		if($user instanceof Entities\User)
 		{
 			return view('user.view')->with(compact('user'));
@@ -38,6 +28,7 @@ class User extends Controller
 		else
 		{
 			abort(404);
+			return redirect("/");
 		}
 	}
 
