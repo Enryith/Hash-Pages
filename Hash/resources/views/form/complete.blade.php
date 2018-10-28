@@ -11,8 +11,10 @@
 				{{ $form->text("$id-text", null, [
 					"class" => "form-control complete $invalid",
 					"data-uri" => $uri,
-					"data-target" => "input[name='$id']"
+					"data-target" => "input[name='$id']",
+					"data-warn" => "#$id-warn"
 				]) }}
+				<div id="{{"$id-warn"}}" class="invalid-feedback" style="display: none;">@lang("validation.select")</div>
 				@if($has)
 					<div class="invalid-feedback">{{ $errors->first($id) }}</div>
 				@endif
