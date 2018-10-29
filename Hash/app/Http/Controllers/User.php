@@ -66,7 +66,7 @@ class User extends Controller
 		$valid = $validator->make($request->all(), [
 			'avatar' => "image|dimensions:max_width=800,max_height=800",
 			'bio' => "max:300",
-			'username' => "required"
+			'username' => "required|unique:App\Entities\User,username"
 		]);
 
 		$valid->validate();
