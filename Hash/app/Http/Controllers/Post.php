@@ -15,7 +15,7 @@ class Post extends Controller
 {
 	public function index(Posts $posts)
 	{
-		$table = $posts->paginateAll(2);
+		$table = $posts->paginateAll(20);
 		return view('post.index')->with(compact('table'));
 	}
 
@@ -37,49 +37,44 @@ class Post extends Controller
 	{
 		$valid = $validator->make($request->all(), [
 			'title' => "required|min:2",
-			'link' => "required|min:13",
 			'body' => "required|min:10",
+			'link' => "sometimes|nullable|url",
 			'tags' => "required",
 		]);
 
 		$valid->validate();
 		$data = $valid->getData();
-
-		$found = [];
 		$ids = array_unique(explode(",", $data["tags"]), SORT_STRING);
 
 		/** @var $user Entities\User */
 		$user = $auth->user();
-		$post = new Entities\Post($user, $data["title"], $data["link"], $data["body"]);
+		$post = new Entities\Post($user, $data["title"], trim($data["link"]), $data["body"]);
 
 		foreach ($ids as $id)
 		{
+			//Find one by will be null if it does not exist
 			$tag = $tags->findOneBy(["id" => $id]);
 
 			if (!$tag)
 			{
+				//If the tag does not exists, stop and throw an exception
 				throw ValidationException::withMessages([
 					'tags' => [trans("validation.exists")],
 				]);
 			}
 
-			//Get all of the tags as actual objects
-			array_push($found, $tag);
-			if($tag) {
-				$score = new Entities\Score($tag, $post);
-				$em->persist($score);
-				$em->persist($tag);
-			}
+			$score = new Entities\Score($tag, $post);
+			$em->persist($score);
 		}
-		var_dump($tags);
 
 		$em->persist($post);
 		$em->flush();
 
-		return redirect('/all');
+		//Send user to the post they just created
+		return redirect("/post/{$post->getId()}");
 	}
 
-	public function view(Posts $posts, $id = null)
+	public function view(Posts $posts, $id)
 	{
 		$post = $posts->findOneById($id);
 
@@ -87,9 +82,7 @@ class Post extends Controller
 		{
 			return view('post.view')->with(compact('post'));
 		}
-		else
-		{
-			abort(404);
-		}
+
+		return abort(404);
 	}
 }

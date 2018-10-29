@@ -12,6 +12,7 @@ return [
 	'dimensions' => ':Attribute must be less than :max_height x :max_width px',
 	'exists' => ':Attribute does not exist.',
 	"select" => 'Extra text in this field will be lost! Press submit again to continue.',
+	"url" => ":Attribute must look like a URL.",
 	"attributes" => [
         'password_confirmation' => "the second password",
         'login' => "username or email"

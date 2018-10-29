@@ -42,6 +42,10 @@ class Score
 	 */
 	private $spam;
 
+	public function getTag() {
+		return $this->tag;
+	}
+
 	public function __construct($tag, $post){
 		$this->setTag($tag);
 		$this->setPost($post);

@@ -15,7 +15,7 @@
 @component("form.text")
 	@slot('form', $form)
 	@slot('id', 'link')
-	@slot('label', 'Link:')
+	@slot('label', 'Link (Optional):')
 @endcomponent
 
 @component("form.textarea")

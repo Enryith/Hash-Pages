@@ -79,7 +79,7 @@ class Tag
 	/**
 	 * @return string
 	 */
-	public function getTag(): string
+	public function getTag()
 	{
 		return $this->tag;
 	}
