@@ -35,38 +35,31 @@ class Post extends Controller
 	 */
 	public function store(Tags $tags, Request $request, EntityManagerInterface $em, Validation $validator, Guard $auth)
 	{
+		/** @var $user Entities\User */
+		$user = $auth->user();
 		$valid = $validator->make($request->all(), [
 			'title' => "required|min:2",
 			'body' => "required|min:10",
 			'link' => "sometimes|nullable|url",
-			'tags' => "required",
+			'tag' => "required|max:20|alpha_num",
 		]);
 
 		$valid->validate();
 		$data = $valid->getData();
-		$ids = array_unique(explode(",", $data["tags"]), SORT_STRING);
 
-		/** @var $user Entities\User */
-		$user = $auth->user();
-		$post = new Entities\Post($user, $data["title"], trim($data["link"]), $data["body"]);
-
-		foreach ($ids as $id)
+		//Find one by will be null if it does not exist
+		$tag = $tags->findOneBy(["tag" => $data["tag"]]);
+		if (!$tag)
 		{
-			//Find one by will be null if it does not exist
-			$tag = $tags->findOneBy(["id" => $id]);
-
-			if (!$tag)
-			{
-				//If the tag does not exists, stop and throw an exception
-				throw ValidationException::withMessages([
-					'tags' => [trans("validation.exists")],
-				]);
-			}
-
-			$score = new Entities\Score($tag, $post);
-			$em->persist($score);
+			//Create tag for the user if it does not exist.
+			$tag = new Entities\Tag($data["tag"]);
+			$em->persist($tag);
 		}
 
+		//Create post and initial discussion with tag
+		$post = new Entities\Post($user, $data["title"], trim($data["link"]), $data["body"]);
+		$discussion = new Entities\Discussion($post, $tag, $user, "Original Post");
+		$em->persist($discussion);
 		$em->persist($post);
 		$em->flush();
 

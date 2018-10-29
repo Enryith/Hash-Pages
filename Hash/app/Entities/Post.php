@@ -13,31 +13,13 @@ class Post
 	use Traits\Id;
 
 	/**
-	 * @ORM\OneToMany(targetEntity="Score", mappedBy="post")
-	 * @var ArrayCollection|Score[]
-	 */
-	private $scores;
-
-	/**
-	 * @ORM\ManyToOne(targetEntity="User", inversedBy="posts")
-	 * @var User
-	 */
-	private $author;
-
-	/**
-	 * @ORM\OneToMany(targetEntity="Discussion", mappedBy="post")
-	 * @var ArrayCollection|Discussion[]
-	 */
-	private $discussion;
-
-	/**
 	 * @ORM\Column(type="string", length=255)
 	 * @var string
 	 */
 	private $title;
 
 	/**
-	 * @ORM\Column(type="string", length=255)
+	 * @ORM\Column(type="string", length=255, nullable=true)
 	 * @var string
 	 */
 	private $link;
@@ -49,16 +31,16 @@ class Post
 	private $body;
 
 	/**
-	 * @ORM\Column(type="integer")
-	 * @var integer
+	 * @ORM\ManyToOne(targetEntity="User", inversedBy="posts")
+	 * @var User
 	 */
-	private $agree;
+	private $author;
 
 	/**
-	 * @ORM\Column(type="integer")
-	 * @var integer
+	 * @ORM\OneToMany(targetEntity="Discussion", mappedBy="post")
+	 * @var ArrayCollection|Discussion[]
 	 */
-	private $disagree;
+	private $discussions;
 
 	public function __construct(User $user, $title, $link, $body)
 	{
@@ -66,42 +48,26 @@ class Post
 		$this->title = $title;
 		$this->link = $link;
 		$this->body = $body;
-		$this->agree = 0;
-		$this->disagree = 0;
-		$this->discussion = new ArrayCollection();
-		$this->scores = new ArrayCollection();
-	}
-
-	/**
-	 * @return Score[]|ArrayCollection
-	 */
-	public function getScores()
-	{
-		return $this->scores;
-	}
-
-	public function addScore(Score $score){
-		if(!$this->scores->contains($score)){
-			$this->scores->add($score);
-			$score->setPost($this);
-		}
-		return $this;
+		$this->discussions = new ArrayCollection();
 	}
 
 	/**
 	 * @return Discussion[]|ArrayCollection
 	 */
-	public function getDiscussion()
+	public function getDiscussions()
 	{
-		return $this->discussion;
+		return $this->discussions;
 	}
 
-	/**
-	 * @param Discussion[]|ArrayCollection $discussion
-	 */
-	public function setDiscussion($discussion): void
+	public function addDiscussion(Discussion $discussion)
 	{
-		$this->discussion = $discussion;
+		if(!$this->discussions->contains($discussion))
+		{
+			$this->discussions->add($discussion);
+			$discussion->setPost($this);
+		}
+
+		return $this;
 	}
 
 	/**
@@ -174,42 +140,6 @@ class Post
 	public function setLink($link)
 	{
 		$this->link = $link;
-		return $this;
-	}
-
-	/**
-	 * @return int
-	 */
-	public function getAgree()
-	{
-		return $this->agree;
-	}
-
-	/**
-	 * @param int $agree
-	 * @return Post
-	 */
-	public function setAgree($agree)
-	{
-		$this->agree = $agree;
-		return $this;
-	}
-
-	/**
-	 * @return int
-	 */
-	public function getDisagree()
-	{
-		return $this->disagree;
-	}
-
-	/**
-	 * @param int $disagree
-	 * @return Post
-	 */
-	public function setDisagree($disagree)
-	{
-		$this->disagree = $disagree;
 		return $this;
 	}
 }

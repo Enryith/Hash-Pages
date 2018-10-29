@@ -13,67 +13,38 @@ class Tag
 	use Traits\Id;
 
 	/**
-	 * @ORM\OneToMany(targetEntity="Score", mappedBy="tag")
-	 * @var ArrayCollection|Score[]
-	 */
-	private $scores;
-
-	/**
-	 * @ORM\ManyToMany(targetEntity="User", inversedBy="subscriptions")
-	 * @var ArrayCollection|User[]
-	 */
-	private $subscribers;
-
-	/**
 	 * @ORM\Column(type="string")
 	 * @var string
 	 */
 	private $tag;
 
+	/**
+	 * @ORM\OneToMany(targetEntity="Discussion", mappedBy="tag")
+	 * @var ArrayCollection|Discussion[]
+	 */
+	private $discussions;
+
 	public function __construct($tag){
 		$this->tag = $tag;
-		$this->subscribers = new ArrayCollection();
-		$this->scores = new ArrayCollection();
+		$this->discussions = new ArrayCollection();
 	}
 
-	public function addScore(Score $score){
-		if(!$this->scores->contains($score)){
-			$this->scores->add($score);
-			$score->setTag($this);
+	public function addDiscussion(Discussion $discussion){
+		if(!$this->discussions->contains($discussion))
+		{
+			$this->discussions->add($discussion);
+			$discussion->setTag($this);
 		}
+
 		return $this;
 	}
 
 	/**
-	 * @return Score[]|ArrayCollection
+	 * @return Discussion[]|ArrayCollection
 	 */
-	public function getScores()
+	public function getDiscussions()
 	{
-		return $this->scores;
-	}
-
-	/**
-	 * @param Score[]|ArrayCollection $scores
-	 */
-	public function setScores($scores): void
-	{
-		$this->scores = $scores;
-	}
-
-	/**
-	 * @return User[]|ArrayCollection
-	 */
-	public function getSubscribers()
-	{
-		return $this->subscribers;
-	}
-
-	/**
-	 * @param User[]|ArrayCollection $subscribers
-	 */
-	public function setSubscribers($subscribers): void
-	{
-		$this->subscribers = $subscribers;
+		return $this->discussions;
 	}
 
 	/**
@@ -86,11 +57,11 @@ class Tag
 
 	/**
 	 * @param string $tag
+	 * @return Tag
 	 */
-	public function setTag(string $tag): void
+	public function setTag(string $tag)
 	{
 		$this->tag = $tag;
+		return $this;
 	}
-
-
 }

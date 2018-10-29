@@ -9,17 +9,21 @@
 				<small class="text-muted">By: {{ $post->getAuthor()->getUsername() }}</small>
 			</h2>
 
-			@component("ajax.scores")
-				@slot("scores", $post->getScores())
-			@endcomponent
-
 			@if($post->getLink())
-				<a href="{{ $post->getLink() }}">{{ $post->getLink() }}</a>
+				<h4><a href="{{ $post->getLink() }}">{{ $post->getLink() }}</a></h4>
 			@else
 				<em>Text Post</em>
 			@endif
 
 			<p>{{ $post->getBody() }}</p>
+
+			<div class="btn-toolbar">
+				@foreach($post->getDiscussions() as $d)
+					@component("ajax.tag")
+						@slot("discussion", $d)
+					@endcomponent
+				@endforeach
+			</div>
 
 			<hr>
 		@endforeach

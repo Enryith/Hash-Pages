@@ -14,8 +14,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/tag', "Tag@form");
-Route::post('/tag', "Tag@store");
 Route::get('/post', "Post@form");
 Route::post('/post', "Post@store");
 Route::get('/settings', 'User@form');
