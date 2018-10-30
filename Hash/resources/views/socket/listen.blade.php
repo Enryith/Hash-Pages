@@ -1,7 +1,8 @@
 @extends('theme.base')
 @section('title', 'Listen')
-@section('content')
-
+@push('scripts')
 	<script src="/js/socket.js"></script>
+@endpush
+@section('content')
 
 @endsection

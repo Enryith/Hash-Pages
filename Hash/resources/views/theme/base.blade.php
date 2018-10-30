@@ -74,6 +74,7 @@
 	<script src="/js/vendor.js"></script>
 	<script src="/js/app.js"></script>
 	<script src="/js/hash.js"></script>
+	@stack('scripts')
 </div>
 </body>
 </html>
