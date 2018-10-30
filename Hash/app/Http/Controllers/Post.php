@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\Events;
 use App\Repositories\Posts;
 use App\Repositories\Tags;
 use Doctrine\ORM\EntityManagerInterface;
@@ -67,6 +68,9 @@ class Post extends Controller
 
 		//Create post and initial discussion with tag
 		$post = new Entities\Post($user, $data["title"], trim($data["link"]), $data["body"]);
+
+		event(new Events\Post($post));
+
 		$discussion = new Entities\Discussion($post, $tag, $user, "Original Post");
 		$em->persist($discussion);
 		$em->persist($post);
