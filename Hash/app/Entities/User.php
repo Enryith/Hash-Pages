@@ -21,40 +21,22 @@ class User implements Authenticatable
 	const SOLAR = "Solar";
 
 	/**
-	 * @ORM\OneToMany(targetEntity="Comment", mappedBy="author")
-	 * @var ArrayCollection|Comment[]
+	 * @ORM\Column(type="string")
+	 * @var string
 	 */
-	private $comments;
+	private $name;
 
 	/**
-	 * @ORM\OneToMany(targetEntity="Post", mappedBy="author")
-	 * @var ArrayCollection|Post[]
+	 * @ORM\Column(type="string")
+	 * @var string
 	 */
-	private $posts;
+	private $picture;
 
 	/**
-	 * @ORM\ManyToMany(targetEntity="User", mappedBy="following")
-	 * @var ArrayCollection|User[]
+	 * @ORM\Column(type="string", length=300)
+	 * @var string
 	 */
-	private $followers;
-
-	/**
-	 * @ORM\ManyToMany(targetEntity="User", inversedBy="followers")
-	 * @var ArrayCollection|User[]
-	 */
-	private $following;
-
-	/**
-	 * @ORM\ManyToMany(targetEntity="Tag", mappedBy="subscribers")
-	 * @var ArrayCollection|Tag[]
-	 */
-	private $subscriptions;
-
-	/**
-	 * @ORM\OneToMany(targetEntity="Discussion", mappedBy="author")
-	 * @var ArrayCollection|Discussion[]
-	 */
-	private $leading;
+	private $bio;
 
 	/**
 	 * Warning: only use getters to get this
@@ -73,27 +55,49 @@ class User implements Authenticatable
 	public $email;
 
 	/**
-	 * @ORM\Column(type="string")
-	 * @var string
+	 * @ORM\OneToMany(targetEntity="Post", mappedBy="author")
+	 * @var ArrayCollection|Post[]
 	 */
-	protected $name;
+	private $posts;
 
 	/**
-	 * @ORM\Column(type="string")
-	 * @var string
+	 * @ORM\OneToMany(targetEntity="Discussion", mappedBy="author")
+	 * @var ArrayCollection|Discussion[]
 	 */
-	protected $picture;
+	private $leading;
 
 	/**
-	 * @ORM\Column(type="string", length=300)
-	 * @var string
+	 * @ORM\OneToMany(targetEntity="Comment", mappedBy="author")
+	 * @var ArrayCollection|Comment[]
 	 */
-	protected $bio;
+	private $comments;
+
+	/**
+	 * @ORM\ManyToMany(targetEntity="Conversation", mappedBy="users")
+	 * @var ArrayCollection|Conversation[]
+	 */
+	private $conversations;
+
+	/**
+	 * @ORM\ManyToMany(targetEntity="Conversation", mappedBy="agree")
+	 * @var ArrayCollection|Conversation[]
+	 */
+	private $agree;
+
+	/**
+	 * @ORM\ManyToMany(targetEntity="Conversation", mappedBy="disagree")
+	 * @var ArrayCollection|Conversation[]
+	 */
+	private $disagree;
 
 	public function __construct()
 	{
 		$this->picture = "";
 		$this->bio = "";
+		$this->posts = new ArrayCollection();
+		$this->leading = new ArrayCollection();
+		$this->agree = new ArrayCollection();
+		$this->disagree = new ArrayCollection();
 	}
 
 	/**
@@ -151,19 +155,6 @@ class User implements Authenticatable
 	}
 
 	/**
-	 * @param Post $post
-	 * @return $this
-	 */
-	public function addPost(Post $post)
-	{
-		if (!$this->posts->contains($post)) {
-			$this->posts->add($post);
-			$post->setAuthor($this);
-		}
-		return $this;
-	}
-
-	/**
 	 * @return string
 	 */
 	public function getPicture()
@@ -171,6 +162,9 @@ class User implements Authenticatable
 		return $this->picture;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getPicturePublic()
 	{
 		return str_replace("public","/storage", $this->picture);
@@ -209,5 +203,16 @@ class User implements Authenticatable
 		return $this->$key;
 	}
 
-
+	/**
+	 * @param Post $post
+	 * @return $this
+	 */
+	public function addPost(Post $post)
+	{
+		if (!$this->posts->contains($post)) {
+			$this->posts->add($post);
+			$post->setAuthor($this);
+		}
+		return $this;
+	}
 }

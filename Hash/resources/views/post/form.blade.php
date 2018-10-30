@@ -1,10 +1,10 @@
 @php /** @var $form Collective\Html\FormBuilder */ @endphp
 @inject('form', 'Collective\Html\FormBuilder')
 @extends('theme.base')
-@section('title', 'Register')
+@section('title', 'New Post')
 @section('content')
 
-{{ $form->open()}}
+{{ $form->open(["autocomplete" => 'off'])}}
 
 @component("form.text")
 	@slot('form', $form)
@@ -15,13 +15,20 @@
 @component("form.text")
 	@slot('form', $form)
 	@slot('id', 'link')
-	@slot('label', 'Link:')
+	@slot('label', 'Link (Optional):')
 @endcomponent
 
 @component("form.textarea")
 	@slot('form', $form)
 	@slot('id', 'body')
 	@slot('label', 'Body:')
+@endcomponent
+
+@component("form.complete")
+	@slot('form', $form)
+	@slot('id', 'tag')
+	@slot('uri', '/api/tags')
+	@slot('label', "Master Tag (You'll be able to add more later):")
 @endcomponent
 
 @component("form.submit")

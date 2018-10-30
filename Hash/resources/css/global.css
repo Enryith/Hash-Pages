@@ -11,3 +11,11 @@ img.profile {
 .custom-file-label::after  {
 	height: auto !important;
 }
+
+.typeahead__container {
+	font: inherit !important;
+}
+
+.typeahead__field input {
+	border-radius: 0.25rem !important;
+}
