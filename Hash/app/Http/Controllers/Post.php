@@ -13,9 +13,18 @@ use Illuminate\Validation\ValidationException;
 
 class Post extends Controller
 {
+	/**
+	 * @param Posts $posts
+	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+	 */
 	public function index(Posts $posts)
 	{
-		$table = $posts->paginateAll(20);
+		$table = $posts->paginate($posts->createQueryBuilder("p")
+			->leftJoin("p.discussions", "d")
+			->leftJoin("d.tag", "t")
+			->select("p,d,t")
+			->getQuery(),
+			20);
 		return view('post.index')->with(compact('table'));
 	}
 
@@ -67,9 +76,22 @@ class Post extends Controller
 		return redirect("/post/{$post->getId()}");
 	}
 
+	/**
+	 * @param Posts $posts
+	 * @param $id
+	 * @return \Illuminate\View\View
+	 * @throws \Doctrine\ORM\NonUniqueResultException
+	 */
 	public function view(Posts $posts, $id)
 	{
-		$post = $posts->findOneById($id);
+		$post = $posts->createQueryBuilder("p")
+			->leftJoin("p.discussions", "d")
+			->leftJoin("d.tag", "t")
+			->select("p, d, t")
+			->where("p = :p")
+			->setParameter("p", $id)
+			->getQuery()
+			->getOneOrNullResult();
 
 		if($post instanceof Entities\Post)
 		{
