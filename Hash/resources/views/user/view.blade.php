@@ -13,7 +13,7 @@
 				{{$user->getUsername()}}
 				<small class="text-muted">{{$user->getName()}}</small>
 			</h1>
-			<p class="lead">{!! nl2br(e($user->getBio())) !!}</p>
+			@markdown($user->getBio())
 		</div>
 	</div>
 
