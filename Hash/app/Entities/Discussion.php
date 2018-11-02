@@ -43,18 +43,10 @@ class Discussion
 	private $tag;
 
 	/**
-	 * @ORM\ManyToMany(targetEntity="User", inversedBy="agree")
-	 * @ORM\JoinTable(name="discussion_user_agree")
-	 * @var ArrayCollection|User[]
+	 * @ORM\OneToMany(targetEntity="Vote", mappedBy="discussion")
+	 * @var ArrayCollection|Vote[]
 	 */
-	private $agree;
-
-	/**
-	 * @ORM\ManyToMany(targetEntity="User", inversedBy="disagree")
-	 * @ORM\JoinTable(name="discussion_user_disagree")
-	 * @var ArrayCollection|User[]
-	 */
-	private $disagree;
+	private $votes;
 
 	public function __construct(Post $post, Tag $tag, User $lead, $title)
 	{
@@ -62,8 +54,7 @@ class Discussion
 		$this->tag = $tag;
 		$this->lead = $lead;
 		$this->title = $title;
-		$this->agree = new ArrayCollection();
-		$this->disagree = new ArrayCollection();
+		$this->votes = new ArrayCollection();
 	}
 
 	/**

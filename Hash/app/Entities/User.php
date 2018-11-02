@@ -79,16 +79,10 @@ class User implements Authenticatable
 	private $conversations;
 
 	/**
-	 * @ORM\ManyToMany(targetEntity="Conversation", mappedBy="agree")
-	 * @var ArrayCollection|Conversation[]
+	 * @ORM\OneToMany(targetEntity="Vote", mappedBy="user")
+	 * @var ArrayCollection|Vote[]
 	 */
-	private $agree;
-
-	/**
-	 * @ORM\ManyToMany(targetEntity="Conversation", mappedBy="disagree")
-	 * @var ArrayCollection|Conversation[]
-	 */
-	private $disagree;
+	private $votes;
 
 	public function __construct()
 	{
@@ -96,8 +90,7 @@ class User implements Authenticatable
 		$this->bio = "";
 		$this->posts = new ArrayCollection();
 		$this->leading = new ArrayCollection();
-		$this->agree = new ArrayCollection();
-		$this->disagree = new ArrayCollection();
+		$this->votes = new ArrayCollection();
 	}
 
 	/**
