@@ -13,7 +13,7 @@ class Comment
 	use Traits\Id;
 
 	/**
-	 * @ORM\ManyToOne(targetEntity="Discussion", inversedBy="comment")
+	 * @ORM\OneToOne(targetEntity="Discussion", inversedBy="comment")
 	 * @var Discussion
 	 */
 	private $discussion;
@@ -41,16 +41,4 @@ class Comment
 	 * @var string
 	 */
 	private $comment;
-
-	/**
-	 * @ORM\Column(type="integer")
-	 * @var integer
-	 */
-	private $agree;
-
-	/**
-	 * @ORM\Column(type="integer")
-	 * @var integer
-	 */
-	private $disagree;
 }

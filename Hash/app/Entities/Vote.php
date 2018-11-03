@@ -12,8 +12,14 @@ class Vote
 {
 	use Traits\Id;
 
-	const AGREE = 1;
-	const DISAGREE = 0;
+	const AGREE = "agree";
+	const DISAGREE = "disagree";
+
+	//list of valid types, their KEY will be stored.
+	const TYPES = [
+		0 => self::DISAGREE,
+		1 => self::AGREE,
+	];
 
 	/**
 	 * @ORM\ManyToOne(targetEntity="User", inversedBy="votes")
@@ -37,6 +43,7 @@ class Vote
 	{
 		$this->user = $user;
 		$this->discussion = $discussion;
+		$this->type = $this->setType(self::AGREE);
 	}
 
 	/**
@@ -76,20 +83,32 @@ class Vote
 	}
 
 	/**
-	 * @return int
+	 * @return string
 	 */
 	public function getType()
 	{
-		return $this->type;
+		return self::TYPES[$this->type];
 	}
 
 	/**
-	 * @param int $type
+	 * @param string $type
 	 * @return Vote
 	 */
 	public function setType($type)
 	{
-		$this->type = $type;
+		$this->type = array_search($type, self::TYPES);
+
+		//Remember, array_search(...) can return false AND 0
+		if ($this->type === false)
+		{
+			throw new \InvalidArgumentException("Undefined type!");
+		}
+
 		return $this;
+	}
+
+	public static function isValid($type)
+	{
+		return !(array_search($type, self::TYPES) === false);
 	}
 }

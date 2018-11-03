@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Repositories\Posts;
 use App\Repositories\Tags;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Query;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -14,17 +15,27 @@ use Illuminate\Validation\ValidationException;
 class Post extends Controller
 {
 	/**
+	 * @param Guard $auth
 	 * @param Posts $posts
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
-	public function index(Posts $posts)
+	public function index(Guard $auth, Posts $posts)
 	{
-		$table = $posts->paginate($posts->createQueryBuilder("p")
+		$query = $posts->createQueryBuilder("p")
 			->leftJoin("p.discussions", "d")
 			->leftJoin("d.tag", "t")
-			->select("p,d,t")
-			->getQuery(),
-			20);
+			->leftJoin("d.root", "c")
+			->setParameter("user", $auth->user())
+			->select("p", "d", "t", "c");
+
+		if ($auth->check())
+		{
+			//If we are logged in, fetch any votes
+			$query->leftJoin("d.votes", "v", "WITH", "v.user = :user")
+				->addSelect("v");
+		}
+
+		$table = $posts->paginate($query->getQuery(), 20);
 		return view('post.index')->with(compact('table'));
 	}
 
@@ -51,6 +62,7 @@ class Post extends Controller
 			'body' => "required|min:10",
 			'link' => "sometimes|nullable|url",
 			'tag' => "required|max:20|alpha_num",
+			'discussion' => 'required|min:2'
 		]);
 
 		$valid->validate();

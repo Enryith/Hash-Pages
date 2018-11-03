@@ -30,14 +30,23 @@
 		@component("form.text")
 			@slot('form', $form)
 			@slot('id', 'title')
-			@slot('label', 'Discussion Title:')
+			@slot('label', 'Title:')
+			@slot('help', 'Start a new discussion of this post with a title.')
+		@endcomponent
+
+		@component("form.text")
+			@slot('form', $form)
+			@slot('id', 'comment')
+			@slot('label', 'Text:')
+			@slot('help', 'Give a brief description why you think this tag should be included.')
 		@endcomponent
 
 		@component("form.complete")
 			@slot('form', $form)
 			@slot('id', 'tag')
-			@slot('uri', '/api/tags')
-			@slot('label', "Discussion Tag:")
+			@slot('uri', '/ajax/tags')
+			@slot('label', "Tag:")
+			@slot('help', "Give this post and your discussion a new tag.")
 		@endcomponent
 
 		@component("form.submit")

@@ -9,6 +9,9 @@
 	<div class="custom-file">
 		{{ $form->file($id, ["class" => "custom-file-input $invalid", "accept" => $accept]) }}
 		{{ $form->label($id, $hint, ["class" => "custom-file-label"]) }}
+		@if(isset($help))
+			<small class="form-text text-muted">{{ $help }}</small>
+		@endif
 		@if($has)
 			<div class="invalid-feedback">{{ $errors->first($id) }}</div>
 		@endif

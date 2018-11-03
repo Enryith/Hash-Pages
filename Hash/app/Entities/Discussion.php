@@ -3,6 +3,7 @@
 namespace App\Entities;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping AS ORM;
 
 /**
@@ -31,7 +32,7 @@ class Discussion
 	private $lead;
 
 	/**
-	 * @ORM\ManyToOne(targetEntity="Comment", inversedBy="discussion")
+	 * @ORM\OneToOne(targetEntity="Comment", mappedBy="discussion")
 	 * @var Comment
 	 */
 	private $root;
@@ -48,12 +49,26 @@ class Discussion
 	 */
 	private $votes;
 
+	/**
+	 * @ORM\Column(type="integer")
+	 * @var integer
+	 */
+	private $cachedAgree;
+
+	/**
+	 * @ORM\Column(type="integer")
+	 * @var integer
+	 */
+	private $cachedDisagree;
+
 	public function __construct(Post $post, Tag $tag, User $lead, $title)
 	{
 		$this->post = $post;
 		$this->tag = $tag;
 		$this->lead = $lead;
 		$this->title = $title;
+		$this->cachedAgree = 0;
+		$this->cachedDisagree = 0;
 		$this->votes = new ArrayCollection();
 	}
 
@@ -109,5 +124,59 @@ class Discussion
 	{
 		$this->title = $title;
 		return $this;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getCachedAgree()
+	{
+		return $this->cachedAgree;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getCachedDisagree()
+	{
+		return $this->cachedDisagree;
+	}
+
+	/**
+	 * Gets if a user has voted on a specific discussion
+	 * @param User|null $user
+	 * @return null|string
+	 */
+	public function hasVoted(User $user = null)
+	{
+		if (!$user) return null;
+
+		/** @var Vote[]|ArrayCollection $votes */
+		$votes = $this->votes->matching(Criteria::create()
+			->where(Criteria::expr()->eq("user", $user))
+			->andWhere(Criteria::expr()->eq("discussion", $this))
+		);
+
+		if ($votes->count() == 1)
+		{
+			return $votes[0]->getType();
+		}
+		else
+		{
+			return null;
+		}
+	}
+
+	public function delta($type, $delta)
+	{
+		switch ($type) {
+			case Vote::AGREE:
+				$this->cachedAgree += $delta;
+				break;
+			case Vote::DISAGREE:
+				$this->cachedDisagree += $delta;
+				break;
+			default:
+		}
 	}
 }
