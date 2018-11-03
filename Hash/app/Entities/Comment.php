@@ -13,13 +13,13 @@ class Comment
 	use Traits\Id;
 
 	/**
-	 * @ORM\OneToOne(targetEntity="Discussion", inversedBy="comment")
+	 * @ORM\ManyToOne(targetEntity="Discussion", inversedBy="comments")
 	 * @var Discussion
 	 */
 	private $discussion;
 
 	/**
-	 * @ORM\ManyToOne(targetEntity="Comment", inversedBy="child")
+	 * @ORM\ManyToOne(targetEntity="Comment", inversedBy="children")
 	 * @var Comment
 	 */
 	private $parent;
@@ -28,7 +28,7 @@ class Comment
 	 * @ORM\OneToMany(targetEntity="Comment", mappedBy ="parent")
 	 * @var ArrayCollection|Comment[]
 	 */
-	private $child;
+	private $children;
 
 	/**
 	 * @ORM\ManyToOne(targetEntity="User", inversedBy="comment")

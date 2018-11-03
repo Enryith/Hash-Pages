@@ -32,10 +32,10 @@ class Discussion
 	private $lead;
 
 	/**
-	 * @ORM\OneToOne(targetEntity="Comment", mappedBy="discussion")
+	 * @ORM\OneToMany(targetEntity="Comment", mappedBy="discussion")
 	 * @var Comment
 	 */
-	private $root;
+	private $comments;
 
 	/**
 	 * @ORM\ManyToOne(targetEntity="Tag", inversedBy="discussions")
@@ -70,6 +70,7 @@ class Discussion
 		$this->cachedAgree = 0;
 		$this->cachedDisagree = 0;
 		$this->votes = new ArrayCollection();
+		$this->comments = new ArrayCollection();
 	}
 
 	/**

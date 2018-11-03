@@ -17,46 +17,51 @@
 
 	<p>{{$post->getBody()}}</p>
 
-	<div style="height: 34px;">
-		<button class="btn btn-secondary" type="button" data-toggle="collapse" data-target="#join">
-			Add a Tag
-		</button>
-	</div>
+	@auth
+	<button class="btn btn-secondary" type="button" data-toggle="collapse" data-target="#join">
+		Add a Tag
+	</button>
 
 	<div class="collapse" id="join">
-		<div class="mt-3 pb-0 card card-body bg-secondary">
-		{{ $form->open(["autocomplete" => 'off'])}}
+		<div class="card mt-3">
+			<div class="card-header">Add a tag by starting a new discussion!</div>
+			<div class="card-body border-secondary pb-0">
 
-		@component("form.text")
-			@slot('form', $form)
-			@slot('id', 'title')
-			@slot('label', 'Title:')
-			@slot('help', 'Start a new discussion of this post with a title.')
-		@endcomponent
+				{{ $form->open(["autocomplete" => 'off'])}}
 
-		@component("form.text")
-			@slot('form', $form)
-			@slot('id', 'comment')
-			@slot('label', 'Text:')
-			@slot('help', 'Give a brief description why you think this tag should be included.')
-		@endcomponent
+				@component("form.text")
+					@slot('form', $form)
+					@slot('id', 'title')
+					@slot('label', 'Title:')
+					@slot('help', 'Start a new discussion of this post with a title.')
+				@endcomponent
 
-		@component("form.complete")
-			@slot('form', $form)
-			@slot('id', 'tag')
-			@slot('uri', '/ajax/tags')
-			@slot('label', "Tag:")
-			@slot('help', "Give this post and your discussion a new tag.")
-		@endcomponent
+				@component("form.complete")
+					@slot('form', $form)
+					@slot('id', 'tag')
+					@slot('uri', '/ajax/tags')
+					@slot('label', "Tag:")
+					@slot('help', "Give this post and your discussion a new tag.")
+				@endcomponent
 
-		@component("form.submit")
-			@slot('form', $form)
-			@slot('label', "Launch Discussion")
-		@endcomponent
+				@component("form.textarea")
+					@slot('form', $form)
+					@slot('id', 'comment')
+					@slot('label', 'Comment:')
+					@slot('help', 'Give an initial comment why you think this tag should be included.')
+				@endcomponent
 
-		{{ $form->close() }}
+				@component("form.submit")
+					@slot('form', $form)
+					@slot('label', "Launch Discussion")
+				@endcomponent
+
+				{{ $form->close() }}
+			</div>
 		</div>
 	</div>
+	@endauth
+
 	<hr>
 	@foreach($post->getDiscussions() as $d)
 		<h2>

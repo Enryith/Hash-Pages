@@ -24,14 +24,13 @@ class Post extends Controller
 		$query = $posts->createQueryBuilder("p")
 			->leftJoin("p.discussions", "d")
 			->leftJoin("d.tag", "t")
-			->leftJoin("d.root", "c")
-			->setParameter("user", $auth->user())
-			->select("p", "d", "t", "c");
+			->select("p", "d", "t");
 
 		if ($auth->check())
 		{
 			//If we are logged in, fetch any votes
 			$query->leftJoin("d.votes", "v", "WITH", "v.user = :user")
+				->setParameter("user", $auth->user())
 				->addSelect("v");
 		}
 
@@ -62,7 +61,6 @@ class Post extends Controller
 			'body' => "required|min:10",
 			'link' => "sometimes|nullable|url",
 			'tag' => "required|max:20|alpha_num",
-			'discussion' => 'required|min:2'
 		]);
 
 		$valid->validate();

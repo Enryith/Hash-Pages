@@ -25,13 +25,6 @@
 	@slot('help', "The main body of your post. Everyone will see this!")
 @endcomponent
 
-@component("form.text")
-	@slot('form', $form)
-	@slot('id', 'discussion')
-	@slot('label', 'Discussion:')
-	@slot('help', "Provide a brief description why you think your post fits this tag.")
-@endcomponent
-
 @component("form.complete")
 	@slot('form', $form)
 	@slot('id', 'tag')

@@ -13,5 +13,6 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/test', "Ajax@test");
+Route::get('/tags', "Ajax@tags");
 Route::post('/tags', "Ajax@tags");
 Route::post('/vote', "Ajax@vote")->middleware("auth");

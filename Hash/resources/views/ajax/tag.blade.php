@@ -6,22 +6,34 @@
 	$disagree = $type == Vote::DISAGREE ? "active" : "";
 @endphp
 
-<div class="btn-group mr-2" role="group" aria-label="Second group">
+<div class="btn-group mr-2">
 	@auth
-		<button class="btn btn-secondary js-vote js-agree {{$agree}}" data-discussion="{{ $discussion->getId() }}">
-			<strong style="font-size: 1.1rem;" class="text-success text-lg-center js-agree-text">
+		<button class="btn btn-outline-secondary js-vote js-agree {{$agree}}" data-discussion="{{ $discussion->getId() }}">
+			<strong class="text-success text-lg-center js-agree-text vote">
 				{{$discussion->getCachedAgree()}}
 			</strong>
 		</button>
+	@else
+		<div class="btn btn-outline-secondary no-hover disabled">
+			<strong class="text-success vote">
+				{{$discussion->getCachedAgree()}}
+			</strong>
+		</div>
 	@endauth
 
 	<a class="btn btn-secondary" href="{{ url("/tag/{$discussion->getTag()->getTag()}") }}">#{{ $discussion->getTag()->getTag() }}</a>
 
 	@auth
-		<button class="btn btn-secondary js-vote js-disagree {{$disagree}}" data-discussion="{{ $discussion->getId() }}">
-			<strong style="font-size: 1.1rem;" class="text-danger text-lg-center js-disagree-text">
+		<button class="btn btn-outline-secondary js-vote js-disagree {{$disagree}}" data-discussion="{{ $discussion->getId() }}">
+			<strong class="text-danger text-lg-center js-disagree-text vote">
 				{{$discussion->getCachedDisagree()}}
 			</strong>
 		</button>
+	@else
+		<div class="btn btn-outline-secondary no-hover disabled">
+			<strong class="text-danger vote">
+				{{$discussion->getCachedDisagree()}}
+			</strong>
+		</div>
 	@endauth
 </div>
