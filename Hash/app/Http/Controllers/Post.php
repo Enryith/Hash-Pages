@@ -14,6 +14,11 @@ use Illuminate\Validation\ValidationException;
 
 class Post extends Controller
 {
+	public function form()
+	{
+		return view('post.form');
+	}
+
 	/**
 	 * @param Guard $auth
 	 * @param Posts $posts
@@ -38,9 +43,62 @@ class Post extends Controller
 		return view('post.index')->with(compact('table'));
 	}
 
-	public function form()
+	/**
+	 * @param Tags $tags
+	 * @param Request $request
+	 * @param EntityManagerInterface $em
+	 * @param Validation $validator
+	 * @param Guard $auth
+	 * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+	 * @throws ValidationException
+	 */
+	public function discussion(Tags $tags, Request $request, EntityManagerInterface $em, Validation $validator, Guard $auth, $id)
 	{
-		return view('post.form');
+		/** @var Entities\Post $post */
+		$post = $em->find("App\Entities\Post", $id);
+
+		//Post must exist if you want to discuss it!
+		if (!$post) abort(404);
+
+		/** @var $user Entities\User */
+		$user = $auth->user();
+		$valid = $validator->make($request->all(), [
+			'title' => "required|min:2",
+			'comment' => "required|min:2",
+			'tag' => "required|max:20|alpha_num",
+		]);
+
+		$valid->validate();
+		$data = $valid->getData();
+
+		//Get a new tag or reuse one that exists
+		$tag = $this->getTag($em, $tags, $data["tag"]);
+
+		//Make sure the tag is not already added
+		$count = $em->createQueryBuilder()
+			->select("COUNT(d) as count")
+			->from("App\Entities\Post", "p")
+			->where("p = :post")
+			->leftJoin("p.discussions", "d", "WITH", "d.tag = :tag")
+			->setParameter("tag", $tag)
+			->setParameter("post", $post)
+			->getQuery()->getArrayResult();
+
+		if ($count[0]["count"] > 0)
+		{
+			throw ValidationException::withMessages([
+				'tag' => [trans("validation.discussion")],
+			]);
+		}
+
+		//Create the discussion
+		$discussion = new Entities\Discussion($post, $tag, $user, $data["title"]);
+		$comment = new Entities\Comment($discussion, $user, $data["comment"]);
+		$discussion->addComment($comment);
+		$em->persist($discussion);
+		$em->persist($comment);
+		$em->flush();
+		return redirect("/post/{$post->getId()}");
 	}
 
 	/**
@@ -66,14 +124,8 @@ class Post extends Controller
 		$valid->validate();
 		$data = $valid->getData();
 
-		//Find one by will be null if it does not exist
-		$tag = $tags->findOneBy(["tag" => $data["tag"]]);
-		if (!$tag)
-		{
-			//Create tag for the user if it does not exist.
-			$tag = new Entities\Tag($data["tag"]);
-			$em->persist($tag);
-		}
+		//Get a new tag or reuse one that exists
+		$tag = $this->getTag($em, $tags, $data["tag"]);
 
 		//Create post and initial discussion with tag
 		$post = new Entities\Post($user, $data["title"], trim($data["link"]), $data["body"]);
@@ -109,5 +161,20 @@ class Post extends Controller
 		}
 
 		return abort(404);
+	}
+
+	private function getTag(EntityManagerInterface $em, Tags $tags, $name)
+	{
+		//Find one by will be null if it does not exist
+		$tag = $tags->findOneBy(["tag" => $name]);
+
+		if (!$tag)
+		{
+			//Create tag for the user if it does not exist.
+			$tag = new Entities\Tag($name);
+			$em->persist($tag);
+		}
+
+		return $tag;
 	}
 }

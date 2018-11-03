@@ -22,6 +22,6 @@
 	@endif
 	<div id="{{"$id-warn"}}" class="invalid-feedback" style="display: none;">@lang("validation.create", ["attribute" => $id])</div>
 	@if($has)
-		<div class="invalid-feedback">{{ $errors->first($id) }}</div>
+		<div class="invalid-feedback d-block">{{ $errors->first($id) }}</div>
 	@endif
 </div>

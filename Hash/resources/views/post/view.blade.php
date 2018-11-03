@@ -1,5 +1,7 @@
 @php /** @var $post App\Entities\Post */ @endphp
 @php /** @var $form Collective\Html\FormBuilder */ @endphp
+@php /** @var $errors \Illuminate\Support\ViewErrorBag */ @endphp
+@php($collapse = $errors->count() > 0 ? "" : "collapse");
 @inject('form', 'Collective\Html\FormBuilder')
 @extends('theme.base')
 @section('title', e($post->getTitle()))
@@ -22,7 +24,7 @@
 		Add a Tag
 	</button>
 
-	<div class="collapse" id="join">
+	<div class="{{ $collapse }}" id="join">
 		<div class="card mt-3">
 			<div class="card-header">Add a tag by starting a new discussion!</div>
 			<div class="card-body border-secondary pb-0">

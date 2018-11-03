@@ -143,6 +143,15 @@ class Discussion
 		return $this->cachedDisagree;
 	}
 
+	public function addComment(Comment $comment)
+	{
+		if (!$this->comments->contains($comment))
+		{
+			$this->comments->add($comment);
+			$comment->setDiscussion($this);
+		}
+	}
+
 	/**
 	 * Gets if a user has voted on a specific discussion
 	 * @param User|null $user

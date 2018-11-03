@@ -22,7 +22,8 @@
 	@endif
 	<div id="{{"$id-warn"}}" class="invalid-feedback" style="display: none;">@lang("validation.select")</div>
 	@if($has)
-		<div class="invalid-feedback">{{ $errors->first($id) }}</div>
+		<!-- Apparently Bootstrap hides invalid feedback unless it's right after an input? -->
+		<div class="invalid-feedback d-block">{{ $errors->first($id) }}</div>
 	@endif
 	{{ $form->hidden($id) }}
 </div>
