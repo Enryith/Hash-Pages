@@ -27,3 +27,8 @@ img.profile {
 .btn.no-hover:hover {
 	border-color: #8E8C84;
 }
+
+.navbar {
+	padding-top: 8px !important;
+	padding-bottom: 8px !important;
+}

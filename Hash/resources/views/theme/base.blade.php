@@ -14,10 +14,17 @@
 	<link rel="preload" href="{{url("/js/vendor.js")}}" as="script">
 	<link rel="preload" href="/js/app.js" as="script">
 	<link rel="preload" href="/js/hash.js" as="script">
-	<link href="https://stackpath.bootstrapcdn.com/bootswatch/4.1.3/sandstone/bootstrap.min.css"
-	      integrity="sha384-CfCAYEgrdtRrpvjGKxoaRy5ge1ggMbxNSpEkY+XqdfdRTUkRrYZVB2z99E7BsEDZ"
-	      crossorigin="anonymous"
-	      rel="stylesheet">
+	@auth
+		<link href="{{ App\Entities\User::THEMES[$user->getTheme()]['href'] }}"
+		      integrity="{{ App\Entities\User::THEMES[$user->getTheme()]['integrity'] }}"
+		      crossorigin="anonymous"
+		      rel="stylesheet">
+	@else
+		<link href="{{ App\Entities\User::THEMES['sandstone']['href'] }}"
+		      integrity="{{ App\Entities\User::THEMES['sandstone']['integrity'] }}"
+		      crossorigin="anonymous"
+		      rel="stylesheet">
+	@endauth
 	<title>HashPages - @yield('title')</title>
 	<script type="text/javascript">
 		//look, an easter egg!

@@ -26,6 +26,13 @@
 		@slot('label', 'Bio:')
 	@endcomponent
 
+	@component("form.select")
+		@slot('form', $form)
+		@slot('options', App\Entities\User::themeOptions())
+		@slot('id', 'theme')
+		@slot('label', "Theme:")
+	@endcomponent
+
 	@component("form.submit")
 		@slot('form', $form)
 		@slot('label', "Save")
