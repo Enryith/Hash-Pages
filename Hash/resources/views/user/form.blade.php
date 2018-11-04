@@ -6,6 +6,12 @@
 
 	{{ $form->model($user,['files'=>true])}}
 
+	@component("form.text")
+		@slot('form', $form)
+		@slot('id', 'username')
+		@slot('label', 'Username:')
+	@endcomponent
+
 	@component("form.file")
 		@slot('form', $form)
 		@slot('id', 'avatar')
@@ -18,6 +24,13 @@
 		@slot('form', $form)
 		@slot('id', 'bio')
 		@slot('label', 'Bio:')
+	@endcomponent
+
+	@component("form.select")
+		@slot('form', $form)
+		@slot('options', App\Entities\User::themeOptions())
+		@slot('id', 'theme')
+		@slot('label', "Theme:")
 	@endcomponent
 
 	@component("form.submit")

@@ -3,7 +3,9 @@
 namespace App\Entities;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping AS ORM;
+use Illuminate\Support\Arr;
 
 /**
  * @ORM\Entity
@@ -31,10 +33,10 @@ class Discussion
 	private $lead;
 
 	/**
-	 * @ORM\ManyToOne(targetEntity="Comment", inversedBy="discussion")
-	 * @var Comment
+	 * @ORM\OneToMany(targetEntity="Comment", mappedBy="discussion")
+	 * @var ArrayCollection|Comment[]
 	 */
-	private $root;
+	private $comments;
 
 	/**
 	 * @ORM\ManyToOne(targetEntity="Tag", inversedBy="discussions")
@@ -43,18 +45,22 @@ class Discussion
 	private $tag;
 
 	/**
-	 * @ORM\ManyToMany(targetEntity="User", inversedBy="agree")
-	 * @ORM\JoinTable(name="discussion_user_agree")
-	 * @var ArrayCollection|User[]
+	 * @ORM\OneToMany(targetEntity="Vote", mappedBy="discussion")
+	 * @var ArrayCollection|Vote[]
 	 */
-	private $agree;
+	private $votes;
 
 	/**
-	 * @ORM\ManyToMany(targetEntity="User", inversedBy="disagree")
-	 * @ORM\JoinTable(name="discussion_user_disagree")
-	 * @var ArrayCollection|User[]
+	 * @ORM\Column(type="integer")
+	 * @var integer
 	 */
-	private $disagree;
+	private $cachedAgree;
+
+	/**
+	 * @ORM\Column(type="integer")
+	 * @var integer
+	 */
+	private $cachedDisagree;
 
 	public function __construct(Post $post, Tag $tag, User $lead, $title)
 	{
@@ -62,8 +68,10 @@ class Discussion
 		$this->tag = $tag;
 		$this->lead = $lead;
 		$this->title = $title;
-		$this->agree = new ArrayCollection();
-		$this->disagree = new ArrayCollection();
+		$this->cachedAgree = 0;
+		$this->cachedDisagree = 0;
+		$this->votes = new ArrayCollection();
+		$this->comments = new ArrayCollection();
 	}
 
 	/**
@@ -118,5 +126,76 @@ class Discussion
 	{
 		$this->title = $title;
 		return $this;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getCachedAgree()
+	{
+		return $this->cachedAgree;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getCachedDisagree()
+	{
+		return $this->cachedDisagree;
+	}
+
+	/**
+	 * @return Comment[]|ArrayCollection
+	 */
+	public function getComments()
+	{
+		return $this->comments;
+	}
+
+	public function addComment(Comment $comment)
+	{
+		if (!$this->comments->contains($comment))
+		{
+			$this->comments->add($comment);
+			$comment->setDiscussion($this);
+		}
+	}
+
+	/**
+	 * Gets if a user has voted on a specific discussion
+	 * @param User|null $user
+	 * @return null|string
+	 */
+	public function hasVoted(User $user = null)
+	{
+		if (!$user) return null;
+
+		/** @var Vote[]|ArrayCollection $votes */
+		$votes = $this->votes->matching(Criteria::create()
+			->where(Criteria::expr()->eq("user", $user))
+			->andWhere(Criteria::expr()->eq("discussion", $this))
+		);
+
+		if ($votes->count() == 1)
+		{
+			return $votes[0]->getType();
+		}
+		else
+		{
+			return null;
+		}
+	}
+
+	public function delta($type, $delta)
+	{
+		switch ($type) {
+			case Vote::AGREE:
+				$this->cachedAgree += $delta;
+				break;
+			case Vote::DISAGREE:
+				$this->cachedDisagree += $delta;
+				break;
+			default:
+		}
 	}
 }

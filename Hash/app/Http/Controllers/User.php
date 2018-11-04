@@ -10,6 +10,7 @@ use Illuminate\Routing\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Factory as Validation;
 use Illuminate\Contracts\Auth\Guard;
+use Illuminate\Validation\Rule;
 
 class User extends Controller
 {
@@ -53,9 +54,12 @@ class User extends Controller
 		/** @var Entities\User $user */
 		$user = $auth->user();
 
+		$options = implode(",", array_keys(Entities\User::themeOptions()));
 		$valid = $validator->make($request->all(), [
 			'avatar' => "image|dimensions:max_width=800,max_height=800",
-			'bio' => "max:300"
+			'bio' => "max:300",
+			'username' => "required|unique:App\Entities\User,username,{$user->getId()}",
+			'theme' => "required|in:$options",
 		]);
 
 		$valid->validate();
@@ -70,6 +74,8 @@ class User extends Controller
 		}
 
 		$user->setBio($data['bio']);
+		$user->setTheme($data['theme']);
+		$user->setUsername($data['username']);
 
 		$em->flush();
 

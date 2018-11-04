@@ -8,12 +8,27 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link href="/css/all.css" rel="stylesheet">
-	<link href="https://stackpath.bootstrapcdn.com/bootswatch/4.1.3/lumen/bootstrap.min.css"
-	      integrity="sha384-DfbCiBdRiiNWvRTbHe5X9IfkezKzm0pCrZSKc7EM9mmSl/OyckwbYk3GrajL8Ngy"
-	      rel="stylesheet"
-	      crossorigin="anonymous">
+	<meta name="csrf-token" content="{{ csrf_token() }}" />
+	<link href="/css/global.css" rel="stylesheet">
+	<link rel="preload" href="{{url("/js/manifest.js")}}" as="script">
+	<link rel="preload" href="{{url("/js/vendor.js")}}" as="script">
+	<link rel="preload" href="/js/app.js" as="script">
+	<link rel="preload" href="/js/hash.js" as="script">
+	@auth
+		<link href="{{ App\Entities\User::THEMES[$user->getTheme()]['href'] }}"
+		      integrity="{{ App\Entities\User::THEMES[$user->getTheme()]['integrity'] }}"
+		      crossorigin="anonymous"
+		      rel="stylesheet">
+	@else
+		<link href="{{ App\Entities\User::THEMES['sandstone']['href'] }}"
+		      integrity="{{ App\Entities\User::THEMES['sandstone']['integrity'] }}"
+		      crossorigin="anonymous"
+		      rel="stylesheet">
+	@endauth
 	<title>HashPages - @yield('title')</title>
+	<script type="text/javascript">
+		//look, an easter egg!
+	</script>
 </head>
 <body>
 
@@ -70,8 +85,8 @@
 
 	@yield('content')
 
-	<script src="/js/manifest.js"></script>
-	<script src="/js/vendor.js"></script>
+	<script src="{{url("/js/manifest.js")}}"></script>
+	<script src="{{url("/js/vendor.js")}}"></script>
 	<script src="/js/app.js"></script>
 	<script src="/js/hash.js"></script>
 	@stack('scripts')

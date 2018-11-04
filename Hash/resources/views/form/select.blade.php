@@ -5,7 +5,7 @@
 @php($danger = $has ? "has-danger" : "")
 <div class="form-group {{$danger}}">
 	{{ $form->label($id, $label, ["class" => "form-control-label"]) }}
-	{{ $form->textarea($id, null, ["class" => "form-control $invalid"]) }}
+	{{ $form->select($id, $options, null, ["class" => "form-control $invalid"]) }}
 	@if(isset($help))
 		<small class="form-text text-muted">{{ $help }}</small>
 	@endif

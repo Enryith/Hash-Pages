@@ -5,6 +5,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Contracts\Hashing\Hasher;
+use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Validation\Factory as Validation;
@@ -138,11 +139,13 @@ class Auth extends Controller
 
 	/**
 	 * @param Request $request
+	 * @param Session $session
 	 * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
 	 */
-	public function logout(Request $request)
+	public function logout(Request $request, Session $session)
 	{
 		$this->auth->logout();
+		$session->flush();
 		$request->session()->flash("alert-success", trans('auth.logout'));
 		return redirect('/auth/login');
 	}
