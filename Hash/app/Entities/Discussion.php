@@ -189,6 +189,9 @@ class Discussion
 		}
 	}
 
+	/**
+	 * @return ArrayCollection
+	 */
 	public function getRootComments()
 	{
 		return $this->comments->matching(Criteria::create()

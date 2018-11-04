@@ -9,20 +9,18 @@ $collapse = $errors->has('title') || $errors->has('tag') || $errors->has('commen
 @extends('theme.base')
 @section('title', e($post->getTitle()))
 @section('content')
+@php start_measure("render", "Comments Render") @endphp
 
 <div class="card mt-3 mb-3">
 	<h1 class="card-header">
 		{{ $post->getTitle() }}
 		<small class="text-muted">{{"@" . $post->getAuthor()->getUsername() }}</small>
 	</h1>
-	@if($post->getLink())
-		<ul class="list-group list-group-flush">
-			<li class="list-group-item">
-				<h3 class="mb-0"><a href="{{ $post->getLink() }}">{{ $post->getLink() }}</a></h3>
-			</li>
-		</ul>
-	@endif
 	<div class="card-body">
+		@if($post->getLink())
+			<h3><a href="{{ $post->getLink() }}">{{ $post->getLink() }}</a></h3>
+		@endif
+
 		<div class="card-text">
 			{{$post->getBody()}}
 		</div>
@@ -33,7 +31,7 @@ $collapse = $errors->has('title') || $errors->has('tag') || $errors->has('commen
 	<div class="card mt-3 mb-3">
 		<div class="card-header pl-3">
 			<div class="float-left">
-				<div class="btn btn-secondary" data-toggle="collapse" data-target="#top-reply-{{$d->getId()}}">
+				<div class="btn btn-dark" data-toggle="collapse" data-target="#top-reply-{{$d->getId()}}">
 					Reply
 				</div>
 			</div>
@@ -42,10 +40,9 @@ $collapse = $errors->has('title') || $errors->has('tag') || $errors->has('commen
 					@slot("discussion", $d)
 				@endcomponent
 			</div>
-			<h4 class="mt-1 mb-1 float-left">
+			<h4 class="mt-1 mb-1 float-left inline-title">
 				{{ $d->getTitle() }}
 				<small class="text-muted">{{"@" . $post->getAuthor()->getUsername() }}</small>
-
 			</h4>
 		</div>
 		<div class="card-body">
@@ -70,6 +67,10 @@ $collapse = $errors->has('title') || $errors->has('tag') || $errors->has('commen
 					@slot("comments", $d->getRootComments())
 					@slot("depth", 0)
 				@endcomponent
+
+				@if($d->getRootComments()->count() == 0)
+					<span class="text-muted">There's nothing here. Add to the discussion with the "Reply" button</span>
+				@endif
 			</div>
 		</div>
 	</div>
@@ -120,4 +121,5 @@ $collapse = $errors->has('title') || $errors->has('tag') || $errors->has('commen
 	</div>
 @endauth
 <div class="mb-5"></div>
+@php stop_measure("render") @endphp
 @endsection
