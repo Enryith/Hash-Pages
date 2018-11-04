@@ -1,44 +1,59 @@
-@php /** @var $comments \App\Entities\Comment[] **/ @endphp
-@php /** @var $form Collective\Html\FormBuilder */ @endphp
-@php $indentation = isset($indentation) ? $indentation : 0 @endphp
-@php $maxDepth = 5 @endphp
+@php
+/** @var $comments \App\Entities\Comment[] **/
+/** @var $form Collective\Html\FormBuilder */
+$maxDepth = 10;
+$indent = 6;
+$css = [
+	"border-left: ${indent}px solid rgb(" . getRGB(($depth * 50) % 360, 80, 95) . ");",
+	"margin-left: " . ($depth * $indent) . "px;",
+	"padding-left: 10px;",
+	"padding-top: 8px;",
+	"overflow: auto;"
+];
+@endphp
 
 @foreach($comments as $comment)
-	<div style="margin-left: {{$indentation * 30}}px">
+	<div style="{{ implode(" ", $css) }}">
 		<strong>{{ "@" . $comment->getAuthor()->getUsername() }}</strong>
 
-		@if($indentation < $maxDepth -1)
-			<a href="#collapse-{{$comment->getId()}}" data-toggle="collapse" >reply</a>
+		@if(auth()->guard()->check() && $depth < $maxDepth -1)
+		<a href="#collapse-{{$comment->getId()}}" data-toggle="collapse" >reply</a>
 		@endif
-		<br>
-		<span>{{ $comment->getComment() }}</span>
-		@if($indentation < $maxDepth -1)
-		<div class="collapse" id="collapse-{{$comment->getId()}}">
-			<div class="mt-2">
-				{{ $form->open(['action' => ['Post@comment', $comment->getId()]])}}
 
-				@component("form.textarea")
-					@slot('form', $form)
-					@slot('id', 'reply')
-				@endcomponent
+		@markdown($comment->getComment())
 
-				@component("form.submit")
-					@slot('form', $form)
-					@slot('label', "Reply")
-				@endcomponent
-
-				{{ $form->close() }}
-			</div>
+		@if(auth()->guard()->check() && $depth < $maxDepth -1)
+		@php
+			$id = "reply-{$comment->getId()}";
+			$has = $errors->has($id);
+			$collapse = !$has ? "collapse" : "";
+			$invalid = $has ? "is-invalid" : "";
+			$danger = $has ? "has-danger" : ""
+		@endphp
+		<div class="{{ $collapse }}" id="collapse-{{ $comment->getId() }}">
+			<!--For performance reasons, render manually-->
+			<form method="post" action="{{ action('Post@comment', ["id" => $comment->getId()]) }}" accept-charset="UTF-8">
+				@csrf
+				<div class="form-group {{ $danger }}">
+					<textarea name="{{ $id }}" class="form-control {{ $invalid }}" rows="3">{{ old($id)}}</textarea>
+					@if($has)
+						<div class="invalid-feedback">{{ $errors->first($id) }}</div>
+					@endif
+				</div>
+				<div class="form-group">
+					<input class="btn btn-primary" type="submit" value="Reply">
+				</div>
+			</form>
 		</div>
 		@endif
 	</div>
 
-	@if($indentation < $maxDepth - 1 && $comment->getChildren()->count() > 0)
+	@if($depth < $maxDepth - 1 && $comment->getChildren()->count() > 0)
 		@php /** RECURSION????????? **/ @endphp
 		@component("main.comments")
-			@slot("form", $form)
 			@slot("comments", $comment->getChildren())
-			@slot("indentation", $indentation + 1)
+			@slot("depth", $depth + 1)
 		@endcomponent
 	@endif
+
 @endforeach

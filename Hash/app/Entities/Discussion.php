@@ -152,6 +152,9 @@ class Discussion
 		return $this->comments;
 	}
 
+	/**
+	 * @param Comment $comment
+	 */
 	public function addComment(Comment $comment)
 	{
 		if (!$this->comments->contains($comment))
@@ -184,6 +187,13 @@ class Discussion
 		{
 			return null;
 		}
+	}
+
+	public function getRootComments()
+	{
+		return $this->comments->matching(Criteria::create()
+			->where(Criteria::expr()->isNull("parent"))
+		);
 	}
 
 	public function delta($type, $delta)

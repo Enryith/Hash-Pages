@@ -109,6 +109,7 @@ class Post extends Controller
 	{
 		/** @var Entities\Discussion $disc */
 		$disc = $em->find("App\Entities\Discussion", $id);
+		//TODO: Make sure this exists
 
 		return $this->commentHelper($request, $auth, $validator, $em, $disc);
 	}
@@ -126,6 +127,7 @@ class Post extends Controller
 	{
 		/** @var Entities\Comment $parent */
 		$parent = $em->find("App\Entities\Comment", $id);
+		//TODO: Make sure this exists
 
 		return $this->commentHelper($request, $auth, $validator, $em, $parent->getDiscussion(), $parent);
 	}
@@ -144,15 +146,19 @@ class Post extends Controller
 	{
 		/** @var $user Entities\User */
 		$user = $auth->user();
+		$field = $parent ? "reply-{$parent->getId()}" : "reply";
 
 		$valid = $validator->make($request->all(), [
-			'reply' => "required",
+			$field => "required|max:1000",
+		], [
+			"required" => "Comment is required",
+			"max" => "Comment cannot be over :max characters"
 		]);
 
 		$valid->validate();
 		$data = $valid->getData();
 
-		$comment = new Entities\Comment($discussion, $user, $data['reply'], $parent);
+		$comment = new Entities\Comment($discussion, $user, $data[$field], $parent);
 		$discussion->addComment($comment);
 
 		$em->persist($comment);
@@ -211,26 +217,21 @@ class Post extends Controller
 	public function view(Guard $auth, Posts $posts, $id)
 	{
 		//how many left joins can we have?
+		start_measure("query", "Query");
 		$query = $posts->createQueryBuilder("p")
 			->leftJoin("p.discussions", "d")
-			->leftJoin("d.comments", "c1", "WITH", "c1.parent IS NULL")
-			->leftJoin("c1.children", "c2")
-			->leftJoin("c2.children", "c3")
-			->leftJoin("c3.children", "c4")
-			->leftJoin("c4.children", "c5")
-			->leftJoin("c1.author", "c1a")
-			->leftJoin("c2.author", "c2a")
-			->leftJoin("c3.author", "c3a")
-			->leftJoin("c4.author", "c4a")
-			->leftJoin("c5.author", "c5a")
+			->leftJoin("d.comments", "c")
+			->leftJoin("c.author", 'a')
+			->leftJoin("c.children", "l")
 			->leftJoin("d.tag", "t")
 			->where("p = :post")
 			->setParameter("post", $id)
-			->orderBy("c1.id", "ASC")
-			->select("p", "d", "t", "c1", "c2", "c3", "c4", "c5", "c1a", "c2a", "c3a", "c4a", "c5a");
+			->orderBy("c.id", "ASC")
+			->select("p", "d", "t", "c", 'a', 'l');
 
 		$this->leftJoinVotes($query, $auth);
 		$post = $query->getQuery()->getOneOrNullResult();
+		stop_measure("query");
 
 		if($post instanceof Entities\Post)
 		{

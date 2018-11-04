@@ -1,7 +1,10 @@
-@php /** @var $post App\Entities\Post */ @endphp
-@php /** @var $form Collective\Html\FormBuilder */ @endphp
-@php /** @var $errors \Illuminate\Support\ViewErrorBag */ @endphp
-@php($collapse = $errors->count() > 0 ? "" : "collapse")
+@php
+/** @var $post App\Entities\Post */
+/** @var $form Collective\Html\FormBuilder */
+/** @var $errors \Illuminate\Support\ViewErrorBag */
+$collapse = $errors->has('title') || $errors->has('tag') || $errors->has('comment') ? "" : "collapse";
+@endphp
+
 @inject('form', 'Collective\Html\FormBuilder')
 @extends('theme.base')
 @section('title', e($post->getTitle()))
@@ -57,17 +60,15 @@
 					@slot('rows', 3)
 				@endcomponent
 
-				@component("form.submit")
-					@slot('form', $form)
-					@slot('label', "Reply")
-				@endcomponent
+				<!--For performance reasons, render manually-->
+				<div class="form-group"><input class="btn btn-primary" type="submit" value="Reply"></div>
 
 				{{ $form->close() }}
 			</div>
 			<div class="card-text">
 				@component("main.comments")
-					@slot("comments", $d->getComments())
-					@slot("form", $form)
+					@slot("comments", $d->getRootComments())
+					@slot("depth", 0)
 				@endcomponent
 			</div>
 		</div>
@@ -118,4 +119,5 @@
 		</div>
 	</div>
 @endauth
+<div class="mb-5"></div>
 @endsection
