@@ -14,6 +14,7 @@ return [
 	"select" => 'Extra text in this field will be lost! Press submit again to continue.',
 	"url" => ":Attribute must look like a URL.",
 	"create" => "You have not selected a :attribute. Continuing may limit how often you can create a :attribute if a new one is created!",
+	"discussion" => "This tag already exists in a discussion on this post. Choose another.",
 	"attributes" => [
         'password_confirmation' => "the second password",
         'login' => "username or email"

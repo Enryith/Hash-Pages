@@ -14,7 +14,7 @@ mix.webpackConfig({devtool: "source-map"});
 mix.styles([
 	'resources/css/global.css',
 	'node_modules/jquery-typeahead/src/jquery.typeahead.css'
-], 'public/css/all.css');
+], 'public/css/global.css');
 mix.copyDirectory('resources/svg', 'public/svg');
 mix.copyDirectory('resources/img', 'public/img');
 mix.js('resources/js/feed.js', 'public/js');

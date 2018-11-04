@@ -98,3 +98,39 @@ $(".complete").each(function(e) {
 	});
 });
 
+//Voting handling
+$(".js-vote").click(function () {
+	let type = "";
+	let $this = $(this);
+	if ($this.hasClass("js-agree")) type = "agree";
+	if ($this.hasClass("js-disagree")) type = "disagree";
+	$this.parent().find(".js-vote").removeClass("active");
+
+	$.ajax({
+		type:'POST',
+		url:'/ajax/vote',
+		headers: {
+			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+		},
+		data: {
+			discussion: $this.data("discussion"),
+			type: type,
+		},
+		success: function(data){
+			console.log(data);
+			if (data["success"] === "changed" || data["success"] === "created") $this.addClass("active");
+			$this.parent().find(".js-agree-text").text(data["votes"]["agree"]);
+			$this.parent().find(".js-disagree-text").text(data["votes"]["disagree"]);
+		},
+		error: function() {
+			$this.tooltip({
+				title: "Error",
+				trigger: "manual"
+			}).tooltip("show");
+
+			setTimeout(function() {
+				$this.tooltip("hide");
+			}, 2000);
+		}
+	})
+});

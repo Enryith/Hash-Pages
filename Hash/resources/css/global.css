@@ -19,3 +19,11 @@ img.profile {
 .typeahead__field input {
 	border-radius: 0.25rem !important;
 }
+
+.vote {
+	font-size: 1.1rem;
+}
+
+.btn.no-hover:hover {
+	border-color: #8E8C84;
+}
