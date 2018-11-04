@@ -15,7 +15,7 @@ $show = $errors->has('title') || $errors->has('tag') || $errors->has('comment') 
 		{{ $post->getTitle() }}
 		<small class="text-muted">{{"@" . $post->getAuthor()->getUsername() }}</small>
 	</h1>
-	<div class="card-body">
+	<div class="card-body pb-0">
 		@if($post->getLink())
 			<h3><a href="{{ $post->getLink() }}">{{ $post->getLink() }}</a></h3>
 		@endif
