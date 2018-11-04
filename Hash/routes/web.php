@@ -17,5 +17,4 @@ Route::get('/', 'Auth@welcome');
 Route::get('/all', "Post@index");
 Route::get('/post/{id}', "Post@view");
 Route::get('/user/{username}', 'User@view');
-Route::get('/send/{message}', 'Socket@send');
-Route::get('/listen', 'Socket@listen');
+Route::get('/feed', 'Feed@feed');
