@@ -21,7 +21,7 @@ $show = $errors->has('title') || $errors->has('tag') || $errors->has('comment') 
 		@endif
 
 		<div class="card-text">
-			{{$post->getBody()}}
+			@markdown($post->getBody())
 		</div>
 	</div>
 </div>
