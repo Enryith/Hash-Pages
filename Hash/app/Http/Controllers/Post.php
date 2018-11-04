@@ -217,7 +217,6 @@ class Post extends Controller
 	public function view(Guard $auth, Posts $posts, $id)
 	{
 		//how many left joins can we have?
-		start_measure("query", "Query");
 		$query = $posts->createQueryBuilder("p")
 			->leftJoin("p.discussions", "d")
 			->leftJoin("d.comments", "c")
@@ -231,7 +230,6 @@ class Post extends Controller
 
 		$this->leftJoinVotes($query, $auth);
 		$post = $query->getQuery()->getOneOrNullResult();
-		stop_measure("query");
 
 		if($post instanceof Entities\Post)
 		{

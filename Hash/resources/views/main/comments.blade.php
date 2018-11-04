@@ -4,7 +4,7 @@
 $maxDepth = 10;
 $indent = 6;
 $css = [
-	"border-left: ${indent}px solid rgb(" . getRGB(($depth * 50) % 360, 80, 95) . ");",
+	"border-left: ${indent}px solid rgb(" . getRGB(($depth * 36) % 360, 80, 95) . ");",
 	"margin-left: " . ($depth * $indent) . "px;",
 	"padding-left: 10px;",
 	"padding-top: 8px;",
@@ -26,11 +26,11 @@ $css = [
 		@php
 			$id = "reply-{$comment->getId()}";
 			$has = $errors->has($id);
-			$collapse = !$has ? "collapse" : "";
+			$show = $has ? "show" : "";
 			$invalid = $has ? "is-invalid" : "";
 			$danger = $has ? "has-danger" : ""
 		@endphp
-		<div class="{{ $collapse }}" id="collapse-{{ $comment->getId() }}">
+		<div class="collapse {{ $show }}" id="collapse-{{ $comment->getId() }}">
 			<!--For performance reasons, render manually-->
 			<form method="post" action="{{ action('Post@comment', ["id" => $comment->getId()]) }}" accept-charset="UTF-8">
 				@csrf

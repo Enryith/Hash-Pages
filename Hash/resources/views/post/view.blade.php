@@ -2,14 +2,13 @@
 /** @var $post App\Entities\Post */
 /** @var $form Collective\Html\FormBuilder */
 /** @var $errors \Illuminate\Support\ViewErrorBag */
-$collapse = $errors->has('title') || $errors->has('tag') || $errors->has('comment') ? "" : "collapse";
+$show = $errors->has('title') || $errors->has('tag') || $errors->has('comment') ? "show" : "";
 @endphp
 
 @inject('form', 'Collective\Html\FormBuilder')
 @extends('theme.base')
 @section('title', e($post->getTitle()))
 @section('content')
-@php start_measure("render", "Comments Render") @endphp
 
 <div class="card mt-3 mb-3">
 	<h1 class="card-header">
@@ -81,7 +80,7 @@ $collapse = $errors->has('title') || $errors->has('tag') || $errors->has('commen
 		Add a Tag
 	</button>
 
-	<div class="{{ $collapse }}" id="join">
+	<div class="collapse {{ $show }}" id="join">
 		<div class="card mt-3">
 			<div class="card-header">Add a tag by starting a new discussion!</div>
 			<div class="card-body border-secondary pb-0">
@@ -121,5 +120,4 @@ $collapse = $errors->has('title') || $errors->has('tag') || $errors->has('commen
 	</div>
 @endauth
 <div class="mb-5"></div>
-@php stop_measure("render") @endphp
 @endsection
