@@ -5,6 +5,7 @@ namespace App\Entities;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping AS ORM;
+use Illuminate\Support\Arr;
 
 /**
  * @ORM\Entity
@@ -33,7 +34,7 @@ class Discussion
 
 	/**
 	 * @ORM\OneToMany(targetEntity="Comment", mappedBy="discussion")
-	 * @var Comment
+	 * @var ArrayCollection|Comment[]
 	 */
 	private $comments;
 
@@ -141,6 +142,14 @@ class Discussion
 	public function getCachedDisagree()
 	{
 		return $this->cachedDisagree;
+	}
+
+	/**
+	 * @return Comment[]|ArrayCollection
+	 */
+	public function getComments()
+	{
+		return $this->comments;
 	}
 
 	public function addComment(Comment $comment)

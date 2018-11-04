@@ -5,6 +5,7 @@ use App\Repositories\Posts;
 use App\Repositories\Tags;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query;
+use Doctrine\ORM\QueryBuilder;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -31,14 +32,7 @@ class Post extends Controller
 			->leftJoin("d.tag", "t")
 			->select("p", "d", "t");
 
-		if ($auth->check())
-		{
-			//If we are logged in, fetch any votes
-			$query->leftJoin("d.votes", "v", "WITH", "v.user = :user")
-				->setParameter("user", $auth->user())
-				->addSelect("v");
-		}
-
+		$this->leftJoinVotes($query, $auth);
 		$table = $posts->paginate($query->getQuery(), 20);
 		return view('post.index')->with(compact('table'));
 	}
@@ -139,21 +133,30 @@ class Post extends Controller
 	}
 
 	/**
+	 * @param Guard $auth
 	 * @param Posts $posts
 	 * @param $id
 	 * @return \Illuminate\View\View
 	 * @throws \Doctrine\ORM\NonUniqueResultException
 	 */
-	public function view(Posts $posts, $id)
+	public function view(Guard $auth, Posts $posts, $id)
 	{
-		$post = $posts->createQueryBuilder("p")
+		//how many left joins can we have?
+		$query = $posts->createQueryBuilder("p")
 			->leftJoin("p.discussions", "d")
+			->leftJoin("d.comments", "c1", "WITH", "c1.parent IS NULL")
+			->leftJoin("c1.children", "c2")
+			->leftJoin("c2.children", "c3")
+			->leftJoin("c3.children", "c4")
+			->leftJoin("c4.children", "c5")
 			->leftJoin("d.tag", "t")
-			->select("p, d, t")
-			->where("p = :p")
-			->setParameter("p", $id)
-			->getQuery()
-			->getOneOrNullResult();
+			->where("p = :post")
+			->setParameter("post", $id)
+			->orderBy("c1.id", "ASC")
+			->select("p", "d", "t", "c1", "c2", "c3", "c4", "c5");
+
+		$this->leftJoinVotes($query, $auth);
+		$post = $query->getQuery()->getOneOrNullResult();
 
 		if($post instanceof Entities\Post)
 		{
@@ -161,6 +164,17 @@ class Post extends Controller
 		}
 
 		return abort(404);
+	}
+
+	private function leftJoinVotes(QueryBuilder $query, Guard $auth)
+	{
+		if ($auth->check())
+		{
+			//If we are logged in, fetch any votes
+			$query->leftJoin("d.votes", "v", "WITH", "v.user = :user")
+				->setParameter("user", $auth->user())
+				->addSelect("v");
+		}
 	}
 
 	private function getTag(EntityManagerInterface $em, Tags $tags, $name)

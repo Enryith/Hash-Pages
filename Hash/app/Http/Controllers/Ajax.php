@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use App\Entities\Discussion;
 use App\Entities\Vote;
 use App\Repositories\Tags;
+use Doctrine\DBAL\LockMode;
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Mapping\Entity;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Contracts\Auth\Guard;
@@ -38,6 +41,7 @@ class Ajax extends Controller
 	 */
 	function vote(Request $request, EntityManagerInterface $em, Guard $auth)
 	{
+		/** @var EntityManager $em */
 		/** @var Entities\User $user */
 		$user = $auth->user();
 
@@ -65,9 +69,9 @@ class Ajax extends Controller
 		//same time and break the score deltas
 		$em->getConnection()->beginTransaction();
 
+		//Update the votes in one transaction
 		try
 		{
-			//Update the votes in one transaction
 			$response = $this->update($em, $user, $data["type"], $data["discussion"]);
 			$em->flush();
 			$em->getConnection()->commit();
@@ -82,46 +86,63 @@ class Ajax extends Controller
 		}
 	}
 
-	private function update(EntityManagerInterface $em, Entities\User $user, $type, $id)
+	/**
+	 * @param EntityManager $em
+	 * @param Entities\User $user
+	 * @param $type
+	 * @param $id
+	 * @return array|\Illuminate\Http\JsonResponse
+	 * @throws \Doctrine\ORM\ORMException
+	 */
+	private function update(EntityManager $em, Entities\User $user, $type, $id)
 	{
 		//Find the discussion based on ID
 		/** @var Discussion $discussion */
-		$discussion = $em->getRepository("App\Entities\Discussion")->find($id);
+		$discussion = $em->getRepository("App\Entities\Discussion")
+			->find($id, LockMode::PESSIMISTIC_WRITE);
 
+		//Fail if the discussion is not found
 		if (!$discussion)
-		{   //Fail if the discussion is not found
+		{
 			return response()->json([
 				self::FAIL => "invalid discussion"
 			], 400);
 		}
 
 		/** @var Vote $vote */
-		$vote = $em->getRepository("App\Entities\Vote")->findOneBy([
-			"user" => $user,
-			"discussion" => $discussion
-		]);
+		$vote = $em->getRepository("App\Entities\Vote")->createQueryBuilder("v")
+			->where("v.user = :user")
+			->andWhere("v.discussion = :discussion")
+			->setParameter("user", $user)
+			->setParameter("discussion", $discussion)
+			->getQuery()
+			->setLockMode(LockMode::PESSIMISTIC_WRITE)
+			->getOneOrNullResult();
 
 		if (!$vote)
-		{   //They do not have a vote yet, add it in
+		{
+			//They do not have a vote yet, add it in
 			$vote = new Vote($user, $discussion);
 			$vote->setType($type);
 			$discussion->delta($type, 1);
 			$em->persist($vote);
 			return $this->valid("created", $discussion);
 		}
-
-		if ($type == $vote->getType())
-		{   //Have a vote, user wants to remove it because they are voting again
+		else if ($type == $vote->getType())
+		{
+			//Have a vote, user wants to remove it because they are voting again
 			$em->remove($vote);
 			$discussion->delta($type, -1);
 			return $this->valid("removed", $discussion);
 		}
-
-		//Have a vote, user does not want it removed, so change it
-		$discussion->delta($vote->getType(), -1);
-		$discussion->delta($type, 1);
-		$vote->setType($type);
-		return $this->valid("changed", $discussion);
+		else
+		{
+			//Have a vote, user does not want it removed, so change it
+			$discussion->delta($vote->getType(), -1);
+			$discussion->delta($type, 1);
+			$vote->setType($type);
+			return $this->valid("changed", $discussion);
+		}
 	}
 
 	private function valid($status, Discussion $discussion)
