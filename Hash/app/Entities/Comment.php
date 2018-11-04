@@ -123,5 +123,11 @@ class Comment
 		return $this;
 	}
 
-
+	/**
+	 * @return Comment[]|ArrayCollection
+	 */
+	public function getChildren()
+	{
+		return $this->children;
+	}
 }

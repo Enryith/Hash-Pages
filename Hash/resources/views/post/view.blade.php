@@ -41,7 +41,9 @@
 		</div>
 		<div class="card-body">
 			<div class="card-text">
-				{{ $d->getComments()[0] ? $d->getComments()[0]->getComment() : "?" }}
+				@component("main.comments")
+					@slot("comments", $d->getComments())
+				@endcomponent
 			</div>
 		</div>
 	</div>
