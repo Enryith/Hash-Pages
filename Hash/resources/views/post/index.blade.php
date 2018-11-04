@@ -3,6 +3,9 @@
 @section('content')
 @php /** @var Illuminate\Pagination\LengthAwarePaginator|App\Entities\Post[] $table */ @endphp
 	<div class="container">
+		<div id="target">
+
+		</div>
 		@foreach($table as $post)
 			<h2>
 				<a href="/post/{{$post->getId()}}">{{ $post->getTitle() }}</a>
