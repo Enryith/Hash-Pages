@@ -31,7 +31,7 @@ class Comment
 	private $parent;
 
 	/**
-	 * @ORM\ManyToOne(targetEntity="User", inversedBy="comment")
+	 * @ORM\ManyToOne(targetEntity="User", inversedBy="comments")
 	 * @var User
 	 */
 	private $author;

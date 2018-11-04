@@ -149,11 +149,16 @@ class Post extends Controller
 			->leftJoin("c2.children", "c3")
 			->leftJoin("c3.children", "c4")
 			->leftJoin("c4.children", "c5")
+			->leftJoin("c1.author", "c1a")
+			->leftJoin("c2.author", "c2a")
+			->leftJoin("c3.author", "c3a")
+			->leftJoin("c4.author", "c4a")
+			->leftJoin("c5.author", "c5a")
 			->leftJoin("d.tag", "t")
 			->where("p = :post")
 			->setParameter("post", $id)
 			->orderBy("c1.id", "ASC")
-			->select("p", "d", "t", "c1", "c2", "c3", "c4", "c5");
+			->select("p", "d", "t", "c1", "c2", "c3", "c4", "c5", "c1a", "c2a", "c3a", "c4a", "c5a");
 
 		$this->leftJoinVotes($query, $auth);
 		$post = $query->getQuery()->getOneOrNullResult();
