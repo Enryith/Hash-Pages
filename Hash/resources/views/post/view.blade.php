@@ -30,6 +30,11 @@
 	<div class="card mt-3 mb-3">
 		<div class="card-header pl-3">
 			<div class="float-left">
+				<div class="btn btn-secondary" data-toggle="collapse" data-target="#top-reply-{{$d->getId()}}">
+					Reply
+				</div>
+			</div>
+			<div class="float-left ml-3">
 				@component("ajax.tag")
 					@slot("discussion", $d)
 				@endcomponent
@@ -37,12 +42,32 @@
 			<h4 class="mt-1 mb-1 float-left">
 				{{ $d->getTitle() }}
 				<small class="text-muted">{{"@" . $post->getAuthor()->getUsername() }}</small>
+
 			</h4>
 		</div>
 		<div class="card-body">
+			<div class="collapse" id="top-reply-{{$d->getId()}}">
+
+				{{ $form->open(['action' => ['Post@commentRoot', $d->getId()]])}}
+
+				@component("form.textarea")
+					@slot('form', $form)
+					@slot('id', 'reply')
+					@slot('label', "Reply to {$d->getTitle()}")
+					@slot('rows', 3)
+				@endcomponent
+
+				@component("form.submit")
+					@slot('form', $form)
+					@slot('label', "Reply")
+				@endcomponent
+
+				{{ $form->close() }}
+			</div>
 			<div class="card-text">
 				@component("main.comments")
 					@slot("comments", $d->getComments())
+					@slot("form", $form)
 				@endcomponent
 			</div>
 		</div>
