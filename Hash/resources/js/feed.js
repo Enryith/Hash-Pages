@@ -9,4 +9,9 @@ let mustache = new Writer();
 let template = $('#template-post').html();
 mustache.parse(template);
 
-echo.channel('feed').listen('.post', (e) => $('#target').prepend(mustache.render(template, e)));
+echo.channel('feed').listen('.post', (e) =>
+{
+	console.log(e);
+	$('#target').prepend(mustache.render(template, e));
+	$(".js-init").hide();
+});

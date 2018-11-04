@@ -97,6 +97,71 @@ class Post extends Controller
 	}
 
 	/**
+	 * @param Request $request
+	 * @param Guard $auth
+	 * @param Validation $validator
+	 * @param EntityManagerInterface $em
+	 * @param $id
+	 * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+	 * @throws ValidationException
+	 */
+	public function commentRoot(Request $request, Guard $auth, Validation $validator, EntityManagerInterface $em, $id)
+	{
+		/** @var Entities\Discussion $disc */
+		$disc = $em->find("App\Entities\Discussion", $id);
+
+		return $this->commentHelper($request, $auth, $validator, $em, $disc);
+	}
+
+	/**
+	 * @param Request $request
+	 * @param Guard $auth
+	 * @param Validation $validator
+	 * @param EntityManagerInterface $em
+	 * @param $id
+	 * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+	 * @throws ValidationException
+	 */
+	public function comment(Request $request, Guard $auth, Validation $validator, EntityManagerInterface $em, $id)
+	{
+		/** @var Entities\Comment $parent */
+		$parent = $em->find("App\Entities\Comment", $id);
+
+		return $this->commentHelper($request, $auth, $validator, $em, $parent->getDiscussion(), $parent);
+	}
+
+	/**
+	 * @param Request $request
+	 * @param Guard $auth
+	 * @param Validation $validator
+	 * @param EntityManagerInterface $em
+	 * @param Entities\Discussion $discussion
+	 * @param Entities\Comment|null $parent
+	 * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+	 * @throws ValidationException
+	 */
+	private function commentHelper(Request $request, Guard $auth, Validation $validator, EntityManagerInterface $em, Entities\Discussion $discussion, Entities\Comment $parent = null)
+	{
+		/** @var $user Entities\User */
+		$user = $auth->user();
+
+		$valid = $validator->make($request->all(), [
+			'reply' => "required",
+		]);
+
+		$valid->validate();
+		$data = $valid->getData();
+
+		$comment = new Entities\Comment($discussion, $user, $data['reply'], $parent);
+		$discussion->addComment($comment);
+
+		$em->persist($comment);
+		$em->flush();
+
+		return redirect("/post/{$comment->getDiscussion()->getPost()->getId()}");
+	}
+
+	/**
 	 * @param Tags $tags
 	 * @param Request $request
 	 * @param EntityManagerInterface $em
@@ -125,12 +190,12 @@ class Post extends Controller
 		//Create post and initial discussion with tag
 		$post = new Entities\Post($user, $data["title"], trim($data["link"]), $data["body"]);
 
-		event(new Events\Post($post));
-
 		$discussion = new Entities\Discussion($post, $tag, $user, "Original Post");
 		$em->persist($discussion);
 		$em->persist($post);
 		$em->flush();
+
+		event(new Events\Post($post));
 
 		//Send user to the post they just created
 		return redirect("/post/{$post->getId()}");
@@ -196,6 +261,7 @@ class Post extends Controller
 			//Create tag for the user if it does not exist.
 			$tag = new Entities\Tag($name);
 			$em->persist($tag);
+			$em->flush();
 		}
 
 		return $tag;
