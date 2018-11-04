@@ -2,6 +2,7 @@
 
 namespace App\Entities;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping AS ORM;
 
 /**
@@ -12,16 +13,16 @@ class Discussion
 	use Traits\Id;
 
 	/**
-	 * @ORM\ManyToOne(targetEntity="Post", inversedBy="discussion")
+	 * @ORM\Column(type="string")
+	 * @var string
+	 */
+	private $title;
+
+	/**
+	 * @ORM\ManyToOne(targetEntity="Post", inversedBy="discussions")
 	 * @var Post
 	 */
 	private $post;
-
-	/**
-	 * @ORM\ManyToOne(targetEntity="Score", inversedBy="discussion")
-	 * @var Score
-	 */
-	private $score;
 
 	/**
 	 * @ORM\ManyToOne(targetEntity="User", inversedBy="leading")
@@ -30,26 +31,92 @@ class Discussion
 	private $lead;
 
 	/**
-	 * @ORM\Column(type="string")
-	 * @var string
+	 * @ORM\ManyToOne(targetEntity="Comment", inversedBy="discussion")
+	 * @var Comment
 	 */
-	private $title;
+	private $root;
 
 	/**
-	 * @ORM\Column(type="string")
-	 * @var string
+	 * @ORM\ManyToOne(targetEntity="Tag", inversedBy="discussions")
+	 * @var Tag
 	 */
-	private $comment;
+	private $tag;
 
 	/**
-	 * @ORM\Column(type="integer")
-	 * @var integer
+	 * @ORM\ManyToMany(targetEntity="User", inversedBy="agree")
+	 * @ORM\JoinTable(name="discussion_user_agree")
+	 * @var ArrayCollection|User[]
 	 */
 	private $agree;
 
 	/**
-	 * @ORM\Column(type="integer")
-	 * @var integer
+	 * @ORM\ManyToMany(targetEntity="User", inversedBy="disagree")
+	 * @ORM\JoinTable(name="discussion_user_disagree")
+	 * @var ArrayCollection|User[]
 	 */
 	private $disagree;
+
+	public function __construct(Post $post, Tag $tag, User $lead, $title)
+	{
+		$this->post = $post;
+		$this->tag = $tag;
+		$this->lead = $lead;
+		$this->title = $title;
+		$this->agree = new ArrayCollection();
+		$this->disagree = new ArrayCollection();
+	}
+
+	/**
+	 * @return Post
+	 */
+	public function getPost()
+	{
+		return $this->post;
+	}
+
+	/**
+	 * @param Post $post
+	 * @return Discussion
+	 */
+	public function setPost(Post $post)
+	{
+		$this->post = $post;
+		return $this;
+	}
+
+	/**
+	 * @return Tag
+	 */
+	public function getTag()
+	{
+		return $this->tag;
+	}
+
+	/**
+	 * @param Tag $tag
+	 * @return Discussion
+	 */
+	public function setTag(Tag $tag)
+	{
+		$this->tag = $tag;
+		return $this;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getTitle()
+	{
+		return $this->title;
+	}
+
+	/**
+	 * @param string $title
+	 * @return Discussion
+	 */
+	public function setTitle($title)
+	{
+		$this->title = $title;
+		return $this;
+	}
 }

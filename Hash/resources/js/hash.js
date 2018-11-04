@@ -8,8 +8,8 @@ $("input[type=file]").change(function () {
 	}
 });
 
-//Makes the suggestion boxes work
-$(".complete").each(function(e) {
+//Makes the suggestion boxes work for multi selects
+$(".multi").each(function(e) {
 	let $this = $(this);
 	let uri = $this.data("uri");
 	let $target = $($this.data("target"));
@@ -56,3 +56,45 @@ $(".complete").each(function(e) {
 		},
 	});
 });
+
+//Makes the suggestion boxes work
+$(".complete").each(function(e) {
+	let $this = $(this);
+	let uri = $this.data("uri");
+	let $warning = $($this.data("warn"));
+	$this.typeahead({
+		minLength: 1,
+		maxItem: 0, //The server limits results
+		emptyTemplate: "No result for {{query}}",
+		dynamic: true,
+		delay: 300,
+		hint: true,
+		accent: true,
+		highlight :true,
+		source: {
+			ajax: {
+				type: "POST",
+				url: uri,
+				data: {
+					q: "{{query}}",
+				}
+			}
+		},
+		callback: {
+			onResult: function () {
+				$this.data("asked", false);
+				$warning.hide();
+			},
+			onSubmit: function (node, form, item) {
+				if ((item !== null && item.display === $this.val()) || $this.data("asked") === true) {
+					return true;
+				} else {
+					$warning.show();
+					$this.data("asked", true);
+					return false;
+				}
+			}
+		},
+	});
+});
+

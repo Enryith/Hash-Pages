@@ -15,7 +15,7 @@
 @component("form.text")
 	@slot('form', $form)
 	@slot('id', 'link')
-	@slot('label', 'Link:')
+	@slot('label', 'Link (Optional):')
 @endcomponent
 
 @component("form.textarea")
@@ -26,9 +26,9 @@
 
 @component("form.complete")
 	@slot('form', $form)
-	@slot('id', 'tags')
+	@slot('id', 'tag')
 	@slot('uri', '/api/tags')
-	@slot('label', 'Tags:')
+	@slot('label', "Master Tag (You'll be able to add more later):")
 @endcomponent
 
 @component("form.submit")
