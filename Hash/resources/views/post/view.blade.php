@@ -13,7 +13,7 @@ $show = $errors->has('title') || $errors->has('tag') || $errors->has('comment') 
 <div class="card mt-3 mb-3">
 	<h1 class="card-header">
 		{{ $post->getTitle() }}
-		<small class="text-muted">{{"@" . $post->getAuthor()->getUsername() }}</small>
+		<small class="text-muted"><a href="{{ action('User@view', ['username' => $post->getAuthor()->getUsername()]) }}">{{"@" . $post->getAuthor()->getUsername() }}</a></small>
 	</h1>
 	<div class="card-body pb-0">
 		@if($post->getLink())
@@ -41,7 +41,7 @@ $show = $errors->has('title') || $errors->has('tag') || $errors->has('comment') 
 			</div>
 			<h4 class="mt-1 mb-1 float-left inline-title">
 				{{ $d->getTitle() }}
-				<small class="text-muted">{{"@" . $post->getAuthor()->getUsername() }}</small>
+				<small class="text-muted"><a href="{{ action('User@view', ['username' => $post->getAuthor()->getUsername()]) }}">{{"@" . $post->getAuthor()->getUsername() }}</a></small>
 			</h4>
 		</div>
 		<div class="card-body">
