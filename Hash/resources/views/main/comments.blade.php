@@ -14,7 +14,11 @@ $css = [
 
 @foreach($comments as $comment)
 	<div style="{{ implode(" ", $css) }}">
-		<strong><a href="{{ action('User@view', ['username' => $post->getAuthor()->getUsername()]) }}">{{"@" . $comment->getAuthor()->getUsername() }}</a></strong><br
+		<strong>
+			<a href="{{ action('User@view', ['username' => $comment->getAuthor()->getUsername()]) }}">
+				{{"@" . $comment->getAuthor()->getUsername() }}
+			</a>
+		</strong>
 
 		@if(auth()->guard()->check() && $depth < $maxDepth -1)
 		<a href="#collapse-{{$comment->getId()}}" data-toggle="collapse" >reply</a>
