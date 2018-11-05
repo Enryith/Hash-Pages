@@ -10,7 +10,7 @@
 <div class="card mt-3 mb-3">
 	<h1 class="card-header">
 		{{ $post->getTitle() }}
-		<small class="text-muted">{{"@" . $post->getAuthor()->getUsername() }}</small>
+		<small class="text-muted"><a href="{{ action('User@view', ['username' => $post->getAuthor()->getUsername()]) }}">{{"@" . $post->getAuthor()->getUsername() }}</a></small>
 	</h1>
 	@if($post->getLink())
 		<ul class="list-group list-group-flush">
@@ -36,7 +36,7 @@
 			</div>
 			<h4 class="mt-1 mb-1 float-left">
 				{{ $d->getTitle() }}
-				<small class="text-muted">{{"@" . $post->getAuthor()->getUsername() }}</small>
+				<small class="text-muted"><a href="{{ action('User@view', ['username' => $post->getAuthor()->getUsername()]) }}">{{"@" . $post->getAuthor()->getUsername() }}</a></small>
 			</h4>
 		</div>
 		<div class="card-body">
