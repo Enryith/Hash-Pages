@@ -2,7 +2,7 @@
 @php $indentation = isset($indentation) ? $indentation : 0 @endphp
 @foreach($comments as $comment)
 	<div style="margin-left: {{$indentation * 30}}px">
-		<strong>{{ "@" . $comment->getAuthor()->getUsername() }}</strong><br>
+		<strong><a href="{{ action('User@view', ['username' => $post->getAuthor()->getUsername()]) }}">{{"@" . $comment->getAuthor()->getUsername() }}</a></strong><br>
 		<span>{{ $comment->getComment() }}</span>
 	</div>
 

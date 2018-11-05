@@ -6,7 +6,7 @@
 	@foreach($table as $post)
 		<h2>
 			<a href="/post/{{$post->getId()}}">{{ $post->getTitle() }}</a>
-			<small class="text-muted">By: {{ $post->getAuthor()->getUsername() }}</small>
+			<small class="text-muted">By: <a href="{{ action('User@view', ['username' => $post->getAuthor()->getUsername()]) }}">{{ $post->getAuthor()->getUsername() }}</a></small>
 		</h2>
 
 		@if($post->getLink())
