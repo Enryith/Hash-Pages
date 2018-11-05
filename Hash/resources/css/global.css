@@ -32,3 +32,7 @@ img.profile {
 	padding-top: 8px !important;
 	padding-bottom: 8px !important;
 }
+
+h4.inline-title {
+	font-size: 1.4rem;
+}

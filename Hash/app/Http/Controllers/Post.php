@@ -97,6 +97,77 @@ class Post extends Controller
 	}
 
 	/**
+	 * @param Request $request
+	 * @param Guard $auth
+	 * @param Validation $validator
+	 * @param EntityManagerInterface $em
+	 * @param $id
+	 * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+	 * @throws ValidationException
+	 */
+	public function commentRoot(Request $request, Guard $auth, Validation $validator, EntityManagerInterface $em, $id)
+	{
+		/** @var Entities\Discussion $disc */
+		$disc = $em->find("App\Entities\Discussion", $id);
+		//TODO: Make sure this exists
+
+		return $this->commentHelper($request, $auth, $validator, $em, $disc);
+	}
+
+	/**
+	 * @param Request $request
+	 * @param Guard $auth
+	 * @param Validation $validator
+	 * @param EntityManagerInterface $em
+	 * @param $id
+	 * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+	 * @throws ValidationException
+	 */
+	public function comment(Request $request, Guard $auth, Validation $validator, EntityManagerInterface $em, $id)
+	{
+		/** @var Entities\Comment $parent */
+		$parent = $em->find("App\Entities\Comment", $id);
+		//TODO: Make sure this exists
+
+		return $this->commentHelper($request, $auth, $validator, $em, $parent->getDiscussion(), $parent);
+	}
+
+	/**
+	 * @param Request $request
+	 * @param Guard $auth
+	 * @param Validation $validator
+	 * @param EntityManagerInterface $em
+	 * @param Entities\Discussion $discussion
+	 * @param Entities\Comment|null $parent
+	 * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+	 * @throws ValidationException
+	 */
+	private function commentHelper(Request $request, Guard $auth, Validation $validator, EntityManagerInterface $em, Entities\Discussion $discussion, Entities\Comment $parent = null)
+	{
+		/** @var $user Entities\User */
+		$user = $auth->user();
+		$field = $parent ? "reply-{$parent->getId()}" : "reply";
+
+		$valid = $validator->make($request->all(), [
+			$field => "required|max:1000",
+		], [
+			"required" => "Comment is required",
+			"max" => "Comment cannot be over :max characters"
+		]);
+
+		$valid->validate();
+		$data = $valid->getData();
+
+		$comment = new Entities\Comment($discussion, $user, $data[$field], $parent);
+		$discussion->addComment($comment);
+
+		$em->persist($comment);
+		$em->flush();
+
+		return redirect("/post/{$comment->getDiscussion()->getPost()->getId()}");
+	}
+
+	/**
 	 * @param Tags $tags
 	 * @param Request $request
 	 * @param EntityManagerInterface $em
@@ -125,12 +196,12 @@ class Post extends Controller
 		//Create post and initial discussion with tag
 		$post = new Entities\Post($user, $data["title"], trim($data["link"]), $data["body"]);
 
-		event(new Events\Post($post));
-
 		$discussion = new Entities\Discussion($post, $tag, $user, "Original Post");
 		$em->persist($discussion);
 		$em->persist($post);
 		$em->flush();
+
+		event(new Events\Post($post));
 
 		//Send user to the post they just created
 		return redirect("/post/{$post->getId()}");
@@ -148,21 +219,14 @@ class Post extends Controller
 		//how many left joins can we have?
 		$query = $posts->createQueryBuilder("p")
 			->leftJoin("p.discussions", "d")
-			->leftJoin("d.comments", "c1", "WITH", "c1.parent IS NULL")
-			->leftJoin("c1.children", "c2")
-			->leftJoin("c2.children", "c3")
-			->leftJoin("c3.children", "c4")
-			->leftJoin("c4.children", "c5")
-			->leftJoin("c1.author", "c1a")
-			->leftJoin("c2.author", "c2a")
-			->leftJoin("c3.author", "c3a")
-			->leftJoin("c4.author", "c4a")
-			->leftJoin("c5.author", "c5a")
+			->leftJoin("d.comments", "c")
+			->leftJoin("c.author", 'a')
+			->leftJoin("c.children", "l")
 			->leftJoin("d.tag", "t")
 			->where("p = :post")
 			->setParameter("post", $id)
-			->orderBy("c1.id", "ASC")
-			->select("p", "d", "t", "c1", "c2", "c3", "c4", "c5", "c1a", "c2a", "c3a", "c4a", "c5a");
+			->orderBy("c.id", "ASC")
+			->select("p", "d", "t", "c", 'a', 'l');
 
 		$this->leftJoinVotes($query, $auth);
 		$post = $query->getQuery()->getOneOrNullResult();
@@ -196,6 +260,7 @@ class Post extends Controller
 			//Create tag for the user if it does not exist.
 			$tag = new Entities\Tag($name);
 			$em->persist($tag);
+			$em->flush();
 		}
 
 		return $tag;

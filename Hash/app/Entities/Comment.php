@@ -13,7 +13,7 @@ class Comment
 	use Traits\Id;
 
 	/**
-	 * @ORM\Column(type="string")
+	 * @ORM\Column(type="text")
 	 * @var string
 	 */
 	private $comment;
