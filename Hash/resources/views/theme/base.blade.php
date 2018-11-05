@@ -22,10 +22,6 @@
 	<link rel="mask-icon" href="/icon/safari-pinned-tab.svg" color="#5bbad5">
 	<link rel="shortcut icon" href="/favicon.ico">
 	<link href="/css/global.css" rel="stylesheet">
-	<link rel="preload" href="{{url("/js/manifest.js")}}" as="script">
-	<link rel="preload" href="{{url("/js/vendor.js")}}" as="script">
-	<link rel="preload" href="/js/app.js" as="script">
-	<link rel="preload" href="/js/hash.js" as="script">
 	@auth
 		<link href="{{ App\Entities\User::THEMES[$user->getTheme()]['href'] }}"
 		      integrity="{{ App\Entities\User::THEMES[$user->getTheme()]['integrity'] }}"
