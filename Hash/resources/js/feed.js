@@ -5,10 +5,10 @@ let echo = new Echo({
 	host: window.location.hostname + ':6001'
 });
 
-var mustache = new Writer();
-var postTemp = $('#template-post').html();
-var discTemp = $('#template-discussion').html();
-var comTemp = $('#template-comment').html();
+let mustache = new Writer();
+let postTemp = $('#template-post').html();
+let discTemp = $('#template-discussion').html();
+let comTemp = $('#template-comment').html();
 
 mustache.parse(postTemp);
 mustache.parse(discTemp);
