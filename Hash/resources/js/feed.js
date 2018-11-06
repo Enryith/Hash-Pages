@@ -15,3 +15,17 @@ echo.channel('feed').listen('.post', (e) =>
 	$('#target').prepend(mustache.render(template, e));
 	$(".js-init").hide();
 });
+
+echo.channel('feed').listen('.discussion', (e) =>
+{
+	console.log(e);
+	$('#target').prepend(mustache.render(template, e));
+	$(".js-init").hide();
+});
+
+echo.channel('feed').listen('.comment', (e) =>
+{
+	console.log(e);
+	$('#target').prepend(mustache.render(template, e));
+	$(".js-init").hide();
+});
