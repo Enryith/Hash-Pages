@@ -15,7 +15,7 @@
 			<em>Text Post</em>
 		@endif
 
-		<p>{{ $post->getBody() }}</p>
+		@markdown($post->getBody())
 
 		<div class="btn-toolbar">
 			@foreach($post->getDiscussions() as $d)

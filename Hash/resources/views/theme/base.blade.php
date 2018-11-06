@@ -22,6 +22,7 @@
 	<link rel="mask-icon" href="/icon/safari-pinned-tab.svg" color="#5bbad5">
 	<link rel="shortcut icon" href="/favicon.ico">
 	<link href="/css/global.css" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Fredericka+the+Great" rel="stylesheet">
 	@auth
 		<link href="{{ App\Entities\User::THEMES[$user->getTheme()]['href'] }}"
 		      integrity="{{ App\Entities\User::THEMES[$user->getTheme()]['integrity'] }}"
