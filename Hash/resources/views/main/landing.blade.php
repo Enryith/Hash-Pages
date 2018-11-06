@@ -3,7 +3,7 @@
 @section('content')
 	<div class="pt-2"></div>
 	<div class="jumbotron pt-4 pb-4">
-		<h1 class="display-2" style="font-family: 'Fredericka the Great', cursive;">Hash#Pages</h1>
+		<h1 class="display-3" style="font-family: 'Fredericka the Great', cursive;">Hash#<wbr>Pages</h1>
 		<p class="lead">
 			This is a media sharing site that is based around tags. Anyone can create a tag and then other
 			users can apply those tags to their posts. This makes it so anyone can easily find and be a part of
