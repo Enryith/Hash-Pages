@@ -17,7 +17,6 @@ class Chats extends EntityRepository
 			->leftJoin("c.users", "u")
 			->where("u = :user")
 			->setParameter("user", $user)
-			->select("c", "u")
 			->getQuery();
 
 		return $this->paginate($query, $perPage);
