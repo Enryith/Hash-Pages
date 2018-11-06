@@ -3,6 +3,7 @@
 namespace App\Entities;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping AS ORM;
 
 /**
@@ -63,6 +64,13 @@ class Chat
 	public function getMessages()
 	{
 		return $this->messages;
+	}
+
+	public function getLatest()
+	{
+		return $this->messages->matching(Criteria::create()
+			->setMaxResults(50)
+		);
 	}
 
 	public function addMessages(Message $message){

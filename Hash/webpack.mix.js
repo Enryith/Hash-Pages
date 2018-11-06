@@ -20,6 +20,7 @@ mix.copyDirectory('resources/img', 'public/img');
 mix.copyDirectory('resources/icon', 'public/icon');
 mix.copy('resources/favicon.ico', 'public/favicon.ico');
 mix.js('resources/js/feed.js', 'public/js');
+mix.js('resources/js/chat.js', 'public/js');
 mix.js('resources/js/hash.js', 'public/js');
 mix.js('resources/js/app.js', 'public/js')
 	.extract(["jquery", "popper.js", "bootstrap", "socket.io-client", "laravel-echo", "jquery-typeahead", "mustache"]);

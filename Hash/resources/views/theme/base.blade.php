@@ -50,7 +50,13 @@
 		<div class="collapse navbar-collapse" id="main-nav">
 			<ul class="navbar-nav mr-auto">
 				<li class="nav-item">
-					<a class="nav-link" href="{{url("/all")}}">All</a>
+					<a class="nav-link" href="{{action("Chat@index")}}">Chat</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="{{action("Feed@feed")}}">Feed</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="{{action("Post@index")}}">All</a>
 				</li>
 			</ul>
 			<ul class="navbar-nav">
@@ -60,19 +66,19 @@
 							{{ $user->getUsername() }}
 						</a>
 						<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-							<a class="dropdown-item" href="{{url("/post")}}">New Post</a>
-							<a class="dropdown-item" href="{{url("/user")}}">My Profile</a>
-							<a class="dropdown-item" href="{{url("/settings")}}">Settings</a>
+							<a class="dropdown-item" href="{{action("Post@form")}}">New Post</a>
+							<a class="dropdown-item" href="{{action("User@self")}}">My Profile</a>
+							<a class="dropdown-item" href="{{action("User@form")}}">Settings</a>
 							<div class="dropdown-divider"></div>
-							<a class="dropdown-item" href="{{url("/auth/logout")}}">Logout</a>
+							<a class="dropdown-item" href="{{action("Auth@logout")}}">Logout</a>
 						</div>
 					</li>
 				@else
 					<li class="nav-item">
-						<a class="nav-link" href="{{url("/auth/login")}}">Login</a>
+						<a class="nav-link" href="{{action("Auth@login")}}">Login</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" href="{{url("/register")}}">Register</a>
+						<a class="nav-link" href="{{action("Auth@register")}}">Register</a>
 					</li>
 				@endauth
 			</ul>

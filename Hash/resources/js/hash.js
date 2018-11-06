@@ -133,4 +133,3 @@ $(".js-vote").click(function () {
 		}
 	})
 });
-

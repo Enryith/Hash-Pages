@@ -1,18 +1,35 @@
-@php /** @var Illuminate\Pagination\LengthAwarePaginator|App\Entities\Chat[] $table */ @endphp
-@php /** @var $form Collective\Html\FormBuilder */ @endphp
+@php
+	/** @var Illuminate\Pagination\LengthAwarePaginator|App\Entities\Chat[] $table */
+	/** @var $form Collective\Html\FormBuilder */
+@endphp
 @inject('form', 'Collective\Html\FormBuilder')
 @extends('theme.base')
 @section('title', 'Chat with Users')
 @section('content')
-	<p>Choose a user to chat with.</p>
+	<h4 class="mb-3">Choose a group to chat with</h4>
+
+	<div class="list-group">
 	@foreach ($table as $chat)
-		{{ $chat->getTitle() }}
-		<br>
+		<a class="list-group-item list-group-item-action" href="{{ action("Chat@view", ["id" => $chat->getId()]) }}">
+			{{ $chat->getTitle() }}
+			<div class="text-muted">
+				@foreach($chat->getUsers() as $user)
+					<span class="mr-2"> {{ '@' . $user->getUsername() }} </span>
+				@endforeach
+			</div>
+		</a>
 	@endforeach
+
+	@if($table->count() == 0)
+		<div class="list-group-item text-muted">We've come up empty! Start a conversation below.</div>
+	@endif
+	</div>
+
 	{{ $table->links() }}
 
-	{{ Form::open(array('url' => 'chat')) }}
+	<h4 class="mb-3 mt-3">Or start a new conversation</h4>
 
+	{{ $form->open(array('url' => 'chat')) }}
 
 	@component("form.text")
 		@slot('form', $form)
@@ -32,6 +49,6 @@
 		@slot('label', "Create a New Chat")
 	@endcomponent
 
-	{{ Form::close() }}
+	{{ $form->close() }}
 
 @endsection

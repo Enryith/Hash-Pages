@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Entities\Discussion;
 use App\Entities\Vote;
+use App\Events\Message;
 use App\Repositories\Chats;
 use App\Repositories\Tags;
 use App\Repositories\Users;
@@ -15,7 +16,6 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Contracts\Auth\Guard;
 use App\Entities;
-use Illuminate\Validation\Factory as Validation;
 
 
 class Ajax extends Controller
@@ -41,9 +41,9 @@ class Ajax extends Controller
 		return $users->findAllLike($request->get("q"));
 	}
 
-	public function message(Chats $chats, Gate $gate, Request $request, EntityManagerInterface $em, Guard $auth, $id){
+	public function message(Chats $chats, Gate $gate, Request $request, EntityManagerInterface $em, Guard $auth){
 		/** @var Entities\Chat $chat */
-		$chat = $chats->find($id);
+		$chat = $chats->find($request->get("id"));
 
 		if(!$chat || $gate->denies("view-chat", $chat)){
 			return abort(404);
@@ -58,11 +58,14 @@ class Ajax extends Controller
 		/** @var  $user Entities\User */
 		$user = $auth->user();
 		$message = new Entities\Message($user, $chat, $text);
-
 		$em->persist($message);
 		$em->flush();
 
-		return [];
+		event(new Message($message, $chat));
+
+		return [
+			self::OK => "sent",
+		];
 	}
 
 	/**

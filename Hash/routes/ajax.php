@@ -18,3 +18,4 @@ Route::post('/tags', "Ajax@tags");
 Route::get('/users',"Ajax@users");
 Route::post('/users',"Ajax@users");
 Route::post('/vote', "Ajax@vote")->middleware("auth");
+Route::post('/message', "Ajax@message")->middleware("auth");
