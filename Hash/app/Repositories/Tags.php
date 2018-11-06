@@ -19,7 +19,7 @@ class Tags extends EntityRepository
 		 return $qb->getQuery()->getArrayResult();
 	}
 
-	private function like($search) {
+	public static function like($search) {
 		return preg_replace("/[%_]/", "", trim($search));
 	}
 }

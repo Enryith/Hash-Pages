@@ -4,15 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Entities\Discussion;
 use App\Entities\Vote;
+use App\Repositories\Chats;
 use App\Repositories\Tags;
+use App\Repositories\Users;
 use Doctrine\DBAL\LockMode;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Mapping\Entity;
+use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Contracts\Auth\Guard;
 use App\Entities;
+use Illuminate\Validation\Factory as Validation;
+
 
 class Ajax extends Controller
 {
@@ -30,6 +34,35 @@ class Ajax extends Controller
 	function tags(Request $request, Tags $tags)
 	{
 		return $tags->findAllLike($request->get("q"));
+	}
+
+	function users(Request $request, Users $users)
+	{
+		return $users->findAllLike($request->get("q"));
+	}
+
+	public function message(Chats $chats, Gate $gate, Request $request, EntityManagerInterface $em, Guard $auth, $id){
+		/** @var Entities\Chat $chat */
+		$chat = $chats->find($id);
+
+		if(!$chat || $gate->denies("view-chat", $chat)){
+			return abort(404);
+		}
+
+		$text = trim($request->get("message"));
+
+		if($text == ""){
+			return abort(400);
+		}
+
+		/** @var  $user Entities\User */
+		$user = $auth->user();
+		$message = new Entities\Message($user, $chat, $text);
+
+		$em->persist($message);
+		$em->flush();
+
+		return [];
 	}
 
 	/**

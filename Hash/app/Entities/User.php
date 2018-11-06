@@ -53,6 +53,12 @@ class User implements Authenticatable
 	}
 
 	/**
+	 * @ORM\Column(type="string", options={"default" : "sandstone"})
+	 * @var string
+	 */
+	private $theme;
+
+	/**
 	 * @ORM\Column(type="string")
 	 * @var string
 	 */
@@ -99,28 +105,22 @@ class User implements Authenticatable
 	private $leading;
 
 	/**
+	 * @ORM\ManyToMany(targetEntity="Chat", mappedBy="users")
+	 * @var ArrayCollection|Chat[]
+	 */
+	private $chat;
+
+	/**
 	 * @ORM\OneToMany(targetEntity="Comment", mappedBy="author")
 	 * @var ArrayCollection|Comment[]
 	 */
 	private $comments;
 
 	/**
-	 * @ORM\ManyToMany(targetEntity="Conversation", mappedBy="users")
-	 * @var ArrayCollection|Conversation[]
-	 */
-	private $conversations;
-
-	/**
 	 * @ORM\OneToMany(targetEntity="Vote", mappedBy="user")
 	 * @var ArrayCollection|Vote[]
 	 */
 	private $votes;
-
-	/**
-	 * @ORM\Column(type="string", options={"default" : "sandstone"})
-	 * @var string
-	 */
-	private $theme;
 
 	public function __construct()
 	{
@@ -262,6 +262,19 @@ class User implements Authenticatable
 		if (!$this->posts->contains($post)) {
 			$this->posts->add($post);
 			$post->setAuthor($this);
+		}
+		return $this;
+	}
+
+	/**
+	 * @param Chat $chat
+	 * @return $this
+	 */
+	public function addChat(Chat $chat)
+	{
+		if (!$this->chat->contains($chat)) {
+			$this->chat->add($chat);
+			$chat->addUser($this);
 		}
 		return $this;
 	}

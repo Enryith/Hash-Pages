@@ -9,15 +9,19 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 class Users extends EntityRepository
 {
-	use PaginatesFromRequest;
 
-	/**
-	 * @return LengthAwarePaginator|Entities\User[]
-	 */
-	public function paginateUsers()
-	{
-		$query = $this->createQueryBuilder('u');
-		return $this->paginate($query->getQuery(), 1, 'page');
+	public function findAllLike($search, $limit = 10) {
+		$search = Tags::like($search);
+		if (strlen($search) == 0) return [];
+
+		$qb = $this->createQueryBuilder("u")
+			->select("CONCAT(u.username, ' (', u.name, ')') as display, u.id as id")
+			->where("u.username LIKE :user")
+			->orWhere("u.name LIKE :user")
+			->setParameter("user", "%$search%")
+			->setMaxResults($limit);
+
+		return $qb->getQuery()->getArrayResult();
 	}
 
 	/**
