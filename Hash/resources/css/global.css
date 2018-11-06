@@ -36,3 +36,8 @@ img.profile {
 h4.inline-title {
 	font-size: 1.4rem;
 }
+
+.anchor-bottom {
+	position:absolute;
+	bottom:20px;
+}
