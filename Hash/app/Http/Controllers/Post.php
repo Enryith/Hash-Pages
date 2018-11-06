@@ -90,6 +90,10 @@ class Post extends Controller
 		$discussion = new Entities\Discussion($post, $tag, $user, $data["title"]);
 		$comment = new Entities\Comment($discussion, $user, $data["comment"]);
 		$discussion->addComment($comment);
+
+		event(new Events\Discussion($discussion));
+
+
 		$em->persist($discussion);
 		$em->persist($comment);
 		$em->flush();
@@ -160,6 +164,8 @@ class Post extends Controller
 
 		$comment = new Entities\Comment($discussion, $user, $data[$field], $parent);
 		$discussion->addComment($comment);
+
+		event(new Events\Comment($comment));
 
 		$em->persist($comment);
 		$em->flush();

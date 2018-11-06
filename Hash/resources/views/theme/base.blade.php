@@ -53,6 +53,9 @@
 				<li class="nav-item">
 					<a class="nav-link" href="{{url("/all")}}">All</a>
 				</li>
+				<li>
+					<a class="nav-link" href="{{url("/feed")}}">Feed</a>
+				</li>
 			</ul>
 			<ul class="navbar-nav">
 				@auth
