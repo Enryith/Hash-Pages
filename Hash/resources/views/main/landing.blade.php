@@ -1,6 +1,7 @@
 @extends('theme.base')
 @section('title', 'Landing')
 @section('content')
+	<div class="pt-2"></div>
 	<div class="jumbotron pt-4 pb-4">
 		<h1 class="display-2" style="font-family: 'Fredericka the Great', cursive;">Hash#Pages</h1>
 		<p class="lead">
@@ -19,7 +20,7 @@
 			for the implementation of WebSockets, and Webpack so that we are able to use node modules.
 		</p>
 	</div>
-	<div class="card-group">
+	<div class="card-group mb-5">
 		<div class="card">
 			<img class="card-img-top" src="/img/jhin.gif" alt="Card image cap">
 			<div class="card-body">
