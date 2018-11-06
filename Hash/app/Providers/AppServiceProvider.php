@@ -2,9 +2,11 @@
 
 namespace App\Providers;
 
+use App\Entities\Chat;
 use App\Entities\Post;
 use App\Entities\Tag;
 use App\Entities\User;
+use App\Repositories\Chats;
 use App\Repositories\Tags;
 use App\Repositories\Users;
 use App\Repositories\Posts;
@@ -25,28 +27,18 @@ class AppServiceProvider extends ServiceProvider
 	 */
 	public function register()
 	{
+		$this->repository(Chats::class, Chat::class);
+		$this->repository(Tags::class, Tag::class);
+		$this->repository(Posts::class, Post::class);
+		$this->repository(Users::class, User::class);
+	}
+
+	public function repository($repo, $entity){
 		/** @var EntityManagerInterface $em */
 		$em = $this->app['em'];
 
-		//Users repository
-		$this->app->bind(Users::class, function() use ($em) {
-			return new Users(
-				$em, $em->getClassMetaData(User::class)
-			);
-		});
-
-		//Posts repository
-		$this->app->bind(Posts::class, function() use ($em) {
-			return new Posts(
-				$em, $em->getClassMetaData(Post::class)
-			);
-		});
-
-		//Tags repository
-		$this->app->bind(Tags::class, function() use ($em) {
-			return new Tags(
-				$em, $em->getClassMetaData(Tag::class)
-			);
+		$this->app->bind($repo, function() use ($repo, $em, $entity) {
+			return new $repo($em, $em->getClassMetaData($entity));
 		});
 	}
 }
