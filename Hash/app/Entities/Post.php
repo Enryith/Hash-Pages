@@ -59,6 +59,10 @@ class Post
 		return $this->discussions;
 	}
 
+	/**
+	 * @param Discussion $discussion
+	 * @return $this
+	 */
 	public function addDiscussion(Discussion $discussion)
 	{
 		if(!$this->discussions->contains($discussion))
@@ -68,6 +72,18 @@ class Post
 		}
 
 		return $this;
+	}
+
+	/**
+	 * @param Discussion $discussion
+	 */
+	public function removeDiscussion(Discussion $discussion)
+	{
+		if($this->discussions->contains($discussion))
+		{
+			$this->discussions->remove($discussion);
+			$discussion->getTag()->removeDiscussion($discussion);
+		}
 	}
 
 	/**

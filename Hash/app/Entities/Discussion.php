@@ -165,6 +165,17 @@ class Discussion
 	}
 
 	/**
+	 * @param Comment $comment
+	 */
+	public function removeComment(Comment $comment)
+	{
+		if($this->comments->contains($comment))
+		{
+			$this->comments->remove($comment);
+		}
+	}
+
+	/**
 	 * Gets if a user has voted on a specific discussion
 	 * @param User|null $user
 	 * @return null|string

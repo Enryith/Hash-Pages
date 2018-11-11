@@ -40,6 +40,18 @@ class Tag
 	}
 
 	/**
+	 * @param Discussion $discussion
+	 */
+	public function removeDiscussion(Discussion $discussion)
+	{
+		if($this->discussions->contains($discussion))
+		{
+			$this->discussions->remove($discussion);
+			$discussion->getPost()->removeDiscussion($discussion);
+		}
+	}
+
+	/**
 	 * @return Discussion[]|ArrayCollection
 	 */
 	public function getDiscussions()
