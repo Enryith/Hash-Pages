@@ -41,7 +41,7 @@
 			<img class="card-img-top" src="/img/shulk.png" alt="Card image cap">
 			<div class="card-body">
 				<h5 class="card-title">Dheepak Nalluri</h5>
-				<p class="card-text mb-5">ENTITIES.</p>
+				<pre class="card-text mb-5">E N T I T I E S.</pre>
 			</div>
 		</div>
 		<div class="card">

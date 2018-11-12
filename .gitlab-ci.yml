@@ -15,7 +15,10 @@ test:
   tags:
     - test
   script:
-    - composer install
+    - composer install --prefer-dist
+    - cp .env.testing .env
+    - "php artisan doctrine:schema:create"
+    - "php artisan doctrine:generate:proxies"
     - vendor/bin/phpunit
 
 npm:
@@ -37,23 +40,24 @@ deploy:
   tags: 
     - test
   script:
-    - cp public/* $ROOT/projects/AD_2_HashPages/public
-    - cd $ROOT/projects/AD_2_HashPages
+    - cp -rf public $ROOT/projects/AD_2_HashPages/Hash
+    - cd $ROOT/projects/AD_2_HashPages/Hash
+    - git reset --hard HEAD
     - git pull
-    - composer install --prefer-dist --no-ansi --no-dev --optimize-autoloader
-    - "php artisan doctrine:schema:update"
-    - "php artisan doctrine:generate:proxies"
     - rm -rf storage/
     - ln -nfs $ROOT/storage storage
     - ln -nfs $ROOT/.env .env
+    - composer install --prefer-dist --no-ansi --no-dev --optimize-autoloader
+    - "php artisan doctrine:schema:update"
+    - "php artisan doctrine:generate:proxies"
     - chgrp apache bootstrap/cache
   dependencies:
     - npm
-  only:
-    - master
   environment:
     name: stage
     url: http://proj309-ad-02.misc.iastate.edu/
   variables:
     GIT_STRATEGY: none
     ROOT: /vwh/proj309-ad-02.misc.iastate.edu
+  only:
+    - master
