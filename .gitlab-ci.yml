@@ -1,17 +1,15 @@
 before_script:
   - cd Hash
 
-cache:
-  paths:
-    - Hash/vendor
-    - Hash/node_modules
-
 stages:
   - execute
   - deploy
 
 test:
   stage: execute
+  cache:
+      paths:
+        - Hash/vendor
   tags:
     - test
   script:
@@ -23,6 +21,9 @@ test:
 
 npm:
   stage: execute
+  cache:
+    paths:
+      - Hash/node_modules
   tags:
     - npm
   script:
