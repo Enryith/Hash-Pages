@@ -29,7 +29,7 @@ build:
   artifacts:
     - public/css
     - public/js
-    - mix-manifest.json
+    - public/mix-manifest.json
 
 deploy:
   stage: deploy
@@ -37,7 +37,16 @@ deploy:
   tags: 
     - shell
   script:
-    - 
+    - cp public/* $ROOT/projects/AD_2_HashPages/public
+    - cd $ROOT/projects/AD_2_HashPages
+    - git pull
+    - composer install --prefer-dist --no-ansi --no-dev --optimize-autoloader
+    - "php artisan doctrine:schema:update"
+    - "php artisan doctrine:generate:proxies"
+    - rm -rf storage/
+    - ln -nfs $ROOT/storage storage
+    - ln -nfs $ROOT/.env .env
+    - chgrp apache bootstrap/cache
   dependencies:
     - build
   only:
@@ -45,3 +54,6 @@ deploy:
   environment:
     name: stage
     url: http://proj309-ad-02.misc.iastate.edu/
+  variables:
+    GIT_STRATEGY: none
+    ROOT: /vwh/proj309-ad-02.misc.iastate.edu
