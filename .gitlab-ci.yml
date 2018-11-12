@@ -7,9 +7,6 @@ stages:
 
 test:
   stage: execute
-  cache:
-      paths:
-        - Hash/vendor
   tags:
     - test
   script:
@@ -18,17 +15,22 @@ test:
     - "php artisan doctrine:schema:create"
     - "php artisan doctrine:generate:proxies"
     - vendor/bin/phpunit
+  cache:
+    key: test
+    paths:
+      - Hash/vendor
 
 npm:
   stage: execute
-  cache:
-    paths:
-      - Hash/node_modules
   tags:
     - npm
   script:
     - npm install
     - npm run prod
+  cache:
+    key: npm
+    paths:
+      - Hash/node_modules
   artifacts:
     paths:
       - Hash/public/css/
