@@ -7,17 +7,21 @@ cache:
     - Hash/node_modules
 
 stages:
-  - compile
+  - execute
   - deploy
 
 test:
-  stage: compile
+  stage: execute
+  tags:
+    - test
   script:
     - composer install
     - vendor/bin/phpunit
 
-build:
-  stage: compile
+npm:
+  stage: execute
+  tags:
+    - npm
   script:
     - npm install
     - npm run prod
@@ -30,6 +34,8 @@ build:
 deploy:
   stage: deploy
   when: manual
+  tags: 
+    - test
   script:
     - cp public/* $ROOT/projects/AD_2_HashPages/public
     - cd $ROOT/projects/AD_2_HashPages
