@@ -13,6 +13,7 @@
 	clone_repository
 	run_composer
 	update_symlinks
+	run_doctrine
 @endstory
 
 @task('clone_repository')
@@ -27,6 +28,13 @@
 	composer install --prefer-dist --no-scripts --no-ansi --no-dev -o
 @endtask
 
+@task('run_doctrine')
+	echo "Running doctrine"
+	cd {{ $app }}
+	php artisan d:s:u
+	php artisan d:g:p
+@endtask
+
 @task('update_symlinks')
 	echo "Linking storage directory"
 	rm -rf {{ $app }}/storage
@@ -37,4 +45,7 @@
 
 	echo 'Linking current release'
 	ln -nfs {{ $app }}/public {{ $root }}/www
+
+	echo 'Changing permissions'
+	chgrp apache {{ $app }}/bootstrap/cache
 @endtask
