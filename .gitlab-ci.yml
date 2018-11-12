@@ -16,6 +16,9 @@ test:
     - test
   script:
     - composer install
+    - cp .env.testing .env
+    - "php artisan doctrine:schema:update"
+    - "php artisan doctrine:generate:proxies"
     - vendor/bin/phpunit
 
 npm:
