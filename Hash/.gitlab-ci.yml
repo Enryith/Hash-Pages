@@ -1,0 +1,47 @@
+before_script:
+  - cd Hash
+
+cache:
+  paths:
+    - vendor
+    - node_modules
+
+stages:
+  - test
+  - build
+  - deploy
+
+test:
+  stage: test
+  tags:
+    - shell
+  script:
+    - composer install
+    - vendor/bin/phpunit
+
+build:
+  stage: build
+  tags:
+    - shell
+  script:
+    - npm install
+    - npm run prod
+  artifacts:
+    - public/css
+    - public/js
+    - mix-manifest.json
+
+deploy:
+  stage: deploy
+  when: manual
+  tags: 
+    - shell
+  script:
+    - 
+  dependencies:
+    - build
+  only:
+    - master
+  environment:
+    name: stage
+    url: http://proj309-ad-02.misc.iastate.edu/
