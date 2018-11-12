@@ -43,7 +43,7 @@ class Post
 	private $discussions;
 
 	/**
-	 * @ORM\Column(type="datetime" nullable=true)
+	 * @ORM\Column(type="datetime", nullable=true)
 	 * @var \DateTime
 	 */
 	private $recentActivity;
