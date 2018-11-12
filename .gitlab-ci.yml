@@ -59,3 +59,5 @@ deploy:
   variables:
     GIT_STRATEGY: none
     ROOT: /vwh/proj309-ad-02.misc.iastate.edu
+  only:
+    - master
