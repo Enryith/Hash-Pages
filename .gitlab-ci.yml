@@ -3,8 +3,8 @@ before_script:
 
 cache:
   paths:
-    - vendor
-    - node_modules
+    - Hash/vendor
+    - Hash/node_modules
 
 stages:
   - test
@@ -28,9 +28,9 @@ build:
     - npm run prod
   artifacts:
     paths:
-      - public/css/
-      - public/js/
-      - public/mix-manifest.json
+      - Hash/public/css/
+      - Hash/public/js/
+      - Hash/public/mix-manifest.json
 
 deploy:
   stage: deploy
