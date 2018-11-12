@@ -30,7 +30,8 @@ class Post extends Controller
 		$query = $posts->createQueryBuilder("p")
 			->leftJoin("p.discussions", "d")
 			->leftJoin("d.tag", "t")
-			->select("p", "d", "t");
+			->select("p", "d", "t")
+			->orderBy('p.recentActivity', "DESC");
 
 		$this->leftJoinVotes($query, $auth);
 		$table = $posts->paginate($query->getQuery(), 20);
@@ -90,8 +91,9 @@ class Post extends Controller
 		$comment = new Entities\Comment($discussion, $user, $data["comment"]);
 		$discussion->addComment($comment);
 
-		event(new Events\Discussion($discussion));
+		$post->bump();
 
+		event(new Events\Discussion($discussion));
 
 		$em->persist($discussion);
 		$em->persist($comment);
@@ -163,6 +165,9 @@ class Post extends Controller
 
 		$comment = new Entities\Comment($discussion, $user, $data[$field], $parent);
 		$discussion->addComment($comment);
+		$post = $discussion->getPost();
+
+		$post->bump();
 
 		event(new Events\Comment($comment));
 
