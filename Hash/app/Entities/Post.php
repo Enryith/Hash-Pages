@@ -42,12 +42,19 @@ class Post
 	 */
 	private $discussions;
 
+	/**
+	 * @ORM\Column(type="datetime")
+	 * @var \DateTime
+	 */
+	private $recentActivity;
+
 	public function __construct(User $user, $title, $link, $body)
 	{
 		$this->setAuthor($user);
 		$this->title = $title;
 		$this->link = $link;
 		$this->body = $body;
+		$this->recentActivity = new \DateTime('now');
 		$this->discussions = new ArrayCollection();
 	}
 
@@ -142,4 +149,31 @@ class Post
 		$this->link = $link;
 		return $this;
 	}
+
+	/**
+	 * @return \DateTime
+	 */
+	public function getRecentActivity()
+	{
+		return $this->recentActivity;
+	}
+
+	/**
+	 * @param \DateTime $recentActivity
+	 * @return Post
+	 */
+	public function setRecentActivity(\DateTime $recentActivity)
+	{
+		$this->recentActivity = $recentActivity;
+		return $this;
+	}
+
+	/**
+	 * @return Post
+	 */
+	public function bump()
+	{
+		return $this->setRecentActivity(new \DateTime('now'));
+	}
+
 }
