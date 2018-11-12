@@ -41,13 +41,13 @@
 			<img class="card-img-top" src="/img/shulk.png" alt="Card image cap">
 			<div class="card-body">
 				<h5 class="card-title">Dheepak Nalluri</h5>
-				<p class="card-text mb-5">ENTITIES.</p>
+				<pre class="card-text mb-5">E N T I T I E S.</pre>
 			</div>
 		</div>
 		<div class="card">
 			<img class="card-img-top" src="/img/dog.jpg" alt="Card image cap">
 			<div class="card-body">
-				<h5 class="card-title">Richard Anderson</h5>
+				<h5 class="card-title">Keyes Anderson</h5>
 				<p class="card-text mb-5">33 commits in 2 days.</p>
 				<a href="https://github.com/keyesa" class="btn btn-primary anchor-bottom">GitHub</a>
 			</div>
