@@ -37,8 +37,8 @@ deploy:
   tags: 
     - test
   script:
-    - cp public/* $ROOT/projects/AD_2_HashPages/public
-    - cd $ROOT/projects/AD_2_HashPages
+    - cp public/* $ROOT/projects/AD_2_HashPages/Hash/public
+    - cd $ROOT/projects/AD_2_HashPages/Hash
     - git pull
     - composer install --prefer-dist --no-ansi --no-dev --optimize-autoloader
     - "php artisan doctrine:schema:update"
@@ -49,8 +49,6 @@ deploy:
     - chgrp apache bootstrap/cache
   dependencies:
     - npm
-  only:
-    - master
   environment:
     name: stage
     url: http://proj309-ad-02.misc.iastate.edu/
