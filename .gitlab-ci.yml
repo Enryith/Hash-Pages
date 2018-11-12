@@ -1,3 +1,6 @@
+before_script:
+  - cd Hash
+
 stages:
   - execute
   - deploy
@@ -6,15 +9,14 @@ test:
   stage: execute
   tags:
     - test
-  before_script:
-    - cd Hash
-    - composer install --prefer-dist
   script:
+    - composer install --prefer-dist
     - cp .env.testing .env
     - "php artisan doctrine:schema:create"
     - "php artisan doctrine:generate:proxies"
     - vendor/bin/phpunit
   cache:
+    key: test
     paths:
       - Hash/vendor
 
@@ -22,12 +24,11 @@ npm:
   stage: execute
   tags:
     - npm
-  before_script:
-    - cd Hash
-    - npm install
   script:
+    - npm install
     - npm run prod
   cache:
+    key: npm
     paths:
       - Hash/node_modules
   artifacts:
@@ -42,7 +43,6 @@ deploy:
   tags: 
     - test
   script:
-    - cd Hash
     - cp -rf public $ROOT/projects/AD_2_HashPages/Hash
     - cd $ROOT/projects/AD_2_HashPages/Hash
     - git reset --hard HEAD
