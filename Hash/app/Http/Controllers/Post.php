@@ -95,7 +95,6 @@ class Post extends Controller
 
 		event(new Events\Discussion($discussion));
 
-		$em->persist($post);
 		$em->persist($discussion);
 		$em->persist($comment);
 		$em->flush();
@@ -172,7 +171,6 @@ class Post extends Controller
 
 		event(new Events\Comment($comment));
 
-		$em->persist($post);
 		$em->persist($comment);
 		$em->flush();
 
@@ -211,7 +209,6 @@ class Post extends Controller
 		$discussion = new Entities\Discussion($post, $tag, $user, "Original Post");
 		$em->persist($discussion);
 		$em->persist($post);
-
 		$em->flush();
 
 		event(new Events\Post($post));
