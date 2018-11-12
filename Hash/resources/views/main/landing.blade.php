@@ -47,7 +47,7 @@
 		<div class="card">
 			<img class="card-img-top" src="/img/dog.jpg" alt="Card image cap">
 			<div class="card-body">
-				<h5 class="card-title">Richard Anderson</h5>
+				<h5 class="card-title">Keyes Anderson</h5>
 				<p class="card-text mb-5">33 commits in 2 days.</p>
 				<a href="https://github.com/keyesa" class="btn btn-primary anchor-bottom">GitHub</a>
 			</div>
