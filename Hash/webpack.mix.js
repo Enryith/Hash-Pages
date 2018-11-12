@@ -10,7 +10,10 @@ const mix = require('laravel-mix');
  | file for the application as well as bundling up all the JS files.
  |
  */
-mix.webpackConfig({devtool: "source-map"});
+if (!mix.inProduction()) {
+	mix.webpackConfig({devtool: "source-map"});
+}
+
 mix.styles([
 	'resources/css/global.css',
 	'node_modules/jquery-typeahead/src/jquery.typeahead.css'
