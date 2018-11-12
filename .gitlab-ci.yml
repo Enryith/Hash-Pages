@@ -42,8 +42,7 @@ deploy:
   script:
     - cp -r public $ROOT/projects/AD_2_HashPages/Hash/public
     - cd $ROOT/projects/AD_2_HashPages/Hash
-    - git stash
-    - git checkout master
+    - git reset --hard HEAD
     - git pull
     - rm -rf storage/
     - ln -nfs $ROOT/storage storage
