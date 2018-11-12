@@ -15,10 +15,6 @@ mix.styles([
 	'resources/css/global.css',
 	'node_modules/jquery-typeahead/src/jquery.typeahead.css'
 ], 'public/css/global.css');
-mix.copyDirectory('resources/svg', 'public/svg');
-mix.copyDirectory('resources/img', 'public/img');
-mix.copyDirectory('resources/icon', 'public/icon');
-mix.copy('resources/favicon.ico', 'public/favicon.ico');
 mix.js('resources/js/feed.js', 'public/js');
 mix.js('resources/js/chat.js', 'public/js');
 mix.js('resources/js/hash.js', 'public/js');
