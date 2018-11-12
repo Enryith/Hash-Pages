@@ -48,7 +48,7 @@ deploy:
     - ln -nfs $ROOT/.env .env
     - chgrp apache bootstrap/cache
   dependencies:
-    - build
+    - npm
   only:
     - master
   environment:
