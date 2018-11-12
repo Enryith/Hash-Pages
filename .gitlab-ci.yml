@@ -12,16 +12,12 @@ stages:
 
 test:
   stage: compile
-  tags:
-    - shell
   script:
     - composer install
     - vendor/bin/phpunit
 
 build:
   stage: compile
-  tags:
-    - shell
   script:
     - npm install
     - npm run prod
@@ -34,8 +30,6 @@ build:
 deploy:
   stage: deploy
   when: manual
-  tags: 
-    - shell
   script:
     - cp public/* $ROOT/projects/AD_2_HashPages/public
     - cd $ROOT/projects/AD_2_HashPages
