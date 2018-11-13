@@ -64,8 +64,8 @@ class Discussion
 
 	public function __construct(Post $post, Tag $tag, User $lead, $title)
 	{
-		$this->post = $post;
-		$this->tag = $tag;
+		$this->setPost($post);
+		$this->setTag($tag);
 		$this->lead = $lead;
 		$this->title = $title;
 		$this->cachedAgree = 0;
@@ -88,6 +88,7 @@ class Discussion
 	 */
 	public function setPost(Post $post)
 	{
+		$post->addDiscussion($this);
 		$this->post = $post;
 		return $this;
 	}
@@ -106,6 +107,7 @@ class Discussion
 	 */
 	public function setTag(Tag $tag)
 	{
+		$tag->addDiscussion($this);
 		$this->tag = $tag;
 		return $this;
 	}

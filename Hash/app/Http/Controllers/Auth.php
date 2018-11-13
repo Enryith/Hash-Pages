@@ -26,7 +26,7 @@ class Auth extends Controller
 
 	//Constraints for password
 	protected $constraintsPassword = "min:8|max:32";
-	protected $constraintsUsername = "min:3";
+	protected $constraintsUsername = "min:3|max:15";
 
 	public function __construct(Validation $validator, Guard $auth)
 	{
