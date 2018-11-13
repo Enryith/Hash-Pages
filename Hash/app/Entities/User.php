@@ -278,4 +278,18 @@ class User implements Authenticatable
 		}
 		return $this;
 	}
+
+
+	/**
+	 * @param Chat $chat
+	 * @return $this
+	 */
+	public function removeChat(Chat $chat)
+	{
+		if ($this->chat->contains($chat)) {
+			$this->chat->remove($chat);
+			$chat->removeUser($this);
+		}
+		return $this;
+	}
 }
