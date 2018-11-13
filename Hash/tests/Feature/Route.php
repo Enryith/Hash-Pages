@@ -3,16 +3,10 @@
 namespace Tests\Feature;
 
 use Tests\Base;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class Example extends Base
+class Route extends Base
 {
-	/**
-	 * A basic test example.
-	 *
-	 * @return void
-	 */
-	public function testBasicTest()
+	public function testHomePage()
 	{
 		$response = $this->get('/');
 		$response->assertStatus(200);
