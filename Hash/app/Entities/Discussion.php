@@ -166,6 +166,7 @@ class Discussion
 
 	/**
 	 * @param Comment $comment
+	 * @return Comment
 	 */
 	public function removeComment(Comment $comment)
 	{
@@ -173,6 +174,8 @@ class Discussion
 		{
 			$this->comments->remove($comment);
 		}
+
+		return $comment;
 	}
 
 	/**

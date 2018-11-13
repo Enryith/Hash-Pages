@@ -62,10 +62,12 @@ $show = $errors->has('title') || $errors->has('tag') || $errors->has('comment') 
 				{{ $form->close() }}
 			</div>
 			<div class="card-text">
+
 				@component("main.comments")
 					@slot("comments", $d->getRootComments())
 					@slot("depth", 0)
 				@endcomponent
+
 
 				@if($d->getRootComments()->count() == 0)
 					<span class="text-muted">There's nothing here. Add to the discussion with the "Reply" button</span>

@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\Entities\Comment;
 use App\Events;
 use App\Repositories\Posts;
 use App\Repositories\Tags;
@@ -15,9 +16,30 @@ use Illuminate\Validation\ValidationException;
 
 class Post extends Controller
 {
+	/**
+	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+	 */
 	public function form()
 	{
 		return view('post.form');
+	}
+
+	/**
+	 * @param Comment $comment
+	 * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+	 */
+	public function removeComment($Id)
+	{
+		$results = DB::class('Comment')
+			->where(Comment::id == $Id)
+			->first();
+
+		$comments = Comment::hydrate($results);
+
+		foreach ($comments as $comment)
+			$comment->getDiscussion();
+
+		return redirect()->back();
 	}
 
 	/**
