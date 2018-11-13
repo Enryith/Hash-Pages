@@ -17,4 +17,10 @@ class Example extends Base
 		$response = $this->get('/');
 		$response->assertStatus(200);
 	}
+
+	public function testRegisterPage()
+	{
+		$response = $this->get('/register');
+		$response->assertStatus(200);
+	}
 }
