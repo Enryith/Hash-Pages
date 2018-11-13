@@ -55,12 +55,6 @@ class User extends Base
 			])
 			->assertJson(['votes'=>["agree"=>1,"disagree"=>0]]);
 
-		$this->startSession()
-			->json('POST', '/post/root/1', [
-				'reply'=>'Your post is bad.'
-			]);
-		$this->get('/post/1')
-			->assertSee('Your post is bad.');
 	}
 
 	public function testUpdateUser()
