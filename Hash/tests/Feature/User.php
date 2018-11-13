@@ -23,40 +23,56 @@ class User extends Base
 			->json('POST', '/auth/login', [
 				'login' => 'bob33',
 				'password' => '0731andrew'
-			]);
+			])
+			->assertRedirect('/');
+	}
+
+	public function tearDown()
+	{
+		$this->startSession()
+			->get('/auth/logout')
+			->assertRedirect('/auth/login');
+		parent::tearDown();
 	}
 
 	public function testPost()
 	{
-		$response = $this->startSession()
+		$this->startSession()
 			->followingRedirects()
 			->json('POST', '/post', [
 				'title' => 'Chicken Dinner!!!',
 				'link' => '',
 				'body' => 'eat some chicken',
 				'tag' => 'salad',
-			]);
-		$response->assertSee('Chicken Dinner!!!');
-		$response->assertSee('@bob33');
+			])
+			->assertSee('Chicken Dinner!!!')
+			->assertSee('@bob33');
 
-		$response = $this->startSession()
+		$this->startSession()
 			->json('POST', '/ajax/vote', [
 				'discussion' => '1',
 				'type' => 'agree',
+			])
+			->assertJson(['votes'=>["agree"=>1,"disagree"=>0]]);
+
+		$this->startSession()
+			->json('POST', '/post/root/1', [
+				'reply'=>'Your post is bad.'
 			]);
-		$response->assertJson(['votes'=>["agree"=>1,"disagree"=>0]]);
+		$this->get('/post/1')
+			->assertSee('Your post is bad.');
 	}
 
 	public function testUpdateUser()
 	{
-		$response = $this->startSession()
+		$this->startSession()
 			->followingRedirects()
 			->json('POST', '/settings', [
 				'username' => 'ahhhhhhhhhhhhhhhhhhhhhh',
 				'bio' => 'eat some chicken',
 				'theme' => 'sandstone',
-			]);
-		$response->assertJsonValidationErrors(['username']);
+			])
+			->assertJsonValidationErrors(['username']);
 	}
 
 }
