@@ -29,12 +29,34 @@ class User extends Base
 	public function testPost()
 	{
 		$response = $this->startSession()
+			->followingRedirects()
 			->json('POST', '/post', [
-				'title' => 'Chicken dinner!!!',
+				'title' => 'Chicken Dinner!!!',
 				'link' => '',
 				'body' => 'eat some chicken',
 				'tag' => 'salad',
 			]);
-		$response->dump();
+		$response->assertSee('Chicken Dinner!!!');
+		$response->assertSee('@bob33');
+
+		$response = $this->startSession()
+			->json('POST', '/ajax/vote', [
+				'discussion' => '1',
+				'type' => 'agree',
+			]);
+		$response->assertJson(['votes'=>["agree"=>1,"disagree"=>0]]);
 	}
+
+	public function testUpdateUser()
+	{
+		$response = $this->startSession()
+			->followingRedirects()
+			->json('POST', '/settings', [
+				'username' => 'ahhhhhhhhhhhhhhhhhhhhhh',
+				'bio' => 'eat some chicken',
+				'theme' => 'sandstone',
+			]);
+		$response->assertJsonValidationErrors(['username']);
+	}
+
 }
