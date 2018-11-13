@@ -3,13 +3,13 @@
 namespace Tests\Feature;
 
 use Tests\Base;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class User extends Base
 {
 	public function setUp()
 	{
 		parent::setUp();
+
 		$this->startSession()
 			->json('POST', '/register', [
 				'username' => 'bob33',
@@ -31,7 +31,8 @@ class User extends Base
 	{
 		$this->startSession()
 			->get('/auth/logout')
-			->assertRedirect('/auth/login');
+			->assertRedirect("/auth/login");
+
 		parent::tearDown();
 	}
 
@@ -59,6 +60,7 @@ class User extends Base
 			->json('POST', '/post/root/1', [
 				'reply'=>'Your post is bad.'
 			]);
+
 		$this->get('/post/1')
 			->assertSee('Your post is bad.');
 	}
