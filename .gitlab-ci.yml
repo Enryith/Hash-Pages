@@ -19,6 +19,10 @@ test:
     key: test
     paths:
       - Hash/vendor
+  artifacts:
+    paths:
+      - Hash/storage/logs/laravel.log
+      - Hash/database/database.sqlite
 
 npm:
   stage: execute
