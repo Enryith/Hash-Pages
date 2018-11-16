@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 
 use App\Entities\Comment;
 use App\Events;
+use App\Repositories\Comments;
 use App\Repositories\Posts;
 use App\Repositories\Tags;
 use Doctrine\ORM\EntityManagerInterface;
@@ -25,21 +26,17 @@ class Post extends Controller
 	}
 
 	/**
-	 * @param Comment $comment
+	 * @param Comments $comments
+	 * @param $id
 	 * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
 	 */
-	public function removeComment($Id)
+	public function removeComment(Comments $comments, $id)
 	{
-		$results = DB::class('Comment')
-			->where(Comment::id == $Id)
-			->first();
+		$comment = $comments->findOneById($id);
 
-		$comments = Comment::hydrate($results);
+		$comment->getDiscussion()->removeComment($comment);
 
-		foreach ($comments as $comment)
-			$comment->getDiscussion();
-
-		return redirect()->back();
+		return view('post.index');
 	}
 
 	/**

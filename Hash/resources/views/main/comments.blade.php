@@ -22,7 +22,7 @@ $css = [
 
 		@if(auth()->guard()->check() && $depth < $maxDepth -1)
 			<a href="#collapse-{{$comment->getId()}}" data-toggle="collapse" >reply</a>
-			<a href="{{ action('Post@removeComment', [$comment->getId()]) }}">delete</a>
+			<a href="{{ action('Post@removeComment', ['comment' => $comment->getId()]) }}">delete</a>
 		@endif
 
 		@markdown($comment->getComment())

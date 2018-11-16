@@ -168,16 +168,13 @@ class Discussion
 
 	/**
 	 * @param Comment $comment
-	 * @return Comment
+	 * @return bool
 	 */
 	public function removeComment(Comment $comment)
 	{
-		if($this->comments->contains($comment))
-		{
-			$this->comments->remove($comment);
-		}
 
-		return $comment;
+
+		return true;
 	}
 
 	/**

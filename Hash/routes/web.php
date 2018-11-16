@@ -18,4 +18,4 @@ Route::get('/all', "Post@index");
 Route::get('/post/{id}', "Post@view");
 Route::get('/user/{username}', 'User@view');
 Route::get('/feed', 'Feed@feed');
-Route::delete('/post/{id}', 'Post@removeComment');
+Route::get('/post/{id}', 'Post@removeComment');
