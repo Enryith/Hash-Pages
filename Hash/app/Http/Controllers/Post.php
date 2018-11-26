@@ -1,7 +1,6 @@
 <?php
 namespace App\Http\Controllers;
 
-use App\Entities\Comment;
 use App\Events;
 use App\Repositories\Comments;
 use App\Repositories\Posts;
@@ -23,20 +22,6 @@ class Post extends Controller
 	public function form()
 	{
 		return view('post.form');
-	}
-
-	/**
-	 * @param Comments $comments
-	 * @param $id
-	 * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
-	 */
-	public function removeComment(Comments $comments, $id)
-	{
-		$comment = $comments->findOneById($id);
-
-		$comment->getDiscussion()->removeComment($comment);
-
-		return view('post.index');
 	}
 
 	/**
