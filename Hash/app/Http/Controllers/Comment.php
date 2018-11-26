@@ -2,26 +2,31 @@
 
 namespace App\Http\Controllers;
 
-use App\Events;
 use App\Repositories\Comments;
-use App\Repositories\Posts;
-use App\Repositories\Tags;
+use Illuminate\Contracts\Auth\Access\Gate;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Illuminate\Validation\Factory as Validation;
 use App\Entities;
-use Illuminate\Validation\ValidationException;
 
 class Comment extends Controller
 {
 	/**
+	 * @param Comments $comments
+	 * @param Gate $gate
+	 * @param $id
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
-	public function form()
+	public function form(Comments $comments, Gate $gate, $id)
 	{
+		/** @var $comment Entities\Comment*/
+		$comment = $comments->find($id);
+		if(!$comment || $gate->denies('view-chat', $comment)){
+			return abort(403);
+		}
+
 		return view('comment.delete');
 	}
 
