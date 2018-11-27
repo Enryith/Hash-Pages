@@ -88,7 +88,7 @@ class Post
 	{
 		if($this->discussions->contains($discussion))
 		{
-			$this->discussions->remove($discussion);
+			$this->discussions->removeElement($discussion);
 			$discussion->getTag()->removeDiscussion($discussion);
 		}
 	}

@@ -46,7 +46,7 @@ class Tag
 	{
 		if($this->discussions->contains($discussion))
 		{
-			$this->discussions->remove($discussion);
+			$this->discussions->removeElement($discussion);
 			$discussion->getPost()->removeDiscussion($discussion);
 		}
 	}

@@ -21,6 +21,8 @@ Route::post('/post/reply/{id}', "Post@comment");
 Route::post('/post/root/{id}', "Post@commentRoot");
 Route::get('/comment/{id}/delete', "Comment@form");
 Route::post('/comment/{id}/delete', 'Comment@delete');
+Route::get('/discussion/{id}/delete', "Discussion@form");
+Route::post('/discussion/{id}/delete', 'Discussion@delete');
 Route::get('/settings', 'User@form');
 Route::post('/settings', 'User@update');
 Route::get('/chat', 'Chat@index');

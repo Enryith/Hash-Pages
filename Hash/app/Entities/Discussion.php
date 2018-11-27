@@ -62,6 +62,12 @@ class Discussion
 	 */
 	private $cachedDisagree;
 
+	/**
+	 * @ORM\Column(type="boolean")
+	 * @var boolean
+	 */
+	private $isDeleted;
+
 	public function __construct(Post $post, Tag $tag, User $lead, $title)
 	{
 		$this->setPost($post);
@@ -72,6 +78,7 @@ class Discussion
 		$this->cachedDisagree = 0;
 		$this->votes = new ArrayCollection();
 		$this->comments = new ArrayCollection();
+		$this->isDeleted = false;
 	}
 
 	/**
@@ -147,6 +154,22 @@ class Discussion
 	}
 
 	/**
+	 * @return bool
+	 */
+	public function isDeleted(): bool
+	{
+		return $this->isDeleted;
+	}
+
+	/**
+	 * @param bool $isDeleted
+	 */
+	public function setIsDeleted(bool $isDeleted): void
+	{
+		$this->isDeleted = $isDeleted;
+	}
+
+	/**
 	 * @return Comment[]|ArrayCollection
 	 */
 	public function getComments()
@@ -164,17 +187,6 @@ class Discussion
 			$this->comments->add($comment);
 			$comment->setDiscussion($this);
 		}
-	}
-
-	/**
-	 * @param Comment $comment
-	 * @return bool
-	 */
-	public function removeComment(Comment $comment)
-	{
-
-
-		return true;
 	}
 
 	/**

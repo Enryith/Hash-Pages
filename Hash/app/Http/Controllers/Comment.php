@@ -23,7 +23,7 @@ class Comment extends Controller
 	{
 		/** @var $comment Entities\Comment*/
 		$comment = $comments->find($id);
-		if(!$comment || $gate->denies('view-chat', $comment)){
+		if(!$comment || $gate->denies('view-comment', $comment)){
 			return abort(403);
 		}
 
