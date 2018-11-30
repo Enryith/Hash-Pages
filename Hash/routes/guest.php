@@ -18,3 +18,7 @@ Route::get('/register', "Auth@register");
 Route::post('/register', 'Auth@store');
 Route::get('/auth/login', 'Auth@login');
 Route::post('/auth/login', 'Auth@auth');
+Route::get('/auth/{provider}', 'Auth@provider')
+	->where('provider', '(google)');
+Route::get('/auth/{provider}/endpoint', 'Auth@endpoint')
+	->where('provider', '(google)');
