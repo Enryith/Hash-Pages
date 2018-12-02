@@ -6,7 +6,7 @@
 
 	<div class="row">
 		<div class="col-md-auto">
-			<img class="img-thumbnail img-fluid profile" src="{{ url($user->getPicture() ? $user->getPicturePublic() : "/img/default.jpg") }}" alt="Profile Picture" title="{{ $user->getName() }}">
+			<img class="img-fluid profile" style="border-radius: 50%" src="{{ url($user->getPicture() ? $user->getPicturePublic() : "/img/default.jpg") }}" alt="Profile Picture" title="{{ $user->getName() }}">
 		</div>
 		<div class="col">
 			<h1>
