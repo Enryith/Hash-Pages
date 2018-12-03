@@ -1,6 +1,6 @@
 @php /** @var Illuminate\Pagination\LengthAwarePaginator|App\Entities\Post[] $table */ @endphp
 @extends('theme.base')
-@section('title', 'Landing')
+@section('title', 'All Posts')
 @section('content')
 <div class="container">
 	@foreach($table as $post)

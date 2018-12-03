@@ -3,9 +3,13 @@
 namespace App\Repositories;
 
 use Doctrine\ORM\EntityRepository;
+use LaravelDoctrine\ORM\Pagination\PaginatesFromParams;
+use LaravelDoctrine\ORM\Pagination\PaginatesFromRequest;
 
 class Tags extends EntityRepository
 {
+	use PaginatesFromRequest;
+
 	public function findAllLike($search, $limit = 10) {
 		$search = $this->like($search);
 		if (strlen($search) == 0) return [];
