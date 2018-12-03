@@ -43,10 +43,22 @@ $show = $errors->has('title') || $errors->has('tag') || $errors->has('comment') 
 			<h4 class="mt-1 mb-1 float-left inline-title">
 				{{ $d->getTitle() }}
 				<small class="text-muted">
-					<a href="{{ action('User@view', ['username' => $post->getAuthor()->getUsername()]) }}">
-						{{"@" . $post->getAuthor()->getUsername() }}
-					</a>
-					<a href="{{ action('Discussion@form', ['discussion' => $d->getId()]) }}">Delete</a>
+					@if ($post->getDiscussions()[0] === $d)
+						<a href="{{ action('User@view', ['username' => $post->getAuthor()->getUsername()]) }}">
+							{{"@" . $post->getAuthor()->getUsername() }}
+						</a>
+						@if(auth()->guard()->check() && auth()->user()->username === $post->getAuthor()->getUsername())
+							<a href="{{ action('Discussion@form', ['discussion' => $d->getId()]) }}">Delete</a>
+						@endif
+					@else
+						<a href="{{ action('User@view', ['username' => $d->getComments()[0]->getAuthor()->getUsername()]) }}">
+							{{"@" . $d->getComments()[0]->getAuthor()->getUsername() }}
+						</a>
+					@endif
+
+					@if ($post->getDiscussions()[0] !== $d && auth()->guard()->check() && auth()->user()->username === $d->getComments()[0]->getAuthor()->getUsername())
+						<a href="{{ action('Discussion@form', ['discussion' => $d->getId()]) }}">Delete</a>
+					@endif
 				</small>
 			</h4>
 		</div>
