@@ -22,11 +22,12 @@ $css = [
 
 		@if(auth()->guard()->check() && $depth < $maxDepth -1)
 			<a href="#collapse-reply-{{$comment->getId()}}" data-toggle="collapse" >reply</a>
-			<a href="{{ action('Comment@form', ['comment' => $comment->getId()]) }}">delete</a>
+
 		@endif
 
-		@if(auth()->user()->username === $comment->getAuthor()->getUsername())
-			<a href="#collapse-edit-{{$comment->getId()}}" data-toggle="collapse" >edit</a>
+		@if(auth()->user()->username === $comment->getAuthor()->getUsername() && !($comment->getComment() === "[DELETED]"))
+				<a href="{{ action('Comment@form', ['comment' => $comment->getId()]) }}">delete</a>
+				<a href="#collapse-edit-{{$comment->getId()}}" data-toggle="collapse" >edit</a>
 		@endif
 
 		@php
@@ -39,7 +40,7 @@ $css = [
 			@if($edit === $split[0])
 				@continue
 			@else
-				@markdown("Edit: " . $edit)
+				@markdown("\[EDIT\]: ".$edit)
 			@endif
 		@endforeach
 
