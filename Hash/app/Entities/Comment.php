@@ -140,6 +140,4 @@ class Comment
 	{
 		return $this->id;
 	}
-
-
 }
