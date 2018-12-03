@@ -11,15 +11,17 @@ class Tag extends Controller
 	public function index(Tags $tags, Guard $auth)
 	{
 		$query = $tags->createQueryBuilder("p")
-			->orderBy("p.tag", "DESC");
+			->orderBy("p.tag", "ASC");
 
 		$table = $tags->paginate($query->getQuery(), 20);
 		return view("tag.index")->with(compact('table'));
 	}
 
-	public function view()
+	public function view(Guard $auth, Tags $tags, $tagname)
 	{
+		$tag = $tags->findOneBy(["tag" => $tagname]);
 
+		return view('tag.view')->with(compact('tag'));
 	}
 
 }

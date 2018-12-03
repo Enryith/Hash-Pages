@@ -1,7 +1,11 @@
-<?php
-/**
- * Created by PhpStorm.
- * User: yahtzee
- * Date: 12/3/2018
- * Time: 5:51 AM
- */
+@php
+	/** @var $tag App\Entities\Tag */
+	/** @var $form Collective\Html\FormBuilder */
+@endphp
+
+@inject('form', 'Collective\Html\FormBuilder')
+@extends('theme.base')
+@section('title', $tag->getTag())
+@section('content')
+
+@endsection

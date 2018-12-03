@@ -25,7 +25,7 @@ $css = [
 
 		@endif
 
-		@if(auth()->user()->username === $comment->getAuthor()->getUsername() && !($comment->getComment() === "[DELETED]"))
+		@if(auth()->guard()->check() && auth()->user()->username === $comment->getAuthor()->getUsername() && !($comment->getComment() === "[DELETED]"))
 				<a href="{{ action('Comment@form', ['comment' => $comment->getId()]) }}">delete</a>
 				<a href="#collapse-edit-{{$comment->getId()}}" data-toggle="collapse" >edit</a>
 		@endif
@@ -69,7 +69,7 @@ $css = [
 		</div>
 		@endif
 
-		@if(auth()->user()->username === $comment->getAuthor()->getUsername())
+		@if(auth()->guard()->check() && auth()->user()->username === $comment->getAuthor()->getUsername())
 		@php
 			$id = "edit-{$comment->getId()}";
 			$has = $errors->has($id);
