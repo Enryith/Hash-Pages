@@ -3,10 +3,14 @@
 namespace App\Providers;
 
 use App\Entities\Chat;
+use App\Entities\Comment;
+use App\Entities\Discussion;
 use App\Entities\Post;
 use App\Entities\Tag;
 use App\Entities\User;
 use App\Repositories\Chats;
+use App\Repositories\Comments;
+use App\Repositories\Discussions;
 use App\Repositories\Tags;
 use App\Repositories\Users;
 use App\Repositories\Posts;
@@ -31,6 +35,8 @@ class AppServiceProvider extends ServiceProvider
 		$this->repository(Tags::class, Tag::class);
 		$this->repository(Posts::class, Post::class);
 		$this->repository(Users::class, User::class);
+		$this->repository(Comments::class, Comment::class);
+		$this->repository(Discussions::class, Discussion::class);
 	}
 
 	public function repository($repo, $entity){

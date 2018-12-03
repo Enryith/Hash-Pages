@@ -27,6 +27,7 @@ $show = $errors->has('title') || $errors->has('tag') || $errors->has('comment') 
 </div>
 
 @foreach($post->getDiscussions() as $d)
+	@if(!$d->isDeleted())
 	<div class="card mt-3 mb-3">
 		<div class="card-header pl-3">
 			<div class="float-left">
@@ -41,7 +42,12 @@ $show = $errors->has('title') || $errors->has('tag') || $errors->has('comment') 
 			</div>
 			<h4 class="mt-1 mb-1 float-left inline-title">
 				{{ $d->getTitle() }}
-				<small class="text-muted"><a href="{{ action('User@view', ['username' => $post->getAuthor()->getUsername()]) }}">{{"@" . $post->getAuthor()->getUsername() }}</a></small>
+				<small class="text-muted">
+					<a href="{{ action('User@view', ['username' => $post->getAuthor()->getUsername()]) }}">
+						{{"@" . $post->getAuthor()->getUsername() }}
+					</a>
+					<a href="{{ action('Discussion@form', ['discussion' => $d->getId()]) }}">Delete</a>
+				</small>
 			</h4>
 		</div>
 		<div class="card-body">
@@ -62,10 +68,12 @@ $show = $errors->has('title') || $errors->has('tag') || $errors->has('comment') 
 				{{ $form->close() }}
 			</div>
 			<div class="card-text">
+
 				@component("main.comments")
 					@slot("comments", $d->getRootComments())
 					@slot("depth", 0)
 				@endcomponent
+
 
 				@if($d->getRootComments()->count() == 0)
 					<span class="text-muted">There's nothing here. Add to the discussion with the "Reply" button</span>
@@ -73,6 +81,7 @@ $show = $errors->has('title') || $errors->has('tag') || $errors->has('comment') 
 			</div>
 		</div>
 	</div>
+	@endif
 @endforeach
 
 @auth

@@ -7,6 +7,8 @@ use Doctrine\ORM\Mapping AS ORM;
 
 /**
  * @ORM\Entity
+ * @method delete()
+ * @method static hydrate($results)
  */
 class Comment
 {
@@ -129,5 +131,13 @@ class Comment
 	public function getChildren()
 	{
 		return $this->children;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getId(): int
+	{
+		return $this->id;
 	}
 }

@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 
 use App\Events;
+use App\Repositories\Comments;
 use App\Repositories\Posts;
 use App\Repositories\Tags;
 use Doctrine\ORM\EntityManagerInterface;
@@ -15,6 +16,9 @@ use Illuminate\Validation\ValidationException;
 
 class Post extends Controller
 {
+	/**
+	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+	 */
 	public function form()
 	{
 		return view('post.form');
