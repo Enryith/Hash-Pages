@@ -38,8 +38,12 @@ class AuthServiceProvider extends ServiceProvider
 			return ($comment->getAuthor() === $user);
 		});
 
-		$gate->define('view-discussion', function (User $user, Discussion $discussion) {
+		$gate->define('view-discussion-head', function (User $user, Discussion $discussion) {
 			return ($discussion->getPost()->getAuthor() === $user);
+		});
+
+		$gate->define('view-discussion', function (User $user, Discussion $discussion) {
+			return ($discussion->getComments()[0]->getAuthor() === $user);
 		});
 	}
 

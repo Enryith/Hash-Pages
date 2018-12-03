@@ -23,7 +23,10 @@ class Discussion extends Controller
 	{
 		/** @var $discussion Entities\Discussion*/
 		$discussion = $discussions->find($id);
-		if(!$discussion || $gate->denies('view-discussion', $discussion)){
+		$ability = ($discussion->getPost()->getDiscussions()[0] === $discussion) ? 'view-discussion-head' : 'view-discussion';
+
+
+		if(!$discussion || $gate->denies($ability, $discussion)){
 			return abort(403);
 		}
 
