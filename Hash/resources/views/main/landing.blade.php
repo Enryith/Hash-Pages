@@ -45,7 +45,7 @@
 			<img class="card-img-top" src="/img/shulk.png" alt="Card image cap">
 			<div class="card-body">
 				<h5 class="card-title">Dheepak Nalluri</h5>
-				<pre class="card-text mb-5">E N T I T I E S.</pre>
+				<p class="card-text mb-5">Entities and destroyer of worlds.</p>
 			</div>
 		</div>
 		<div class="card">
