@@ -28,7 +28,7 @@ class Admin extends Controller
 			return abort(403);
 
 		$query = $users->createQueryBuilder("u")
-			->select("u");
+			->where("u.admin = 1");
 
 		$table = $users->paginate($query->getQuery(), 20);
 		return view('admin.index')->with(compact('table'));

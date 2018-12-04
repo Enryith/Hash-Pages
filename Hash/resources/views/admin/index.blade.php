@@ -3,18 +3,16 @@
 @extends('theme.base')
 @section('title', 'Admin Page')
 @section('content')
-<div class="container">
 	<h1>Administrators</h1>
 	@foreach($table as $user)
-		@if($user->isAdmin() or $user->getId() == 1)
+
 			<h4>
 				<a href="/user/{{$user->getUsername()}}">{{ "@".$user->getUsername() }}</a>
 				<a href="{{ action('Admin@removeAdmin', ['user' => $user->getId()]) }}">Remove</a>
 				<br>
 			</h4>
-		@endif
+
 	@endforeach
-</div>
 <br>
 
 <h4>
