@@ -26,10 +26,12 @@ class Users extends EntityRepository
 
 	/**
 	 * @param $username
-	 * @return Entities\User|null|object
+	 * @return Entities\User|null
 	 */
 	public function findOneByUsername($username)
 	{
-		return $this->findOneBy(['username' => $username]);
+		/** @var Entities\User $user */
+		$user = $this->findOneBy(['username' => $username]);
+		return $user;
 	}
 }

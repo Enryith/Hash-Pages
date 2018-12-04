@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Entities;
+use App\Repositories\Posts;
 use App\Repositories\Users;
 use Doctrine\ORM\EntityManagerInterface;
 use Illuminate\Contracts\Filesystem\Filesystem;
@@ -14,17 +15,33 @@ use Illuminate\Validation\Rule;
 
 class User extends Controller
 {
-	public function self( Guard $auth) {
+	public function self(Posts $posts, Guard $auth) {
+		/** @var Entities\User $user */
 		$user = $auth->user();
-		return view('user.view')->with(compact("user"));
+		return $this->velf($posts, $user);
 	}
 
-	public function view(Users $users, $username)
+	public function view(Users $users, Posts $posts, $username)
 	{
 		$user = $users->findOneByUsername($username);
+
+		return $this->velf($posts, $user);
+	}
+
+	public function velf(Posts $posts, Entities\User $user)
+	{
+
+
 		if($user instanceof Entities\User)
 		{
-			return view('user.view')->with(compact('user'));
+			$query = $posts->createQueryBuilder("p")
+				->where("p.author = :user")
+				->setParameter(":user", $user)
+				->orderBy('p.id', "DESC");
+
+			$table = $posts->paginate($query->getQuery(), 20);
+
+			return view('user.view')->with(compact('table','user'));
 		}
 		else
 		{
