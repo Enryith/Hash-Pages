@@ -1,10 +1,8 @@
 @php
 	/** @var Illuminate\Pagination\LengthAwarePaginator|App\Entities\Post[] $table */
-	/** @var $form Collective\Html\FormBuilder */
 	/** @var $tag \App\Entities\Tag */
 @endphp
 
-@inject('form', 'Collective\Html\FormBuilder')
 @extends('theme.base')
 @section('title', $tag->getTag())
 @section('content')
@@ -15,7 +13,7 @@
 		@if(!$post->isDeleted())
 		@php($hasPosts=true)
 		<h2>
-			<a href="/post/{{$post->getId()}}">{{ $post->getTitle() }}</a>
+			<a href="{{ action('Post@view', ["id" => $post->getId()]) }}">{{ $post->getTitle() }}</a>
 			<small class="text-muted">By: <a href="{{ action('User@view', ['username' => $post->getAuthor()->getUsername()]) }}">{{ $post->getAuthor()->getUsername() }}</a></small>
 		</h2>
 

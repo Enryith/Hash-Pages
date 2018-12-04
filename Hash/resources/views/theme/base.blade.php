@@ -43,7 +43,7 @@
 
 <nav class="navbar navbar-expand-md navbar-dark bg-primary fixed-top">
 	<div class="container">
-		<a class="navbar-brand" href="/">Hash Pages</a>
+		<a class="navbar-brand" href="/">Hash#Pages</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-nav">
 			<span class="navbar-toggler-icon"></span>
 		</button>
@@ -95,9 +95,9 @@
 			</ul>
 		</div>
 	</div>
-	</nav>
+</nav>
 
-	<div class="container main">
+<div class="container main">
 	<div class="flash-message">
 		@foreach (['danger', 'warning', 'success', 'info'] as $msg)
 			@if(session()->has('alert-' . $msg))
@@ -116,5 +116,7 @@
 	<script src="/js/hash.js"></script>
 	@stack('scripts')
 </div>
+
+<div class="container pb-5 mb-3"></div>
 </body>
 </html>

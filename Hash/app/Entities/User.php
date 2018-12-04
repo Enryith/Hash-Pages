@@ -16,6 +16,10 @@ class User implements Authenticatable
 	use Auth\Authenticatable;
 	use Traits\Id;
 
+	const NATIVE = "native";
+	const GOOGLE = "google";
+	const GITHUB = "github";
+
 	const THEMES = [
 		'sandstone' => [
 			'text' => "Sandstone (light)",
@@ -128,11 +132,25 @@ class User implements Authenticatable
 	 */
 	private $admin;
 
+	/**
+	 * @ORM\Column(type="string")
+	 * @var string
+	 */
+	private $endpoint;
+
+	/**
+	 * @ORM\Column(type="string")
+	 * @var string
+	 */
+	private $uuid;
+
 	public function __construct()
 	{
 		$this->theme = "sandstone";
 		$this->picture = "";
 		$this->bio = "";
+		$this->uuid = "empty";
+		$this->endpoint = self::NATIVE;
 		$this->posts = new ArrayCollection();
 		$this->leading = new ArrayCollection();
 		$this->votes = new ArrayCollection();
@@ -252,6 +270,42 @@ class User implements Authenticatable
 	public function setBio($bio)
 	{
 		$this->bio = $bio ?? "";
+		return $this;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getEndpoint()
+	{
+		return $this->endpoint;
+	}
+
+	/**
+	 * @param string $endpoint
+	 * @return User
+	 */
+	public function setEndpoint($endpoint)
+	{
+		$this->endpoint = $endpoint;
+		return $this;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getUuid()
+	{
+		return $this->uuid;
+	}
+
+	/**
+	 * @param string $uuid
+	 * @return User
+	 */
+	public function setUuid($uuid)
+	{
+		$this->uuid = $uuid;
 		return $this;
 	}
 

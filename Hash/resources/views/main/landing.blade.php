@@ -24,7 +24,7 @@
 			If you would like to see the documentation click <a href="{{ url('/docs/api') }}">here.</a>
 		</p>
 	</div>
-	<div class="card-group mb-5">
+	<div class="card-group mb-2">
 		<div class="card">
 			<img class="card-img-top" src="/img/jhin.gif" alt="Card image cap">
 			<div class="card-body">
@@ -57,4 +57,11 @@
 			</div>
 		</div>
 	</div>
+
+	<small class="text-muted">
+		Icons by Font Awesome are licenced under
+		<a href="https://fontawesome.com/license">
+			Creative Commons Attribution 4.0 International
+		</a>
+	</small>
 @endsection
