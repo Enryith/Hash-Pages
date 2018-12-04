@@ -104,7 +104,7 @@ class Post extends Controller
 		$em->persist($discussion);
 		$em->persist($comment);
 		$em->flush();
-		return redirect("/post/{$post->getId()}");
+		return redirect(action('Post@view', ["id" => $post->getId()]));
 	}
 
 	/**
@@ -144,7 +144,7 @@ class Post extends Controller
 		event(new Events\Post($post));
 
 		//Send user to the post they just created
-		return redirect("/post/{$post->getId()}");
+		return redirect(action('Post@view', ["id" => $post->getId()]));
 	}
 
 	/**

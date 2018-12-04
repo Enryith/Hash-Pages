@@ -177,6 +177,6 @@ class Comment extends Controller
 		$em->persist($comment);
 		$em->flush();
 
-		return redirect("/post/{$comment->getDiscussion()->getPost()->getId()}");
+		return redirect(action('Post@view', ["id" => $comment->getDiscussion()->getPost()->getId()]));
 	}
 }

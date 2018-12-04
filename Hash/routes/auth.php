@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/post', "Post@form");
 Route::post('/post', "Post@store");
-Route::post('/post/{id}', "Post@discussion");
+Route::post('/post/{id}/view', "Post@discussion");
 Route::get('/post/{id}/delete', "Post@deleteForm");
 Route::post('/post/{id}/delete', 'Post@delete');
 Route::post('/post/{id}/edit', "Post@edit");
