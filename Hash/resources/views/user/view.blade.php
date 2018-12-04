@@ -26,7 +26,7 @@
 	@foreach($table as $post)
 		@php($hasPosts=true)
 		<h2>
-			<a href="/post/{{$post->getId()}}">{{ $post->getTitle() }}</a>
+			<a href="{{ action('Post@view', ["id" => $post->getId()]) }}">{{ $post->getTitle() }}</a>
 		</h2>
 
 		@if($post->getLink())
