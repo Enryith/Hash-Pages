@@ -12,7 +12,7 @@
 <script id="template-post" type="x-tmpl-mustache">
 	<div class="jumbotron p-3 mb-3">
 		<h3 class="mb-0 pb-0">New Post:
-			<a href="/post/{{ id }}">
+			<a href="/post/{{ id }}/view">
 				{{ title }}
 			</a>
 		</h3>
@@ -31,7 +31,7 @@
 		<h3 class="mb-0 pb-0">
 			<em>
 				New Discussion on {{ postTitle }}
-				called <a href="/post/{{ id }}">{{ discTitle }}</a>
+				called <a href="/post/{{ id }}/view">{{ discTitle }}</a>
 			</em>
 		</h3>
 		<em>
@@ -54,7 +54,7 @@
 		</em>
 
 		<p class="mb-0">{{ author }} said:
-			<a href="/post/{{ id }}">"{{ comment }}"</a>
+			<a href="/post/{{ id }}/view">"{{ comment }}"</a>
 		</p>
 	</div>
 </script>
