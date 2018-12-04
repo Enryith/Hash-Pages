@@ -2,15 +2,19 @@
 
 namespace App\Entities;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping AS ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Doctrine\Common\Collections\ArrayCollection;
+use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 
 /**
  * @ORM\Entity
+ * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
 class Post
 {
 	use Traits\Id;
+	use SoftDeleteableEntity;
 
 	/**
 	 * @ORM\Column(type="string", length=255)
@@ -48,11 +52,7 @@ class Post
 	 */
 	private $recentActivity;
 
-	/**
-	 * @ORM\Column(type="boolean")
-	 * @var boolean
-	 */
-	private $isDeleted;
+
 
 	public function __construct(User $user, $title, $link, $body)
 	{
@@ -62,7 +62,6 @@ class Post
 		$this->body = $body;
 		$this->recentActivity = new \DateTime('now');
 		$this->discussions = new ArrayCollection();
-		$this->isDeleted = false;
 	}
 
 	/**
@@ -199,19 +198,8 @@ class Post
 		return $this->setRecentActivity(new \DateTime('now'));
 	}
 
-	/**
-	 * @return bool
-	 */
-	public function isDeleted(): bool
+	public function getFormValue($key)
 	{
-		return $this->isDeleted;
-	}
-
-	/**
-	 * @param bool $isDeleted
-	 */
-	public function setIsDeleted(bool $isDeleted): void
-	{
-		$this->isDeleted = $isDeleted;
+		return $this->$key;
 	}
 }

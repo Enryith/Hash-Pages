@@ -17,15 +17,16 @@ class Discussion extends Controller
 	 * @param Discussions $discussions
 	 * @param Gate $gate
 	 * @param $id
+	 *
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
 	public function form(Discussions $discussions, Gate $gate, $id)
 	{
 		/** @var $discussion Entities\Discussion*/
 		$discussion = $discussions->find($id);
-		$ability = ($discussion->getPost()->getDiscussions()[0] === $discussion) ? 'view-discussion-head' : 'view-discussion';
 
-		if(!$discussion || $gate->denies($ability, $discussion)){
+		if (!$discussion || $gate->denies('admin', $discussion))
+		{
 			return abort(403);
 		}
 
@@ -34,22 +35,29 @@ class Discussion extends Controller
 
 	/**
 	 * @param Discussions $discussions
+	 * @param Gate $gate
 	 * @param Request $request
 	 * @param EntityManagerInterface $em
 	 * @param $id
+	 *
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-	 * @throws \Doctrine\ORM\ORMException
 	 */
-	public function delete(Discussions $discussions, Request $request, EntityManagerInterface $em, $id)
+	public function delete(Discussions $discussions, Request $request, EntityManagerInterface $em, Gate $gate, $id)
 	{
 		/** @var $discussion Entities\Discussion*/
 		$discussion = $discussions->find($id);
-		$return = $discussion->getPost()->getId();
-		if('Delete' == $request->get('submit')){
-			$discussion->setIsDeleted(true);
+
+		if (!$discussion || $gate->denies('admin', $discussion))
+		{
+			return abort(403);
+		}
+
+		if ('Delete' == $request->get('submit'))
+		{
+			$em->remove($discussion);
 			$em->flush();
 		}
 
-		return redirect(action('Post@view', [$return]));
+		return redirect(action('Post@view', [$discussion->getPost()->getId()]));
 	}
 }

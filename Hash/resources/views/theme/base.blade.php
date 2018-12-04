@@ -51,17 +51,24 @@
 		<div class="collapse navbar-collapse" id="main-nav">
 			<ul class="navbar-nav mr-auto">
 				<li class="nav-item">
-					<a class="nav-link" href="{{action("Chat@index")}}">Chat</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="{{action("Feed@feed")}}">Feed</a>
-				</li>
-				<li class="nav-item">
 					<a class="nav-link" href="{{action("Post@index")}}">Posts</a>
 				</li>
 				<li class="nav-item">
 					<a class="nav-link" href="{{action("Tag@index")}}">Tags</a>
 				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="{{action("Feed@feed")}}">Feed</a>
+				</li>
+				@auth
+					<li class="nav-item">
+						<a class="nav-link" href="{{action("Chat@index")}}">Chat</a>
+					</li>
+				@endauth
+				@can('admin')
+					<li class="nav-item">
+						<a class="nav-link" href="{{action("Admin@index")}}">Admin</a>
+					</li>
+				@endcan
 			</ul>
 			<ul class="navbar-nav">
 				@auth
@@ -88,9 +95,9 @@
 			</ul>
 		</div>
 	</div>
-</nav>
+	</nav>
 
-<div class="container main">
+	<div class="container main">
 	<div class="flash-message">
 		@foreach (['danger', 'warning', 'success', 'info'] as $msg)
 			@if(session()->has('alert-' . $msg))

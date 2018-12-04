@@ -9,6 +9,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 class Users extends EntityRepository
 {
+	use PaginatesFromRequest;
 
 	public function findAllLike($search, $limit = 10) {
 		$search = Tags::like($search);
@@ -33,5 +34,10 @@ class Users extends EntityRepository
 		/** @var Entities\User $user */
 		$user = $this->findOneBy(['username' => $username]);
 		return $user;
+	}
+
+	public function findOneById($id)
+	{
+		return $this->findOneBy(['id' => $id]);
 	}
 }

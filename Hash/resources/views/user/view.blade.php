@@ -3,7 +3,7 @@
 @endphp
 
 @extends('theme.base')
-@section('title', 'Profile')
+@section('title', $user->getUsername())
 @section('content')
 
 

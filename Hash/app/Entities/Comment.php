@@ -2,17 +2,19 @@
 
 namespace App\Entities;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping AS ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Doctrine\Common\Collections\ArrayCollection;
+use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 
 /**
  * @ORM\Entity
- * @method delete()
- * @method static hydrate($results)
+ * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
 class Comment
 {
 	use Traits\Id;
+	use SoftDeleteableEntity;
 
 	/**
 	 * @ORM\Column(type="text")
@@ -131,13 +133,5 @@ class Comment
 	public function getChildren()
 	{
 		return $this->children;
-	}
-
-	/**
-	 * @return int
-	 */
-	public function getId(): int
-	{
-		return $this->id;
 	}
 }

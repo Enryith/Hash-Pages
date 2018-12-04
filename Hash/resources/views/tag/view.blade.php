@@ -6,12 +6,13 @@
 
 @inject('form', 'Collective\Html\FormBuilder')
 @extends('theme.base')
-@section('title', 'hi')
+@section('title', $tag->getTag())
 @section('content')
 
 	@php($hasPosts=false)
 
 	@foreach($table as $post)
+		@if(!$post->isDeleted())
 		@php($hasPosts=true)
 		<h2>
 			<a href="/post/{{$post->getId()}}">{{ $post->getTitle() }}</a>
@@ -37,6 +38,7 @@
 		</div>
 
 		<hr>
+		@endif
 	@endforeach
 
 	@if(!$hasPosts)

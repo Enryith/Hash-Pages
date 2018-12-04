@@ -21,6 +21,10 @@ class AuthServiceProvider extends ServiceProvider
 		'App\Model' => 'App\Policies\ModelPolicy',
 	];
 
+	public function adminAuth(User $user){
+		return $user && ($user->isAdmin() || $user->getId() == 1);
+	}
+
 	/**
 	 * Register any authentication / authorization services.
 	 *
@@ -31,25 +35,20 @@ class AuthServiceProvider extends ServiceProvider
 	{
 		$this->registerPolicies();
 
+		$gate->before([$this, 'adminAuth']);
+
+		$gate->define('admin', [$this, 'adminAuth']);
+
 		$gate->define('view-chat', function (User $user, Chat $chat) {
 			return $chat->getUsers()->contains($user);
 		});
 
-		$gate->define('view-comment', function (User $user, Comment $comment) {
-			return ($comment->getAuthor() === $user);
+		$gate->define('modify-comment', function (User $user, Comment $comment) {
+			return (!$comment->isDeleted() && $comment->getAuthor() === $user);
 		});
 
-		$gate->define('view-discussion-head', function (User $user, Discussion $discussion) {
-			return ($discussion->getPost()->getAuthor() === $user);
-		});
-
-		$gate->define('view-discussion', function (User $user, Discussion $discussion) {
-			return ($discussion->getComments()[0]->getAuthor() === $user);
-		});
-
-		$gate->define('view-post', function(User $user, Post $post) {
+		$gate->define('modify-post', function(User $user, Post $post) {
 			return ($post->getAuthor() === $user);
 		});
 	}
-
 }
