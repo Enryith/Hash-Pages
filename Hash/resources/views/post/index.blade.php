@@ -19,9 +19,9 @@
 
 		<div class="btn-toolbar">
 			@foreach($post->getDiscussions() as $d)
-					@component("ajax.tag")
-						@slot("discussion", $d)
-					@endcomponent
+				@component("ajax.tag")
+					@slot("discussion", $d)
+				@endcomponent
 			@endforeach
 		</div>
 

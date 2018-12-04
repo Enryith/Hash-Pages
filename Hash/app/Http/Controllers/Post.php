@@ -295,7 +295,7 @@ class Post extends Controller
 		/** @var $post Entities\Post*/
 		$post = $posts->find($id);
 
-		if(!$post || $gate->denies('view-post', $post)){
+		if(!$post || $gate->denies('modify-post', $post)){
 			return abort(403);
 		}
 
@@ -312,19 +312,53 @@ class Post extends Controller
 	 */
 	public function delete(Posts $posts, Gate $gate, Request $request, EntityManagerInterface $em, $id)
 	{
-		/** @var $post Entities\Post*/
+		/** @var $post Entities\Post */
 		$post = $posts->find($id);
 
-		if(!$post || $gate->denies('view-post', $post))
+		if (!$post || $gate->denies('view-post', $post))
 		{
 			return abort(403);
 		}
 
-		if('Delete' == $request->get('submit'))
+		if ('Delete' == $request->get('submit'))
 		{
 			$post->setIsDeleted(true);
 			$em->flush();
 		}
+
 		return redirect(action('Post@index'));
+	}
+
+	/**
+	 * @param Request $request
+	 * @param Validation $validator
+	 * @param Posts $posts
+	 * @param Gate $gate
+	 * @param EntityManagerInterface $em
+	 * @param $id
+	 * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+	 * @throws ValidationException
+	 */
+	public function edit(Request $request, Validation $validator, Posts $posts, Gate $gate, EntityManagerInterface $em, $id)
+	{
+		$valid = $validator->make($request->all(), [
+			'body' => "required"
+		]);
+
+		$valid->validate();
+		$data = $valid->getData();
+
+		/** @var $post Entities\Post*/
+		$post = $posts->find($id);
+
+		if(!$post || $gate->denies('modify-post', $post)){
+			return abort(403);
+		}
+
+		$post->setBody($data['body']);
+
+		$em->flush();
+
+		return redirect(action('Post@view', ["id" => $post->getId()]));
 	}
 }

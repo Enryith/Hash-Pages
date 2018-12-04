@@ -192,9 +192,15 @@ class Post
 
 	/**
 	 * @return Post
+	 * @throws \Exception
 	 */
 	public function bump()
 	{
 		return $this->setRecentActivity(new \DateTime('now'));
+	}
+
+	public function getFormValue($key)
+	{
+		return $this->$key;
 	}
 }

@@ -38,4 +38,5 @@ Route::get('/chat/{id}', 'Chat@view');
 Route::get('/user', 'User@self');
 Route::get('/admin', 'Admin@index');
 Route::get('/auth/logout', 'Auth@logout');
+Route::post('/post/{id}/edit', "Post@edit");
 

@@ -15,7 +15,10 @@ $show = $errors->has('title') || $errors->has('tag') || $errors->has('comment') 
 		{{ $post->getTitle() }}
 		<small class="text-muted">
 			<a href="{{ action('User@view', ['username' => $post->getAuthor()->getUsername()]) }}">{{"@" . $post->getAuthor()->getUsername() }}</a>
-			<a href="{{ action('Post@deleteForm', ['post' => $post->getId()]) }}">Delete</a>
+			@can('modify-post', $post)
+				<a href="{{ action('Post@deleteForm', ['post' => $post->getId()]) }}">Delete</a>
+				<a href="#collapse-post-edit-{{$post->getId()}}" data-toggle="collapse" >Edit</a>
+			@endcan
 		</small>
 	</h1>
 	<div class="card-body pb-0">
@@ -24,6 +27,26 @@ $show = $errors->has('title') || $errors->has('tag') || $errors->has('comment') 
 		@endif
 
 		<div class="card-text">
+			@can('modify-post', $post)
+
+				<div class="collapse {{ $show }}" id="collapse-post-edit-{{ $post->getId() }}">
+					{{ $form->model($post, ['action' => ['Post@edit', $post->getId()]]) }}
+
+					@component("form.textarea")
+						@slot('form', $form)
+						@slot('id', 'body')
+						@slot('label', 'Body:')
+					@endcomponent
+
+					@component("form.submit")
+						@slot('form', $form)
+						@slot('label', "Edit")
+					@endcomponent
+
+					{{ $form->close() }}
+				</div>
+
+			@endcan
 			@markdown($post->getBody())
 		</div>
 	</div>
