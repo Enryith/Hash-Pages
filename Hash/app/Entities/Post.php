@@ -48,6 +48,12 @@ class Post
 	 */
 	private $recentActivity;
 
+	/**
+	 * @ORM\Column(type="boolean")
+	 * @var boolean
+	 */
+	private $isDeleted;
+
 	public function __construct(User $user, $title, $link, $body)
 	{
 		$this->setAuthor($user);
@@ -56,6 +62,7 @@ class Post
 		$this->body = $body;
 		$this->recentActivity = new \DateTime('now');
 		$this->discussions = new ArrayCollection();
+		$this->isDeleted = false;
 	}
 
 	/**
@@ -192,4 +199,19 @@ class Post
 		return $this->setRecentActivity(new \DateTime('now'));
 	}
 
+	/**
+	 * @return bool
+	 */
+	public function isDeleted(): bool
+	{
+		return $this->isDeleted;
+	}
+
+	/**
+	 * @param bool $isDeleted
+	 */
+	public function setIsDeleted(bool $isDeleted): void
+	{
+		$this->isDeleted = $isDeleted;
+	}
 }

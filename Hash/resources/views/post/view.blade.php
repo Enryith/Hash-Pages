@@ -13,7 +13,10 @@ $show = $errors->has('title') || $errors->has('tag') || $errors->has('comment') 
 <div class="card mt-3 mb-3">
 	<h1 class="card-header">
 		{{ $post->getTitle() }}
-		<small class="text-muted"><a href="{{ action('User@view', ['username' => $post->getAuthor()->getUsername()]) }}">{{"@" . $post->getAuthor()->getUsername() }}</a></small>
+		<small class="text-muted">
+			<a href="{{ action('User@view', ['username' => $post->getAuthor()->getUsername()]) }}">{{"@" . $post->getAuthor()->getUsername() }}</a>
+			<a href="{{ action('Post@deleteForm', ['post' => $post->getId()]) }}">Delete</a>
+		</small>
 	</h1>
 	<div class="card-body pb-0">
 		@if($post->getLink())
