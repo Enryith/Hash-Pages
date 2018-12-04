@@ -23,6 +23,8 @@ Route::get('/comment/{id}/delete', "Comment@form");
 Route::post('/comment/{id}/delete', 'Comment@delete');
 Route::get('/discussion/{id}/delete', "Discussion@form");
 Route::post('/discussion/{id}/delete', 'Discussion@delete');
+Route::get('/post/{id}/delete', "Post@deleteForm");
+Route::post('/post/{id}/delete', 'Post@delete');
 Route::post('comment/{id}/edit', "Comment@edit");
 Route::get('/settings', 'User@form');
 Route::post('/settings', 'User@update');

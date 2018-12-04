@@ -4,6 +4,7 @@
 @section('content')
 <div class="container">
 	@foreach($table as $post)
+		@if(!$post->isDeleted())
 		<h2>
 			<a href="/post/{{$post->getId()}}">{{ $post->getTitle() }}</a>
 			<small class="text-muted">By: <a href="{{ action('User@view', ['username' => $post->getAuthor()->getUsername()]) }}">{{ $post->getAuthor()->getUsername() }}</a></small>
@@ -26,6 +27,7 @@
 		</div>
 
 		<hr>
+		@endif
 	@endforeach
 	{{ $table->links() }}
 </div>

@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Entities\Chat;
 use App\Entities\Comment;
+use App\Entities\Post;
 use App\Entities\User;
 use App\Entities\Discussion;
 use Illuminate\Contracts\Auth\Access\Gate;
@@ -44,6 +45,10 @@ class AuthServiceProvider extends ServiceProvider
 
 		$gate->define('view-discussion', function (User $user, Discussion $discussion) {
 			return ($discussion->getComments()[0]->getAuthor() === $user);
+		});
+
+		$gate->define('view-post', function(User $user, Post $post) {
+			return ($post->getAuthor() === $user);
 		});
 	}
 
