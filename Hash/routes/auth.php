@@ -25,12 +25,17 @@ Route::get('/discussion/{id}/delete', "Discussion@form");
 Route::post('/discussion/{id}/delete', 'Discussion@delete');
 Route::get('/post/{id}/delete', "Post@deleteForm");
 Route::post('/post/{id}/delete', 'Post@delete');
-Route::post('comment/{id}/edit', "Comment@edit");
+Route::get('/admin', "Admin@index");
+Route::post('/admin', 'Admin@addAdmin');
+Route::get('/admin/remove/{id}', "Admin@remove");
+Route::post('/admin/remove/{id}', 'Admin@removeAdmin');
+Route::post('/comment/{id}/edit', "Comment@edit");
 Route::get('/settings', 'User@form');
 Route::post('/settings', 'User@update');
 Route::get('/chat', 'Chat@index');
 Route::post('/chat', 'Chat@store');
 Route::get('/chat/{id}', 'Chat@view');
 Route::get('/user', 'User@self');
+Route::get('/admin', 'Admin@index');
 Route::get('/auth/logout', 'Auth@logout');
 

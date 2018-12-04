@@ -21,6 +21,10 @@ class AuthServiceProvider extends ServiceProvider
 		'App\Model' => 'App\Policies\ModelPolicy',
 	];
 
+	public function adminAuth(User $user){
+		return $user && ($user->isAdmin() || $user->getId() == 1);
+	}
+
 	/**
 	 * Register any authentication / authorization services.
 	 *
@@ -30,6 +34,10 @@ class AuthServiceProvider extends ServiceProvider
 	public function boot(Gate $gate)
 	{
 		$this->registerPolicies();
+
+		$gate->before([$this, 'adminAuth']);
+
+		$gate->define('admin', [$this, 'adminAuth']);
 
 		$gate->define('view-chat', function (User $user, Chat $chat) {
 			return $chat->getUsers()->contains($user);
