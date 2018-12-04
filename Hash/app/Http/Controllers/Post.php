@@ -329,17 +329,13 @@ class Post extends Controller
 	 * @param Gate $gate
 	 * @param EntityManagerInterface $em
 	 * @param $id
-	 * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|void
+	 * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
 	 * @throws ValidationException
 	 */
 	public function edit(Request $request, Validation $validator, Posts $posts, Gate $gate, EntityManagerInterface $em, $id)
 	{
-		$key = "post-edit-{$id}";
-
 		$valid = $validator->make($request->all(), [
-			$key => "required"
-		], [
-			"required" => "Edit must not be empty"
+			'body' => "required"
 		]);
 
 		$valid->validate();
@@ -352,7 +348,7 @@ class Post extends Controller
 			return abort(403);
 		}
 
-		$post->setBody($data[$key]);
+		$post->setBody($data['body']);
 
 		$em->flush();
 
