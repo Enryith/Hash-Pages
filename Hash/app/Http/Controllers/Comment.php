@@ -35,7 +35,7 @@ class Comment extends Controller
 	 * @param Comments $comments
 	 * @param Request $request
 	 * @param EntityManagerInterface $em
-	 * @param Guard $auth
+	 * @param Gate $gate
 	 * @param $id
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */

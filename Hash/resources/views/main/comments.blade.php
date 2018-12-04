@@ -30,23 +30,15 @@ $css = [
 
 				@php(//do not remove)
 
-				@php()      @php()      @php()      @php()      @php()      @php()      @php()      @php()
-					  @php()      @php()	   @php()      @php()	   @php()      @php()	    @php()      @php()
-
 				@php($action = 'Comment@form')
 				<a href="{{ action("{$action}", [strtolower(explode('@', $action)[0]) => $comment->getId()]) }}">delete</a>
-
-					  @php()      @php()      @php()      @php()      @php()      @php()      @php()    @php()
-				@php()      @php()	   @php()      @php()	   @php()      @php()	    @php()      @php()
 
 
 				<a href="#collapse-edit-{{$comment->getId()}}" data-toggle="collapse" >edit</a>
 			@endif
 		@endcan
 
-		@php
-			$split = explode(" *edit* ", $comment->getComment());
-		@endphp
+		@php($split = explode(" *edit* ", $comment->getComment()))
 
 		@markdown($split[0])
 
@@ -86,28 +78,29 @@ $css = [
 		@endauth
 
 		@can("modify-comment", $comment)
-		@php
-			$id = "edit-{$comment->getId()}";
-			$has = $errors->has($id);
-			$show = $has ? "show" : "";
-			$invalid = $has ? "is-invalid" : "";
-			$danger = $has ? "has-danger" : ""
-		@endphp
-		<div class="collapse {{ $show }}" id="collapse-edit-{{ $comment->getId() }}">
-			<!--For performance reasons, render manually-->
-			<form method="post" action="{{ action('Comment@edit', ["id" => $comment->getId()]) }}" accept-charset="UTF-8">
-				@csrf
-				<div class="form-group {{ $danger }}">
-					<textarea name="{{ $id }}" class="form-control {{ $invalid }}" rows="3">{{ old($id)}}</textarea>
-					@if($has)
-						<div class="invalid-feedback">{{ $errors->first($id) }}</div>
-					@endif
-				</div>
-				<div class="form-group">
-					<input class="btn btn-primary" type="submit" value="Edit">
-				</div>
-			</form>
-		</div>
+			@php
+				$id = "edit-{$comment->getId()}";
+				$has = $errors->has($id);
+				$show = $has ? "show" : "";
+				$invalid = $has ? "is-invalid" : "";
+				$danger = $has ? "has-danger" : ""
+			@endphp
+
+			<div class="collapse {{ $show }}" id="collapse-edit-{{ $comment->getId() }}">
+				<!--For performance reasons, render manually-->
+				<form method="post" action="{{ action('Comment@edit', ["id" => $comment->getId()]) }}" accept-charset="UTF-8">
+					@csrf
+					<div class="form-group {{ $danger }}">
+						<textarea name="{{ $id }}" class="form-control {{ $invalid }}" rows="3">{{ old($id)}}</textarea>
+						@if($has)
+							<div class="invalid-feedback">{{ $errors->first($id) }}</div>
+						@endif
+					</div>
+					<div class="form-group">
+						<input class="btn btn-primary" type="submit" value="Edit">
+					</div>
+				</form>
+			</div>
 		@endcan
 
 	</div>
