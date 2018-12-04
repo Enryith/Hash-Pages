@@ -308,15 +308,22 @@ class Post extends Controller
 	 */
 	public function delete(Posts $posts, Gate $gate, Request $request, EntityManagerInterface $em, $id)
 	{
-		/** @var $post Entities\Post*/
+		/** @var $post Entities\Post */
 		$post = $posts->find($id);
-		if(!$post || $gate->denies('view-post', $post)){
+		if (!$post || $gate->denies('view-post', $post)) {
 			return abort(403);
 		}
-		if('Delete' == $request->get('submit')){
+
+		if ('Delete' == $request->get('submit')) {
 			$post->setIsDeleted(true);
 			$em->flush();
 		}
+
 		return redirect(action('Post@index'));
+	}
+
+	public function edit(Guard $auth, Posts $posts, $id)
+	{
+
 	}
 }
