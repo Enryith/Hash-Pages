@@ -2,13 +2,14 @@
 
 namespace App\Entities;
 
+use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping AS ORM;
 use Illuminate\Support\Arr;
-
 /**
  * @ORM\Entity
+ * @Gedmo\SoftDeleteable(fieldName="isDeleted", timeAware=false)
  */
 class Discussion
 {
@@ -63,8 +64,7 @@ class Discussion
 	private $cachedDisagree;
 
 	/**
-	 * @ORM\Column(type="boolean")
-	 * @var boolean
+	 * @ORM\Column(name="isDeleted", type="datetime", nullable=true)
 	 */
 	private $isDeleted;
 

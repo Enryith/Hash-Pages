@@ -4,9 +4,11 @@ namespace App\Entities;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping AS ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity
+ * @Gedmo\SoftDeleteable(fieldName="isDeleted", timeAware=false)
  */
 class Post
 {
@@ -49,8 +51,7 @@ class Post
 	private $recentActivity;
 
 	/**
-	 * @ORM\Column(type="boolean")
-	 * @var boolean
+	 * @ORM\Column(name="isDeleted", type="datetime", nullable=true)
 	 */
 	private $isDeleted;
 
