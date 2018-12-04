@@ -23,7 +23,8 @@ class Chat
 	 * @return string
 	 * @throws ValidationException
 	 */
-	public function store(Users $users, Request $request, EntityManagerInterface $em, Validation $validator, Guard $auth){
+	public function store(Users $users, Request $request, EntityManagerInterface $em, Validation $validator, Guard $auth)
+	{
 		/** @var Entities\User $user */
 		$user = $auth->user();
 		$valid = $validator->make($request->all(), [

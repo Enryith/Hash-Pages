@@ -19,75 +19,82 @@ $css = [
 				{{"@" . $comment->getAuthor()->getUsername() }}
 			</a>
 		</strong>
+		@auth
+			@if($depth < $maxDepth -1)
+				<a href="#collapse-reply-{{$comment->getId()}}" data-toggle="collapse" >reply</a>
+			@endif
+		@endauth
 
-		@if(auth()->guard()->check() && $depth < $maxDepth -1)
-			<a href="#collapse-reply-{{$comment->getId()}}" data-toggle="collapse" >reply</a>
+		@can('modify-comment', $comment)
+			@if(!($comment->getComment() === "[DELETED]"))
 
-		@endif
+				@php /**do not remove*/ @endphp
+				@php $action = 'Comment@form' @endphp
+				<a href="{{ action("{$action}", [strtolower(explode('@', $action)[0]) => $comment->getId()]) }}">delete</a>
 
-		@if(auth()->guard()->check() && auth()->user()->username === $comment->getAuthor()->getUsername() && !($comment->getComment() === "[DELETED]"))
-				<a href="{{ action('Comment@form', ['comment' => $comment->getId()]) }}">delete</a>
 				<a href="#collapse-edit-{{$comment->getId()}}" data-toggle="collapse" >edit</a>
-		@endif
+			@endif
+		@endcan
 
 		@markdown($comment->getComment())
 
-		@if(auth()->guard()->check() && $depth < $maxDepth -1)
-		@php
-			$id = "reply-{$comment->getId()}";
-			$has = $errors->has($id);
-			$show = $has ? "show" : "";
-			$invalid = $has ? "is-invalid" : "";
-			$danger = $has ? "has-danger" : ""
-		@endphp
-		<div class="collapse {{ $show }}" id="collapse-reply-{{ $comment->getId() }}">
-			<!--For performance reasons, render manually-->
-			<form method="post" action="{{ action('Post@comment', ["id" => $comment->getId()]) }}" accept-charset="UTF-8">
-				@csrf
-				<div class="form-group {{ $danger }}">
-					<textarea name="{{ $id }}" class="form-control {{ $invalid }}" rows="3">{{ old($id)}}</textarea>
-					@if($has)
-						<div class="invalid-feedback">{{ $errors->first($id) }}</div>
-					@endif
+		@auth
+			@if($depth < $maxDepth -1)
+				@php
+					$id = "reply-{$comment->getId()}";
+					$has = $errors->has($id);
+					$show = $has ? "show" : "";
+					$invalid = $has ? "is-invalid" : "";
+					$danger = $has ? "has-danger" : ""
+				@endphp
+				<div class="collapse {{ $show }}" id="collapse-reply-{{ $comment->getId() }}">
+					<!--For performance reasons, render manually-->
+					<form method="post" action="{{ action('Post@comment', ["id" => $comment->getId()]) }}" accept-charset="UTF-8">
+						@csrf
+						<div class="form-group {{ $danger }}">
+							<textarea name="{{ $id }}" class="form-control {{ $invalid }}" rows="3">{{ old($id)}}</textarea>
+							@if($has)
+								<div class="invalid-feedback">{{ $errors->first($id) }}</div>
+							@endif
+						</div>
+						<div class="form-group">
+							<input class="btn btn-primary" type="submit" value="Reply">
+						</div>
+					</form>
 				</div>
-				<div class="form-group">
-					<input class="btn btn-primary" type="submit" value="Reply">
-				</div>
-			</form>
-		</div>
-		@endif
+			@endif
+		@endauth
 
-		@if(auth()->guard()->check() && auth()->user()->username === $comment->getAuthor()->getUsername())
-		@php
-			$id = "edit-{$comment->getId()}";
-			$has = $errors->has($id);
-			$show = $has ? "show" : "";
-			$invalid = $has ? "is-invalid" : "";
-			$danger = $has ? "has-danger" : ""
-		@endphp
-		<div class="collapse {{ $show }}" id="collapse-edit-{{ $comment->getId() }}">
-			<!--For performance reasons, render manually-->
-			<form method="post" action="{{ action('Comment@edit', ["id" => $comment->getId()]) }}" accept-charset="UTF-8">
-				@csrf
-				<div class="form-group {{ $danger }}">
+		@can("modify-comment", $comment)
+			@php
+				$id = "edit-{$comment->getId()}";
+				$has = $errors->has($id);
+				$show = $has ? "show" : "";
+				$invalid = $has ? "is-invalid" : "";
+				$danger = $has ? "has-danger" : ""
+			@endphp
+			<div class="collapse {{ $show }}" id="collapse-edit-{{ $comment->getId() }}">
+				<!--For performance reasons, render manually-->
+				<form method="post" action="{{ action('Comment@edit', ["id" => $comment->getId()]) }}" accept-charset="UTF-8">
+					@csrf
+					<div class="form-group {{ $danger }}">
 
-					<textarea name="{{ $id }}" class="form-control {{ $invalid }}" rows="3">@if(old($id)){{
-						old($id)
-					}}@else{{
-						$comment->getComment()
-					}}@endif</textarea>
+						<textarea name="{{ $id }}" class="form-control {{ $invalid }}" rows="3">@if(old($id)){{
+							old($id)
+						}}@else{{
+							$comment->getComment()
+						}}@endif</textarea>
 
-					@if($has)
-						<div class="invalid-feedback">{{ $errors->first($id) }}</div>
-					@endif
-				</div>
-				<div class="form-group">
-					<input class="btn btn-primary" type="submit" value="Edit">
-				</div>
-			</form>
-		</div>
-		@endif
-
+						@if($has)
+							<div class="invalid-feedback">{{ $errors->first($id) }}</div>
+						@endif
+					</div>
+					<div class="form-group">
+						<input class="btn btn-primary" type="submit" value="Edit">
+					</div>
+				</form>
+			</div>
+		@endcan
 	</div>
 
 	@if($depth < $maxDepth - 1 && $comment->getChildren()->count() > 0)
