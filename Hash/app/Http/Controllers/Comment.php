@@ -33,16 +33,20 @@ class Comment extends Controller
 
 	/**
 	 * @param Comments $comments
+	 * @param Gate $gate
 	 * @param Request $request
 	 * @param EntityManagerInterface $em
 	 * @param Guard $auth
 	 * @param $id
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
-	public function delete(Comments $comments, Request $request, EntityManagerInterface $em, Guard $auth, $id)
+	public function delete(Comments $comments, Gate $gate, Request $request, EntityManagerInterface $em, Guard $auth, $id)
 	{
 		/** @var $comment Entities\Comment*/
 		$comment = $comments->find($id);
+		if(!$comment || $gate->denies('view-comment', $comment)){
+			return abort(403);
+		}
 		if('Delete' == $request->get('submit')){
 			$comment->setComment('[DELETED]');
 			$em->flush();
