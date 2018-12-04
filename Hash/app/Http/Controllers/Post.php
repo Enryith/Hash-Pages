@@ -224,12 +224,16 @@ class Post extends Controller
 	/**
 	 * @param Guard $auth
 	 * @param Posts $posts
+	 * @param EntityManagerInterface $em
 	 * @param $id
 	 * @return \Illuminate\View\View
 	 * @throws \Doctrine\ORM\NonUniqueResultException
 	 */
-	public function view(Guard $auth, Posts $posts, $id)
+	public function view(Guard $auth, Posts $posts, EntityManagerInterface $em, $id)
 	{
+		//Disable soft delete querying so we can still have comment chains
+		$em->getFilters()->disable('soft-deleteable');
+
 		//how many left joins can we have?
 		$query = $posts->createQueryBuilder("p")
 			->leftJoin("p.discussions", "d")
@@ -310,10 +314,14 @@ class Post extends Controller
 	{
 		/** @var $post Entities\Post*/
 		$post = $posts->find($id);
-		if(!$post || $gate->denies('view-post', $post)){
+
+		if(!$post || $gate->denies('view-post', $post))
+		{
 			return abort(403);
 		}
-		if('Delete' == $request->get('submit')){
+
+		if('Delete' == $request->get('submit'))
+		{
 			$post->setIsDeleted(true);
 			$em->flush();
 		}

@@ -18,13 +18,16 @@ class Comment extends Controller
 	 * @param Comments $comments
 	 * @param Gate $gate
 	 * @param $id
+	 *
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
 	public function form(Comments $comments, Gate $gate, $id)
 	{
 		/** @var $comment Entities\Comment*/
 		$comment = $comments->find($id);
-		if(!$comment || $gate->denies('modify-comment', $comment)){
+
+		if(!$comment || $gate->denies('modify-comment', $comment))
+		{
 			return abort(403);
 		}
 
@@ -36,20 +39,23 @@ class Comment extends Controller
 	 * @param Gate $gate
 	 * @param Request $request
 	 * @param EntityManagerInterface $em
-	 * @param Gate $gate
 	 * @param $id
+	 *
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
-	public function delete(Comments $comments, Gate $gate, Request $request, EntityManagerInterface $em, Guard $auth, $id)
+	public function delete(Comments $comments, Gate $gate, Request $request, EntityManagerInterface $em, $id)
 	{
 		/** @var $comment Entities\Comment*/
 		$comment = $comments->find($id);
 
-		if(!$comment || $gate->denies('modify-comment', $comment)){
+		if(!$comment || $gate->denies('modify-comment', $comment))
+		{
 			return abort(403);
 		}
-		if('Delete' == $request->get('submit')){
-			$comment->setComment('[DELETED]');
+
+		if('Delete' == $request->get('submit'))
+		{
+			$em->remove($comment);
 			$em->flush();
 		}
 
@@ -63,6 +69,7 @@ class Comment extends Controller
 	 * @param EntityManagerInterface $em
 	 * @param Gate $gate
 	 * @param $id
+	 *
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 * @throws \Illuminate\Validation\ValidationException
 	 */
@@ -82,14 +89,13 @@ class Comment extends Controller
 		/** @var $comment Entities\Comment*/
 		$comment = $comments->find($id);
 
-		if(!$comment || $gate->denies('modify-comment', $comment)){
+		if(!$comment || $gate->denies('modify-comment', $comment))
+		{
 			return abort(403);
 		}
 
 		$edit = $data[$key];
-
 		$comment->setComment($edit);
-
 		$em->flush();
 
 		return redirect(action('Post@view', ["id" => $comment->getDiscussion()->getPost()->getId()]));

@@ -14,29 +14,36 @@ $css = [
 
 @foreach($comments as $comment)
 	<div style="{{ implode(" ", $css) }}">
-		<strong>
-			<a href="{{ action('User@view', ['username' => $comment->getAuthor()->getUsername()]) }}">
-				{{"@" . $comment->getAuthor()->getUsername() }}
-			</a>
-		</strong>
+		@if($comment->isDeleted())
+			<strong>
+				[Deleted]
+			</strong>
+		@else
+			<strong>
+				<a href="{{ action('User@view', ['username' => $comment->getAuthor()->getUsername()]) }}">
+					{{"@" . $comment->getAuthor()->getUsername() }}
+				</a>
+			</strong>
+		@endif
+
 		@auth
-			@if($depth < $maxDepth -1)
+			@if($depth < $maxDepth - 1)
 				<a href="#collapse-reply-{{$comment->getId()}}" data-toggle="collapse" >reply</a>
 			@endif
 		@endauth
 
 		@can('modify-comment', $comment)
-			@if(!($comment->getComment() === "[DELETED]"))
-
-				@php /**do not remove*/ @endphp
-				@php $action = 'Comment@form' @endphp
-				<a href="{{ action("{$action}", [strtolower(explode('@', $action)[0]) => $comment->getId()]) }}">delete</a>
-
-				<a href="#collapse-edit-{{$comment->getId()}}" data-toggle="collapse" >edit</a>
-			@endif
+			@php /**do not remove*/ @endphp
+			@php $action = 'Comment@form' @endphp
+			<a href="{{ action("{$action}", [strtolower(explode('@', $action)[0]) => $comment->getId()]) }}">delete</a>
+			<a href="#collapse-edit-{{$comment->getId()}}" data-toggle="collapse" >edit</a>
 		@endcan
 
-		@markdown($comment->getComment())
+		@if($comment->isDeleted())
+			<p>[Deleted]</p>
+		@else
+			@markdown($comment->getComment())
+		@endif
 
 		@auth
 			@if($depth < $maxDepth -1)
@@ -52,7 +59,7 @@ $css = [
 					<form method="post" action="{{ action('Post@comment', ["id" => $comment->getId()]) }}" accept-charset="UTF-8">
 						@csrf
 						<div class="form-group {{ $danger }}">
-							<textarea name="{{ $id }}" class="form-control {{ $invalid }}" rows="3">{{ old($id)}}</textarea>
+							<textarea title="Edit Comment" name="{{ $id }}" class="form-control {{ $invalid }}" rows="3">{{ old($id)}}</textarea>
 							@if($has)
 								<div class="invalid-feedback">{{ $errors->first($id) }}</div>
 							@endif
@@ -79,7 +86,7 @@ $css = [
 					@csrf
 					<div class="form-group {{ $danger }}">
 
-						<textarea name="{{ $id }}" class="form-control {{ $invalid }}" rows="3">@if(old($id)){{
+						<textarea title="Edit Comment" name="{{ $id }}" class="form-control {{ $invalid }}" rows="3">@if(old($id)){{
 							old($id)
 						}}@else{{
 							$comment->getComment()
