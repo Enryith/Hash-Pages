@@ -22,7 +22,7 @@ class AuthServiceProvider extends ServiceProvider
 	];
 
 	public function adminAuth(User $user){
-		return $user->isAdmin() || $user->getId() == 1;
+		return $user && ($user->isAdmin() || $user->getId() == 1);
 	}
 
 	/**

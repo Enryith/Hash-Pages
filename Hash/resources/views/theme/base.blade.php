@@ -62,13 +62,11 @@
 			<li class="nav-item">
 				<a class="nav-link" href="{{action("Tag@index")}}">Tags</a>
 			</li>
-			@if($user)
-				@if($user->getId() == 1 || $user->isAdmin())
-					<li class="nav-item">
-						<a class="nav-link" href="{{action("Admin@index")}}">Admin</a>
-					</li>
-				@endif
-			@endif
+			@can('admin')
+				<li class="nav-item">
+					<a class="nav-link" href="{{action("Admin@index")}}">Admin</a>
+				</li>
+			@endcan
 		</ul>
 		<ul class="navbar-nav">
 			@auth
