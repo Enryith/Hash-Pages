@@ -2,10 +2,12 @@
 namespace App\Http\Controllers;
 
 use App\Events;
+use App\Repositories\Comments;
 use App\Repositories\Posts;
 use App\Repositories\Tags;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
+use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -15,6 +17,9 @@ use Illuminate\Validation\ValidationException;
 
 class Post extends Controller
 {
+	/**
+	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+	 */
 	public function form()
 	{
 		return view('post.form');
@@ -274,5 +279,43 @@ class Post extends Controller
 		}
 
 		return $tag;
+	}
+
+	/**
+	 * @param Posts $posts
+	 * @param Gate $gate
+	 * @param $id
+	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+	 */
+	public function deleteForm(Posts $posts, Gate $gate, $id)
+	{
+		/** @var $post Entities\Post*/
+		$post = $posts->find($id);
+
+		if(!$post || $gate->denies('view-post', $post)){
+			return abort(403);
+		}
+
+		return view('post.delete');
+	}
+
+	/**
+	 * @param Posts $posts
+	 * @param Request $request
+	 * @param EntityManagerInterface $em
+	 * @param $id
+	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+	 */
+	public function delete(Posts $posts, Request $request, EntityManagerInterface $em, $id)
+	{
+		/** @var $post Entities\Post*/
+		$post = $posts->find($id);
+		$return = $post->getId();
+		if('Delete' == $request->get('submit')){
+			$post->setIsDeleted(true);
+			$em->flush();
+		}
+
+		return redirect(action('Post@index'));
 	}
 }

@@ -59,6 +59,18 @@ class Chat
 	}
 
 	/**
+	 * @param User $user
+	 */
+	public function removeUser(User $user)
+	{
+		if($this->users->contains($user))
+		{
+			$this->users->remove($user);
+			$user->removeChat($this);
+		}
+	}
+
+	/**
 	 * @return Message[]|ArrayCollection
 	 */
 	public function getMessages()

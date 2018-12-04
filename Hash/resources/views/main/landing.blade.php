@@ -19,6 +19,10 @@
 			for client-side scripting, Mustache to render templates dynamically sent from the server, Socket.io
 			for the implementation of WebSockets, and Webpack so that we are able to use node modules.
 		</p>
+		<hr class="my-4" style="color:GREY">
+		<p>
+			If you would like to see the documentation click <a href="{{ url('/docs/api') }}">here.</a>
+		</p>
 	</div>
 	<div class="card-group mb-5">
 		<div class="card">

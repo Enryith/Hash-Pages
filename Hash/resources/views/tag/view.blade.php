@@ -1,10 +1,18 @@
-@php /** @var Illuminate\Pagination\LengthAwarePaginator|App\Entities\Post[] $table */ @endphp
+@php
+	/** @var Illuminate\Pagination\LengthAwarePaginator|App\Entities\Post[] $table */
+	/** @var $form Collective\Html\FormBuilder */
+	/** @var $tag \App\Entities\Tag */
+@endphp
+
+@inject('form', 'Collective\Html\FormBuilder')
 @extends('theme.base')
-@section('title', 'All Posts')
+@section('title', 'hi')
 @section('content')
-<div class="container">
+
+	@php($hasPosts=false)
+
 	@foreach($table as $post)
-		@if(!$post->isDeleted())
+		@php($hasPosts=true)
 		<h2>
 			<a href="/post/{{$post->getId()}}">{{ $post->getTitle() }}</a>
 			<small class="text-muted">By: <a href="{{ action('User@view', ['username' => $post->getAuthor()->getUsername()]) }}">{{ $post->getAuthor()->getUsername() }}</a></small>
@@ -21,16 +29,18 @@
 		<div class="btn-toolbar">
 			@foreach($post->getDiscussions() as $d)
 				@if(!$d->isDeleted())
-					@component("ajax.tag")
-						@slot("discussion", $d)
-					@endcomponent
+				@component("ajax.tag")
+					@slot("discussion", $d)
+				@endcomponent
 				@endif
 			@endforeach
 		</div>
 
 		<hr>
-		@endif
 	@endforeach
-	{{ $table->links() }}
-</div>
+
+	@if(!$hasPosts)
+		<p class="js-init text-muted text-center">No Posts were found with related tag {{$tag->getTag()}}</p>
+	@endif
+
 @endsection
