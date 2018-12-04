@@ -15,7 +15,39 @@ $show = $errors->has('title') || $errors->has('tag') || $errors->has('comment') 
 		{{ $post->getTitle() }}
 		<small class="text-muted">
 			<a href="{{ action('User@view', ['username' => $post->getAuthor()->getUsername()]) }}">{{"@" . $post->getAuthor()->getUsername() }}</a>
-			<a href="{{ action('Post@deleteForm', ['post' => $post->getId()]) }}">Delete</a>
+			@can('modify-post', $post)
+				<a href="{{ action('Post@deleteForm', ['post' => $post->getId()]) }}">Delete</a>
+				<a href="#collapse-post-edit-{{$post->getId()}}" data-toggle="collapse" >Edit</a>
+				{{--<a href="{{ action('Post@edit', ['post' => $post->getId()]) }}">Edit</a>--}}
+				@php
+					$id = "post-edit-{$post->getId()}";
+					$has = $errors->has($id);
+					$show = $has ? "show" : "";
+					$invalid = $has ? "is-invalid" : "";
+					$danger = $has ? "has-danger" : ""
+				@endphp
+				<div class="collapse {{ $show }}" id="collapse-post-edit-{{ $post->getId() }}">
+					<!--For performance reasons, render manually-->
+					<form method="post" action="{{ action('Post@edit', ["id" => $post->getId()]) }}" accept-charset="UTF-8">
+						@csrf
+						<div class="form-group {{ $danger }}">
+
+						<textarea name="{{ $id }}" class="form-control {{ $invalid }}" rows="3">@if(old($id)){{
+							old($id)
+						}}@else{{
+							$post->getBody()
+						}}@endif</textarea>
+
+							@if($has)
+								<div class="invalid-feedback">{{ $errors->first($id) }}</div>
+							@endif
+						</div>
+						<div class="form-group">
+							<input class="btn btn-primary" type="submit" value="Edit">
+						</div>
+					</form>
+				</div>
+			@endcan
 		</small>
 	</h1>
 	<div class="card-body pb-0">

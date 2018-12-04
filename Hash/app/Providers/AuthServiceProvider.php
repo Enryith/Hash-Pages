@@ -47,7 +47,7 @@ class AuthServiceProvider extends ServiceProvider
 			return ($comment->getAuthor() === $user);
 		});
 
-		$gate->define('view-post', function(User $user, Post $post) {
+		$gate->define('modify-post', function(User $user, Post $post) {
 			return ($post->getAuthor() === $user);
 		});
 	}

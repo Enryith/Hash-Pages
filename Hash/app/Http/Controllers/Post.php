@@ -291,7 +291,7 @@ class Post extends Controller
 		/** @var $post Entities\Post*/
 		$post = $posts->find($id);
 
-		if(!$post || $gate->denies('view-post', $post)){
+		if(!$post || $gate->denies('modify-post', $post)){
 			return abort(403);
 		}
 
@@ -310,7 +310,7 @@ class Post extends Controller
 	{
 		/** @var $post Entities\Post */
 		$post = $posts->find($id);
-		if (!$post || $gate->denies('view-post', $post)) {
+		if (!$post || $gate->denies('modify-post', $post)) {
 			return abort(403);
 		}
 
@@ -322,8 +322,40 @@ class Post extends Controller
 		return redirect(action('Post@index'));
 	}
 
-	public function edit(Guard $auth, Posts $posts, $id)
+	/**
+	 * @param Request $request
+	 * @param Validation $validator
+	 * @param Posts $posts
+	 * @param Gate $gate
+	 * @param EntityManagerInterface $em
+	 * @param $id
+	 * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|void
+	 * @throws ValidationException
+	 */
+	public function edit(Request $request, Validation $validator, Posts $posts, Gate $gate, EntityManagerInterface $em, $id)
 	{
+		$key = "post-edit-{$id}";
 
+		$valid = $validator->make($request->all(), [
+			$key => "required"
+		], [
+			"required" => "Edit must not be empty"
+		]);
+
+		$valid->validate();
+		$data = $valid->getData();
+
+		/** @var $post Entities\Post*/
+		$post = $posts->find($id);
+
+		if(!$post || $gate->denies('modify-post', $post)){
+			return abort(403);
+		}
+
+		$post->setBody($data[$key]);
+
+		$em->flush();
+
+		return redirect(action('Post@view', ["id" => $post->getId()]));
 	}
 }
