@@ -82,7 +82,7 @@ class Comment extends Controller
 
 		$edit = $data[$key];
 
-		$comment->setComment($comment->getComment() . " *edit* " . $edit);
+		$comment->setComment($edit);
 
 		$em->flush();
 

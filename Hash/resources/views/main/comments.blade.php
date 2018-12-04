@@ -30,19 +30,7 @@ $css = [
 				<a href="#collapse-edit-{{$comment->getId()}}" data-toggle="collapse" >edit</a>
 		@endif
 
-		@php
-			$split = explode(" *edit* ", $comment->getComment());
-		@endphp
-
-		@markdown($split[0])
-
-		@foreach($split as $edit)
-			@if($edit === $split[0])
-				@continue
-			@else
-				@markdown("\[EDIT\]: ".$edit)
-			@endif
-		@endforeach
+		@markdown($comment->getComment())
 
 		@if(auth()->guard()->check() && $depth < $maxDepth -1)
 		@php
@@ -82,7 +70,13 @@ $css = [
 			<form method="post" action="{{ action('Comment@edit', ["id" => $comment->getId()]) }}" accept-charset="UTF-8">
 				@csrf
 				<div class="form-group {{ $danger }}">
-					<textarea name="{{ $id }}" class="form-control {{ $invalid }}" rows="3">{{ old($id)}}</textarea>
+
+					<textarea name="{{ $id }}" class="form-control {{ $invalid }}" rows="3">@if(old($id)){{
+						old($id)
+					}}@else{{
+						$comment->getComment()
+					}}@endif</textarea>
+
 					@if($has)
 						<div class="invalid-feedback">{{ $errors->first($id) }}</div>
 					@endif
