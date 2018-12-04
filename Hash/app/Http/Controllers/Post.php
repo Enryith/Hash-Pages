@@ -2,7 +2,6 @@
 namespace App\Http\Controllers;
 
 use App\Events;
-use App\Repositories\Comments;
 use App\Repositories\Posts;
 use App\Repositories\Tags;
 use Doctrine\ORM\EntityManagerInterface;
@@ -301,21 +300,23 @@ class Post extends Controller
 
 	/**
 	 * @param Posts $posts
+	 * @param Gate $gate
 	 * @param Request $request
 	 * @param EntityManagerInterface $em
 	 * @param $id
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
-	public function delete(Posts $posts, Request $request, EntityManagerInterface $em, $id)
+	public function delete(Posts $posts, Gate $gate, Request $request, EntityManagerInterface $em, $id)
 	{
 		/** @var $post Entities\Post*/
 		$post = $posts->find($id);
-		$return = $post->getId();
+		if(!$post || $gate->denies('view-post', $post)){
+			return abort(403);
+		}
 		if('Delete' == $request->get('submit')){
 			$post->setIsDeleted(true);
 			$em->flush();
 		}
-
 		return redirect(action('Post@index'));
 	}
 }

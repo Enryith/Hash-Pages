@@ -12,6 +12,7 @@
 	@php($hasPosts=false)
 
 	@foreach($table as $post)
+		@if(!$post->isDeleted())
 		@php($hasPosts=true)
 		<h2>
 			<a href="/post/{{$post->getId()}}">{{ $post->getTitle() }}</a>
@@ -37,6 +38,7 @@
 		</div>
 
 		<hr>
+		@endif
 	@endforeach
 
 	@if(!$hasPosts)
