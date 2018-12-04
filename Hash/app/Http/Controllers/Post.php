@@ -2,6 +2,8 @@
 namespace App\Http\Controllers;
 
 use App\Events;
+use App\Repositories\Comments;
+use App\Repositories\Discussions;
 use App\Repositories\Posts;
 use App\Repositories\Tags;
 use Doctrine\ORM\EntityManagerInterface;
@@ -106,82 +108,6 @@ class Post extends Controller
 	}
 
 	/**
-	 * @param Request $request
-	 * @param Guard $auth
-	 * @param Validation $validator
-	 * @param EntityManagerInterface $em
-	 * @param $id
-	 * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
-	 * @throws ValidationException
-	 */
-	public function commentRoot(Request $request, Guard $auth, Validation $validator, EntityManagerInterface $em, $id)
-	{
-		/** @var Entities\Discussion $disc */
-		$disc = $em->find("App\Entities\Discussion", $id);
-		//TODO: Make sure this exists
-
-		return $this->commentHelper($request, $auth, $validator, $em, $disc);
-	}
-
-	/**
-	 * @param Request $request
-	 * @param Guard $auth
-	 * @param Validation $validator
-	 * @param EntityManagerInterface $em
-	 * @param $id
-	 * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
-	 * @throws ValidationException
-	 */
-	public function comment(Request $request, Guard $auth, Validation $validator, EntityManagerInterface $em, $id)
-	{
-		/** @var Entities\Comment $parent */
-		$parent = $em->find("App\Entities\Comment", $id);
-		//TODO: Make sure this exists
-
-		return $this->commentHelper($request, $auth, $validator, $em, $parent->getDiscussion(), $parent);
-	}
-
-	/**
-	 * @param Request $request
-	 * @param Guard $auth
-	 * @param Validation $validator
-	 * @param EntityManagerInterface $em
-	 * @param Entities\Discussion $discussion
-	 * @param Entities\Comment|null $parent
-	 * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
-	 * @throws ValidationException
-	 */
-	private function commentHelper(Request $request, Guard $auth, Validation $validator, EntityManagerInterface $em, Entities\Discussion $discussion, Entities\Comment $parent = null)
-	{
-		/** @var $user Entities\User */
-		$user = $auth->user();
-		$field = $parent ? "reply-{$parent->getId()}" : "reply";
-
-		$valid = $validator->make($request->all(), [
-			$field => "required|max:1000",
-		], [
-			"required" => "Comment is required",
-			"max" => "Comment cannot be over :max characters"
-		]);
-
-		$valid->validate();
-		$data = $valid->getData();
-
-		$comment = new Entities\Comment($discussion, $user, $data[$field], $parent);
-		$discussion->addComment($comment);
-		$post = $discussion->getPost();
-
-		$post->bump();
-
-		event(new Events\Comment($comment));
-
-		$em->persist($comment);
-		$em->flush();
-
-		return redirect("/post/{$comment->getDiscussion()->getPost()->getId()}");
-	}
-
-	/**
 	 * @param Tags $tags
 	 * @param Request $request
 	 * @param EntityManagerInterface $em
@@ -231,23 +157,28 @@ class Post extends Controller
 	 */
 	public function view(Guard $auth, Posts $posts, EntityManagerInterface $em, $id)
 	{
-		//Disable soft delete querying so we can still have comment chains
-		$em->getFilters()->disable('soft-deleteable');
-
-		//how many left joins can we have?
+		//!\\ Warning! //!\\
+		//This query must execute without soft delete
+		//Make sure to query everything correctly!
+		//How many left joins can we have??
 		$query = $posts->createQueryBuilder("p")
 			->leftJoin("p.discussions", "d", "WITH", "d.deletedAt IS NULL")
-			->leftJoin("d.comments", "c")
+			->leftJoin("d.comments", "c") //Allow comments to query deleted
 			->leftJoin("c.author", 'a')
 			->leftJoin("c.children", "l")
 			->leftJoin("d.tag", "t")
 			->where("p = :post")
+			->andWhere("p.deletedAt IS NULL")
 			->setParameter("post", $id)
 			->orderBy("c.id", "ASC")
 			->select("p", "d", "t", "c", 'a', 'l');
 
 		$this->leftJoinVotes($query, $auth);
+
+		//Disable soft delete querying so we can still have comment chains
+		$em->getFilters()->disable('soft-deleteable');
 		$post = $query->getQuery()->getOneOrNullResult();
+		$em->getFilters()->enable('soft-deleteable');
 
 		if($post instanceof Entities\Post)
 		{
@@ -295,7 +226,8 @@ class Post extends Controller
 		/** @var $post Entities\Post*/
 		$post = $posts->find($id);
 
-		if(!$post || $gate->denies('modify-post', $post)){
+		if(!$post || $gate->denies('modify-post', $post))
+		{
 			return abort(403);
 		}
 
@@ -315,14 +247,14 @@ class Post extends Controller
 		/** @var $post Entities\Post */
 		$post = $posts->find($id);
 
-		if (!$post || $gate->denies('view-post', $post))
+		if (!$post || $gate->denies('modify-post', $post))
 		{
 			return abort(403);
 		}
 
 		if ('Delete' == $request->get('submit'))
 		{
-			$post->setIsDeleted(true);
+			$em->remove($post);
 			$em->flush();
 		}
 
@@ -356,7 +288,6 @@ class Post extends Controller
 		}
 
 		$post->setBody($data['body']);
-
 		$em->flush();
 
 		return redirect(action('Post@view', ["id" => $post->getId()]));

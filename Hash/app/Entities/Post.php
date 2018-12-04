@@ -192,7 +192,6 @@ class Post
 
 	/**
 	 * @return Post
-	 * @throws \Exception
 	 */
 	public function bump()
 	{

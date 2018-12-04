@@ -57,7 +57,7 @@ class User extends Base
 			->assertJson(['votes'=>["agree"=>1,"disagree"=>0]]);
 
 		$this->startSession()
-			->json('POST', '/post/root/1', [
+			->json('POST', '/post/1/root', [
 				'reply'=>'Your post is bad.'
 			]);
 

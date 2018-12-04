@@ -56,7 +56,7 @@ $css = [
 				@endphp
 				<div class="collapse {{ $show }}" id="collapse-reply-{{ $comment->getId() }}">
 					<!--For performance reasons, render manually-->
-					<form method="post" action="{{ action('Post@comment', ["id" => $comment->getId()]) }}" accept-charset="UTF-8">
+					<form method="post" action="{{ action('Comment@reply', ["id" => $comment->getId()]) }}" accept-charset="UTF-8">
 						@csrf
 						<div class="form-group {{ $danger }}">
 							<textarea title="Edit Comment" name="{{ $id }}" class="form-control {{ $invalid }}" rows="3">{{ old($id)}}</textarea>

@@ -90,7 +90,7 @@ $show = $errors->has('title') || $errors->has('tag') || $errors->has('comment') 
 		<div class="card-body">
 			<div class="collapse" id="top-reply-{{$d->getId()}}">
 
-				{{ $form->open(['action' => ['Post@commentRoot', $d->getId()]])}}
+				{{ $form->open(['action' => ['Comment@root', $d->getId()]])}}
 
 				@component("form.textarea")
 					@slot('form', $form)

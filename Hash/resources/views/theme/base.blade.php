@@ -51,13 +51,13 @@
 	<div class="collapse navbar-collapse" id="main-nav">
 		<ul class="navbar-nav mr-auto">
 			<li class="nav-item">
-				<a class="nav-link" href="{{action("Feed@feed")}}">Feed</a>
-			</li>
-			<li class="nav-item">
 				<a class="nav-link" href="{{action("Post@index")}}">Posts</a>
 			</li>
 			<li class="nav-item">
 				<a class="nav-link" href="{{action("Tag@index")}}">Tags</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="{{action("Feed@feed")}}">Feed</a>
 			</li>
 			@auth
 				<li class="nav-item">

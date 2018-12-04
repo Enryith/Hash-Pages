@@ -2,15 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Events;
+use App\Entities;
 use App\Repositories\Comments;
+use App\Repositories\Discussions;
 use Illuminate\Contracts\Auth\Access\Gate;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\QueryBuilder;
 use Illuminate\Validation\Factory as Validation;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use App\Entities;
+use Illuminate\Validation\ValidationException;
 
 class Comment extends Controller
 {
@@ -99,5 +101,82 @@ class Comment extends Controller
 		$em->flush();
 
 		return redirect(action('Post@view', ["id" => $comment->getDiscussion()->getPost()->getId()]));
+	}
+
+	/**
+	 * @param Discussions $discussions
+	 * @param Request $request
+	 * @param Guard $auth
+	 * @param Validation $validator
+	 * @param EntityManagerInterface $em
+	 * @param $id
+	 * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+	 * @throws ValidationException
+	 */
+	public function root(Discussions $discussions, Request $request, Guard $auth, Validation $validator, EntityManagerInterface $em, $id)
+	{
+		$disc = $discussions->findOneById($id);
+
+		if (!$disc) return abort(404);
+
+		return $this->common($request, $auth, $validator, $em, $disc);
+	}
+
+	/**
+	 * @param Comments $comments
+	 * @param Request $request
+	 * @param Guard $auth
+	 * @param Validation $validator
+	 * @param EntityManagerInterface $em
+	 * @param $id
+	 * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+	 * @throws ValidationException
+	 */
+	public function reply(Comments $comments, Request $request, Guard $auth, Validation $validator, EntityManagerInterface $em, $id)
+	{
+		$parent = $comments->findOneById($id);
+
+		if (!$parent) return abort(404);
+
+		return $this->common($request, $auth, $validator, $em, $parent->getDiscussion(), $parent);
+	}
+
+	/**
+	 * @param Request $request
+	 * @param Guard $auth
+	 * @param Validation $validator
+	 * @param EntityManagerInterface $em
+	 * @param Entities\Discussion $discussion
+	 * @param Entities\Comment|null $parent
+	 * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+	 * @throws ValidationException
+	 */
+	private function common(Request $request, Guard $auth, Validation $validator, EntityManagerInterface $em, Entities\Discussion $discussion, Entities\Comment $parent = null)
+	{
+		/** @var $user Entities\User */
+		$user = $auth->user();
+		$field = $parent ? "reply-{$parent->getId()}" : "reply";
+
+		$valid = $validator->make($request->all(), [
+			$field => "required|max:1000",
+		], [
+			"required" => "Comment is required",
+			"max" => "Comment cannot be over :max characters"
+		]);
+
+		$valid->validate();
+		$data = $valid->getData();
+
+		$comment = new Entities\Comment($discussion, $user, $data[$field], $parent);
+		$discussion->addComment($comment);
+		$post = $discussion->getPost();
+		$post->bump();
+
+		event(new Events\Comment($comment));
+
+		$em->persist($comment);
+		$em->flush();
+
+		return redirect("/post/{$comment->getDiscussion()->getPost()->getId()}");
 	}
 }
