@@ -61,7 +61,7 @@ class User extends Base
 				'reply'=>'Your post is bad.'
 			]);
 
-		$this->get('/post/1')
+		$this->get('/post/1/view')
 			->assertSee('Your post is bad.');
 	}
 
