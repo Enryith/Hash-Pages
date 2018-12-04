@@ -16,5 +16,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', 'Auth@welcome');
 Route::get('/all', "Post@index");
 Route::get('/post/{id}', "Post@view");
+Route::get('/tags', "Tag@index");
+Route::get('/tag/{tagname}', "Tag@view");
 Route::get('/user/{username}', 'User@view');
 Route::get('/feed', 'Feed@feed');

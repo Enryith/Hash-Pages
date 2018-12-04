@@ -57,7 +57,10 @@
 					<a class="nav-link" href="{{action("Feed@feed")}}">Feed</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="{{action("Post@index")}}">All</a>
+					<a class="nav-link" href="{{action("Post@index")}}">Posts</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="{{action("Tag@index")}}">Tags</a>
 				</li>
 			</ul>
 			<ul class="navbar-nav">
