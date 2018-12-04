@@ -1,24 +1,25 @@
 @php /** @var $form Collective\Html\FormBuilder */ @endphp
 @inject('form', 'Collective\Html\FormBuilder')
 @extends('theme.base')
-@section('title', 'Delete Comment')
+@section('title', 'Remove Admin')
 @section('content')
 
 	<h2>
-		Who is the admin you want to add?
+		Are you sure you want to remove this admin?
 	</h2>
 
 {{ $form->open(["autocomplete" => 'off'])}}
 
-	@component("form.text")
+	@component("form.submit")
 		@slot('form', $form)
-		@slot('id', 'user')
-		@slot('label', "Username:")
+		@slot('id', 'nope')
+		@slot('label', "Go Back")
 	@endcomponent
 
 	@component("form.submit")
 		@slot('form', $form)
-		@slot('label', "Submit")
+		@slot('id', 'remove')
+		@slot('label', "Remove")
 	@endcomponent
 
 {{ $form->close() }}

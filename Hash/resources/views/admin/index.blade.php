@@ -9,6 +9,7 @@
 		@if($user->isAdmin() or $user->getId() == 1)
 			<h4>
 				<a href="/user/{{$user->getUsername()}}">{{ "@".$user->getUsername() }}</a>
+				<a href="{{ action('Admin@removeAdmin', ['user' => $user->getId()]) }}">Remove</a>
 				<br>
 			</h4>
 		@endif
@@ -16,12 +17,23 @@
 </div>
 <br>
 
+<h4>
+	Add Admin
+</h4>
+
 {{ $form->open(["autocomplete" => 'off'])}}
+
+@component("form.text")
+	@slot('form', $form)
+	@slot('id', 'user')
+	@slot('label', "Username:")
+@endcomponent
 
 @component("form.submit")
 	@slot('form', $form)
-	@slot('label', "Add Admin")
+	@slot('label', "Add")
 @endcomponent
 
 {{ $form->close() }}
+
 @endsection
