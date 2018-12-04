@@ -24,7 +24,7 @@ class Comment extends Controller
 	{
 		/** @var $comment Entities\Comment*/
 		$comment = $comments->find($id);
-		if(!$comment || $gate->denies('view-comment', $comment)){
+		if(!$comment || $gate->denies('modify-comment', $comment)){
 			return abort(403);
 		}
 
@@ -39,10 +39,15 @@ class Comment extends Controller
 	 * @param $id
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
-	public function delete(Comments $comments, Request $request, EntityManagerInterface $em, Guard $auth, $id)
+	public function delete(Comments $comments, Request $request, EntityManagerInterface $em, Gate $gate, $id)
 	{
 		/** @var $comment Entities\Comment*/
 		$comment = $comments->find($id);
+
+		if(!$comment || $gate->denies('modify-comment', $comment)){
+			return abort(403);
+		}
+
 		if('Delete' == $request->get('submit')){
 			$comment->setComment('[DELETED]');
 			$em->flush();
@@ -56,11 +61,12 @@ class Comment extends Controller
 	 * @param Comments $comments
 	 * @param Request $request
 	 * @param EntityManagerInterface $em
+	 * @param Gate $gate
 	 * @param $id
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 * @throws \Illuminate\Validation\ValidationException
 	 */
-	public function edit(Validation $validator, Comments $comments, Request $request, EntityManagerInterface $em, $id)
+	public function edit(Validation $validator, Comments $comments, Request $request, EntityManagerInterface $em, Gate $gate, $id)
 	{
 		$key = "edit-{$id}";
 
@@ -75,6 +81,10 @@ class Comment extends Controller
 
 		/** @var $comment Entities\Comment*/
 		$comment = $comments->find($id);
+
+		if(!$comment || $gate->denies('modify-comment', $comment)){
+			return abort(403);
+		}
 
 		$edit = $data[$key];
 

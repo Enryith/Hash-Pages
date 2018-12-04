@@ -6,7 +6,7 @@
 
 @inject('form', 'Collective\Html\FormBuilder')
 @extends('theme.base')
-@section('title', 'hi')
+@section('title', $tag->getTag())
 @section('content')
 
 	@php($hasPosts=false)

@@ -1,5 +1,5 @@
 @extends('theme.base')
-@section('title', 'Login')
+@section('title', $user->getUsername())
 @section('content')
 
 

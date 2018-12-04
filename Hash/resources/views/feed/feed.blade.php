@@ -1,5 +1,5 @@
 @extends('theme.base')
-@section('title', 'Listen')
+@section('title', 'Feed')
 @push('scripts')
 	<script src="/js/feed.js"></script>
 @endpush
