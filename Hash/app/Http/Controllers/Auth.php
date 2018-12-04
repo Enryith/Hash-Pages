@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\Repositories\Users;
 use Doctrine\ORM\EntityManagerInterface;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Auth\StatefulGuard;
@@ -9,6 +10,7 @@ use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Validation\Factory as Validation;
+use Laravel\Socialite\Contracts\Factory as Socialite;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use App\Entities;
 
@@ -36,7 +38,6 @@ class Auth extends Controller
 	}
 
 	/**
-	 * TODO: Temporary test route.
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
 	public function welcome()
@@ -148,6 +149,68 @@ class Auth extends Controller
 		$session->flush();
 		$request->session()->flash("alert-success", trans('auth.logout'));
 		return redirect('/auth/login');
+	}
+
+	public function provider(Socialite $socialite, $provider)
+	{
+		return $socialite->driver($provider)->redirect();
+	}
+
+	public function endpoint(Users $users, Request $request, Socialite $socialite, EntityManagerInterface $em, $provider)
+	{
+		$api = null;
+
+		try {
+			$api = $socialite->driver($provider)->user();
+		} catch (\Exception $e) {
+			$request->session()->flash("alert-danger", "Something wen't wrong when contacting Google!");
+			return redirect('/auth/login');
+		}
+
+		$user = $users->findOneByAPI($api, $provider);
+		if ($user)
+		{
+			$this->auth->login($user, false);
+			$request->session()->flash("alert-success", trans('auth.success', ["name" => $user->getName()]));
+			return redirect('/');
+		}
+
+		//Make sure emails are unique
+		$email = $users->findOneByEmail($api->getEmail());
+		if ($email)
+		{
+			$request->session()->flash("alert-danger", "You already have an account using {$email->getEndpoint()}!");
+			return redirect('/');
+		}
+
+		//Make sure user names are unique, but at least try to make something random if needed.
+		$username = explode("@", $api->getEmail())[0];
+		if ($users->findOneByUsername($username))
+		{
+			$username = substr($username, 0, 15) . rand(1000, 9999);
+
+			if ($users->findOneByUsername($username))
+			{
+				$request->session()->flash("alert-danger", "Could not create username with Google Account information!");
+				return redirect('/');
+			}
+		}
+
+		$user = new Entities\User();
+		$user->setName($api->getName())
+			->setEmail($api->getEmail())
+			->setPicture($api->getAvatar())
+			->setUsername($username)
+			->setEndpoint($provider)
+			->setUuid($api->getId())
+			->setPassword("no u");
+
+		$em->persist($user);
+		$em->flush();
+
+		$this->auth->login($user, false);
+		$request->session()->flash("alert-success", trans('auth.success', ["name" => $user->getName()]));
+		return redirect('/');
 	}
 
 	//Required from the trait ThrottlesLogin, otherwise it crashes.

@@ -14,11 +14,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+$google = App\Entities\User::GOOGLE;
+$github = App\Entities\User::GITHUB;
+
 Route::get('/register', "Auth@register");
 Route::post('/register', 'Auth@store');
 Route::get('/auth/login', 'Auth@login');
 Route::post('/auth/login', 'Auth@auth');
 Route::get('/auth/{provider}', 'Auth@provider')
-	->where('provider', '(google)');
+	->where('provider', "({$google})");
 Route::get('/auth/{provider}/endpoint', 'Auth@endpoint')
-	->where('provider', '(google)');
+	->where('provider', "({$google})");

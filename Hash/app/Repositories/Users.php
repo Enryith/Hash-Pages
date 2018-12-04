@@ -5,7 +5,7 @@ namespace App\Repositories;
 use App\Entities;
 use Doctrine\ORM\EntityRepository;
 use LaravelDoctrine\ORM\Pagination\PaginatesFromRequest;
-use Illuminate\Pagination\LengthAwarePaginator;
+use Laravel\Socialite\Contracts\User as Api;
 
 class Users extends EntityRepository
 {
@@ -27,11 +27,46 @@ class Users extends EntityRepository
 
 	/**
 	 * @param $username
-	 * @return Entities\User|null|object
+	 * @return Entities\User|null
 	 */
 	public function findOneByUsername($username)
 	{
-		return $this->findOneBy(['username' => $username]);
+		/** @var Entities\User $user */
+		$user = $this->findOneBy([
+			'username' => $username
+		]);
+
+		return $user;
+	}
+
+	/**
+	 * @param $email
+	 * @return Entities\User|null
+	 */
+	public function findOneByEmail($email)
+	{
+		/** @var Entities\User $user */
+		$user = $this->findOneBy([
+			'email' => $email
+		]);
+
+		return $user;
+	}
+
+	/**
+	 * @param Api $api
+	 * @param $endpoint
+	 * @return Entities\User|null
+	 */
+	public function findOneByAPI(Api $api, $endpoint)
+	{
+		/** @var Entities\User $user */
+		$user = $this->findOneBy([
+			'endpoint' => $endpoint,
+			'uuid' => $api->getId()
+		]);
+
+		return $user;
 	}
 
 	public function findOneById($id)
