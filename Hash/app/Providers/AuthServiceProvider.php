@@ -21,8 +21,14 @@ class AuthServiceProvider extends ServiceProvider
 		'App\Model' => 'App\Policies\ModelPolicy',
 	];
 
-	public function adminAuth(User $user){
-		return $user && ($user->isAdmin() || $user->getId() == 1);
+	public function adminAuth(User $user)
+	{
+		if($user && ($user->isAdmin() || $user->getId() == 1))
+		{
+			return true;
+		}
+
+		return null;
 	}
 
 	/**

@@ -24,13 +24,13 @@ $css = [
 					{{"@" . $comment->getAuthor()->getUsername() }}
 				</a>
 			</strong>
-		@endif
 
-		@auth
-			@if($depth < $maxDepth - 1)
-				<a href="#collapse-reply-{{$comment->getId()}}" data-toggle="collapse" >reply</a>
-			@endif
-		@endauth
+			@auth
+				@if($depth < $maxDepth - 1)
+					<a href="#collapse-reply-{{$comment->getId()}}" data-toggle="collapse" >reply</a>
+				@endif
+			@endauth
+		@endif
 
 		@can('modify-comment', $comment)
 			@php /**do not remove*/ @endphp
