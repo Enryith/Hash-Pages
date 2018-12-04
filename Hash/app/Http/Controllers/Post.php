@@ -236,7 +236,7 @@ class Post extends Controller
 
 		//how many left joins can we have?
 		$query = $posts->createQueryBuilder("p")
-			->leftJoin("p.discussions", "d")
+			->leftJoin("p.discussions", "d", "WITH", "d.deletedAt IS NULL")
 			->leftJoin("d.comments", "c")
 			->leftJoin("c.author", 'a')
 			->leftJoin("c.children", "l")
