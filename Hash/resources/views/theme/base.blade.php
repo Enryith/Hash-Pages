@@ -42,79 +42,79 @@
 <body>
 
 <nav class="navbar navbar-expand-md navbar-dark bg-primary fixed-top">
-<div class="container">
-	<a class="navbar-brand" href="/">Hash Pages</a>
-	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-nav">
-		<span class="navbar-toggler-icon"></span>
-	</button>
+	<div class="container">
+		<a class="navbar-brand" href="/">Hash Pages</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-nav">
+			<span class="navbar-toggler-icon"></span>
+		</button>
 
-	<div class="collapse navbar-collapse" id="main-nav">
-		<ul class="navbar-nav mr-auto">
-			<li class="nav-item">
-				<a class="nav-link" href="{{action("Post@index")}}">Posts</a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link" href="{{action("Tag@index")}}">Tags</a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link" href="{{action("Feed@feed")}}">Feed</a>
-			</li>
-			@auth
+		<div class="collapse navbar-collapse" id="main-nav">
+			<ul class="navbar-nav mr-auto">
 				<li class="nav-item">
-					<a class="nav-link" href="{{action("Chat@index")}}">Chat</a>
-				</li>
-			@endauth
-			@can('admin')
-				<li class="nav-item">
-					<a class="nav-link" href="{{action("Admin@index")}}">Admin</a>
-				</li>
-			@endcan
-		</ul>
-		<ul class="navbar-nav">
-			@auth
-				<li class="nav-item dropdown">
-					<a class="nav-link dropdown-toggle" role="button" data-toggle="dropdown">
-						{{ $user->getUsername() }}
-					</a>
-					<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-						<a class="dropdown-item" href="{{action("Post@form")}}">New Post</a>
-						<a class="dropdown-item" href="{{action("User@self")}}">My Profile</a>
-						<a class="dropdown-item" href="{{action("User@form")}}">Settings</a>
-						<div class="dropdown-divider"></div>
-						<a class="dropdown-item" href="{{action("Auth@logout")}}">Logout</a>
-					</div>
-				</li>
-			@else
-				<li class="nav-item">
-					<a class="nav-link" href="{{action("Auth@login")}}">Login</a>
+					<a class="nav-link" href="{{action("Post@index")}}">Posts</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="{{action("Auth@register")}}">Register</a>
+					<a class="nav-link" href="{{action("Tag@index")}}">Tags</a>
 				</li>
-			@endauth
-		</ul>
+				<li class="nav-item">
+					<a class="nav-link" href="{{action("Feed@feed")}}">Feed</a>
+				</li>
+				@auth
+					<li class="nav-item">
+						<a class="nav-link" href="{{action("Chat@index")}}">Chat</a>
+					</li>
+				@endauth
+				@can('admin')
+					<li class="nav-item">
+						<a class="nav-link" href="{{action("Admin@index")}}">Admin</a>
+					</li>
+				@endcan
+			</ul>
+			<ul class="navbar-nav">
+				@auth
+					<li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle" role="button" data-toggle="dropdown">
+							{{ $user->getUsername() }}
+						</a>
+						<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+							<a class="dropdown-item" href="{{action("Post@form")}}">New Post</a>
+							<a class="dropdown-item" href="{{action("User@self")}}">My Profile</a>
+							<a class="dropdown-item" href="{{action("User@form")}}">Settings</a>
+							<div class="dropdown-divider"></div>
+							<a class="dropdown-item" href="{{action("Auth@logout")}}">Logout</a>
+						</div>
+					</li>
+				@else
+					<li class="nav-item">
+						<a class="nav-link" href="{{action("Auth@login")}}">Login</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{{action("Auth@register")}}">Register</a>
+					</li>
+				@endauth
+			</ul>
+		</div>
 	</div>
-</div>
-</nav>
+	</nav>
 
-<div class="container main">
-<div class="flash-message">
-	@foreach (['danger', 'warning', 'success', 'info'] as $msg)
-		@if(session()->has('alert-' . $msg))
-			<div class="alert alert-{{ $msg }}">
-				{{ session()->get('alert-' . $msg) }}
-			</div>
-		@endif
-	@endforeach
-</div>
+	<div class="container main">
+	<div class="flash-message">
+		@foreach (['danger', 'warning', 'success', 'info'] as $msg)
+			@if(session()->has('alert-' . $msg))
+				<div class="alert alert-{{ $msg }}">
+					{{ session()->get('alert-' . $msg) }}
+				</div>
+			@endif
+		@endforeach
+	</div>
 
-@yield('content')
+	@yield('content')
 
-<script src="{{url("/js/manifest.js")}}"></script>
-<script src="{{url("/js/vendor.js")}}"></script>
-<script src="/js/app.js"></script>
-<script src="/js/hash.js"></script>
-@stack('scripts')
+	<script src="{{url("/js/manifest.js")}}"></script>
+	<script src="{{url("/js/vendor.js")}}"></script>
+	<script src="/js/app.js"></script>
+	<script src="/js/hash.js"></script>
+	@stack('scripts')
 </div>
 </body>
 </html>
