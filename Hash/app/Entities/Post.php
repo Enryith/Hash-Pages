@@ -52,6 +52,8 @@ class Post
 	 */
 	private $recentActivity;
 
+
+
 	public function __construct(User $user, $title, $link, $body)
 	{
 		$this->setAuthor($user);

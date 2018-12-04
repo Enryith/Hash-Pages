@@ -30,7 +30,6 @@ $show = $errors->has('title') || $errors->has('tag') || $errors->has('comment') 
 </div>
 
 @foreach($post->getDiscussions() as $d)
-	@if(!$d->isDeleted())
 	<div class="card mt-3 mb-3">
 		<div class="card-header pl-3">
 			<div class="float-left">
@@ -96,7 +95,6 @@ $show = $errors->has('title') || $errors->has('tag') || $errors->has('comment') 
 			</div>
 		</div>
 	</div>
-	@endif
 @endforeach
 
 @auth

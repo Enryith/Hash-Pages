@@ -9,6 +9,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 class Users extends EntityRepository
 {
+	use PaginatesFromRequest;
 
 	public function findAllLike($search, $limit = 10) {
 		$search = Tags::like($search);
