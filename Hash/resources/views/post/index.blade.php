@@ -20,9 +20,11 @@
 
 		<div class="btn-toolbar">
 			@foreach($post->getDiscussions() as $d)
-				@component("ajax.tag")
-					@slot("discussion", $d)
-				@endcomponent
+				@if(!$d->isDeleted())
+					@component("ajax.tag")
+						@slot("discussion", $d)
+					@endcomponent
+				@endif
 			@endforeach
 		</div>
 

@@ -25,7 +25,6 @@ class Discussion extends Controller
 		$discussion = $discussions->find($id);
 		$ability = ($discussion->getPost()->getDiscussions()[0] === $discussion) ? 'view-discussion-head' : 'view-discussion';
 
-
 		if(!$discussion || $gate->denies($ability, $discussion)){
 			return abort(403);
 		}
