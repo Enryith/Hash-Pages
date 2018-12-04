@@ -31,6 +31,10 @@ class AuthServiceProvider extends ServiceProvider
 	{
 		$this->registerPolicies();
 
+		$gate->before(function(User $user){
+			return $user->isAdmin() || $user->getId() == 1;
+		});
+
 		$gate->define('view-chat', function (User $user, Chat $chat) {
 			return $chat->getUsers()->contains($user);
 		});

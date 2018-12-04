@@ -122,6 +122,12 @@ class User implements Authenticatable
 	 */
 	private $votes;
 
+	/**
+	 * @ORM\Column(type="boolean")
+	 * @var boolean
+	 */
+	private $admin;
+
 	public function __construct()
 	{
 		$this->theme = "sandstone";
@@ -130,6 +136,7 @@ class User implements Authenticatable
 		$this->posts = new ArrayCollection();
 		$this->leading = new ArrayCollection();
 		$this->votes = new ArrayCollection();
+		$this->admin = false;
 	}
 
 	/**
@@ -291,5 +298,21 @@ class User implements Authenticatable
 			$chat->removeUser($this);
 		}
 		return $this;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function isAdmin(): bool
+	{
+		return $this->admin;
+	}
+
+	/**
+	 * @param bool $admin
+	 */
+	public function setAdmin(bool $admin): void
+	{
+		$this->admin = $admin;
 	}
 }
